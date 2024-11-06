@@ -1,1 +1,38 @@
-<p>register works!</p>
+<div class="login-container">
+  <!-- Panel Izquierdo con Imagen -->
+  <div class="left-panel">
+    <img src="assets/register-illustration.png" alt="Illustration">
+  </div>
+
+  <!-- Panel Derecho con el Formulario de Registro -->
+  <div class="right-panel">
+    <div class="logo">
+      <img src="assets/logo.png" alt="Trade It Logo">
+    </div>
+    <h2>Registro</h2>
+
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input type="text" placeholder="Nombre de usuario" name="username" required />
+      </div>
+      <div class="form-group">
+        <input type="email" placeholder="Correo Electrónico" name="email" required />
+      </div>
+      <div class="form-group">
+        <input type="password" placeholder="Contraseña" name="password" required />
+      </div>
+      <div class="form-group">
+        <input type="password" placeholder="Confirmar Contraseña" name="confirmPassword" required />
+      </div>
+      <button type="submit" class="login-button">Registrarse</button>
+    </form>
+    
+    <p class="register-link">
+      ¿Ya tienes una cuenta?
+      <a (click)="navigateToLogin()">Inicia sesión aquí</a>
+    </p>
+
+    <!-- Botón para regresar a la vista anterior -->
+    <button class="login-button" (click)="goBack()">Regresar</button>
+  </div>
+</div>

@@ -1,26 +1,35 @@
-<!-- src/app/pages/home/components/home.component.html -->
+<app-header></app-header>
 
-<header class="header">
-    <h1>Bienvenido a Segunda Mano UP</h1>
-    <p>Compra, vende, renta o intercambia artículos fácilmente.</p>
-  </header>
-  
-  <!-- Sección de categorías o productos destacados -->
-  <section class="featured">
-    <h2>Artículos Destacados</h2>
-    <div class="item-list">
-      <!-- Aquí se incluirán las tarjetas de productos. Este es un ejemplo estático -->
-      <div class="item-card">
-        <h3>Artículo 1</h3>
-        <p>Descripción breve del artículo</p>
-        <button>Ver más</button>
-      </div>
-      <div class="item-card">
-        <h3>Artículo 2</h3>
-        <p>Descripción breve del artículo</p>
-        <button>Ver más</button>
-      </div>
-      <!-- Añadir más productos como sea necesario -->
+<!-- Nueva sección de galería de imágenes -->
+<section class="image-gallery">
+  <img src="assets/home1.png" alt="Estudiantes en la biblioteca">
+  <img src="assets/home2.png" alt="Estudiantes al aire libre">
+  <img src="assets/home3.png" alt="Estudiantes en el campus">
+</section>
+
+<div class="main-content">
+  <aside class="category-sidebar" [class.active]="menuVisible">
+    <button>BIOMEDICA</button>
+    <button>PETROLERA</button>
+    <button>MANUFACTURA</button>
+    <button>MECATRONICA</button>
+    <button>SOFTWARE</button>
+    <button>NANOTECNOLOGIA</button>
+    <button>ADMINISTRACION</button>
+    <button>AGROINDUSTRIAL</button>
+    <button>AMBIENTAL</button>
+    <button>ENERGIA</button>
+  </aside>
+
+  <section class="featured-products">
+    <div *ngFor="let item of items" class="product-card">
+      <img src="assets/img/product.jpg" alt="{{item.name}}">
+      <p>{{ item.name }}</p>
+      <fa-icon [icon]="faStar" (click)="addToFavorites(item)" class="favorite-icon"></fa-icon>
     </div>
   </section>
-  
+</div>
+
+<footer class="description">
+  <p>El desarrollo de esta plataforma para la compra y venta de artículos universitarios de segunda mano...</p>
+</footer>

@@ -1,0 +1,86 @@
+.product-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.image-section img {
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Contenedor general de detalles del producto */
+.details-container {
+  max-width: 500px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Estilos para las subsecciones de detalles */
+.title-section {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.badge {
+  color: red;
+  font-weight: bold;
+}
+
+.description-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.delivery-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.delivery-info {
+  color: blue;
+  font-weight: bold;
+}
+
+/* Información del vendedor */
+.seller-info {
+  max-width: 200px;
+  background-color: #f9f9f9;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* Tabla de especificaciones */
+.specifications table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.specifications th, .specifications td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Botón Comprar ahora */
+.buy-now {
+  background-color: #007bff;
+  color: #fff;
+  padding: 15px 25px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.buy-now:hover {
+  background-color: #0056b3;
+}
