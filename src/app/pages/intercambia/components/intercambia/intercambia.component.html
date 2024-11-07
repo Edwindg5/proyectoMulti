@@ -1,5 +1,72 @@
+<!-- Llama al componente de encabezado -->
+<app-header></app-header>
+
 <div class="intercambia-container">
-    <h2>Intercambia</h2>
-    <p>Intercambia artículos con otros usuarios aquí.</p>
+  <!-- Sección de detalles del producto -->
+  <div class="product-details">
+    <div class="product-image">
+      <img src="assets/mouse.jpg" alt="Producto">
+    </div>
+    <div class="product-info">
+      <h2>Free Wolf Ratón Ergonómico Bluetooth Inalámbrico Recargable Color Negro</h2>
+      <p class="price">$85 <span>IVA incluido</span></p>
+      <p class="availability">Entrega inmediata en universidad</p>
+      <p class="product-description">Lo que tienes que saber de este producto:</p>
+      <ul>
+        <li>Con 252 funciones.</li>
+        <li>Incluye memoria.</li>
+        <li>Cantidad de líneas de la pantalla: 4.</li>
+        <li>Almacena hasta 0GB.</li>
+      </ul>
+      <p class="pickup-info">Recoge dentro de las instalaciones</p>
+      <select class="pickup-select">
+        <option>Elige edificio de entrega</option>
+        <option>UD1</option>
+        <option>UD2</option>
+        <option>UD3</option>
+        <option>UD4</option>
+      </select>
+      <p class="quantity">Cantidad: 1 (1 disponible)</p>
+    </div>
+    <div class="seller-info">
+      <img src="assets/seller.jpg" alt="Vendedor" class="seller-image">
+      <div class="seller-details">
+        <h3>Información del vendedor</h3>
+        <p>Vendido por: Mónica Durango Mendez</p>
+        <p>Teléfono: 961-1313-999</p>
+        <p>Carrera: Ingeniería Biomédica</p>
+        <p>Correo: AlexDiaz24gmail.com</p>
+      </div>
+    </div>
   </div>
-  
+
+  <!-- Características del producto -->
+  <div class="product-features">
+    <h3>Características del producto</h3>
+    <div class="feature-table">
+      <div class="feature-row">
+        <span class="feature-label">Marca:</span>
+        <span class="feature-value">MRA</span>
+      </div>
+      <div class="feature-row">
+        <span class="feature-label">Modelo:</span>
+        <span class="feature-value">UNOR35MD</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de intercambio -->
+  <div class="exchange-section">
+    <h3>Artículo a intercambiar</h3>
+    <div class="upload-section">
+      <label for="upload">Subir imágenes:</label>
+      <input type="file" id="upload" class="upload-input">
+    </div>
+    <div class="exchange-info">
+      <input type="text" placeholder="Nombre">
+      <input type="text" placeholder="Estado">
+      <textarea placeholder="Descripción"></textarea>
+    </div>
+    <button class="exchange-button">Solicitar intercambio ahora</button>
+  </div>
+</div>

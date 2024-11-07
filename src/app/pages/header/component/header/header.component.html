@@ -1,13 +1,12 @@
 <header class="main-header">
-    <div class="logo">Logo</div>
-    <button class="menu-icon" (click)="toggleMenu()">&#9776;</button>
-    <nav class="nav-bar">
-      <button (click)="navigateTo('compra')">Compra</button>
-      <button (click)="navigateTo('vende')">Vende</button>
-      <button (click)="navigateTo('renta')">Renta</button>
-      <button (click)="navigateTo('intercambia')">Intercambia</button>
-      <input type="text" placeholder="Buscar" class="search-bar">
-      <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
-    </nav>
-  </header>
-  
+  <div class="logo">Logotipo</div>
+  <button class="menu-icon" (click)="toggleMenu()">☰</button>
+  <nav class="nav-bar" [class.visible]="menuVisible">
+    <button (click)="navigateTo('compra')">Compra</button>
+    <button (click)="navigateTo('vende')">Vende</button>
+    <button (click)="navigateTo('renta')">Renta</button>
+    <button (click)="navigateTo('intercambia')">Intercambio</button>
+    <input type="text" placeholder="Buscar" class="search-bar">
+    <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
+  </nav>
+</header>

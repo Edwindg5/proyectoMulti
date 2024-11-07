@@ -1,35 +1,61 @@
+/* Cabecera principal */
 .main-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #f8f9fa;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
-  .menu-icon {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .nav-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .search-bar {
-    padding: 5px;
-  }
-  
-  .user-icon {
-    width: 30px;
-    cursor: pointer;
-  }
-  
+  display: flex;
+  align-items: center;
+  background-color: #4a90e2;
+  padding: 20px;
+  color: white;
+  position: relative;
+}
+
+.main-header .logo {
+  flex: 1;
+  font-size: 1.5rem;
+}
+
+.menu-icon {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+}
+
+.nav-bar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+  font-size: 1.1rem;
+}
+
+.search-bar {
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  margin-left: 15px;
+}
+
+/* Icono de usuario */
+.user-icon {
+  margin-left: 20px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
