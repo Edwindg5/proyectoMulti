@@ -1,16 +1,22 @@
 /* Cabecera principal */
 .main-header {
   display: flex;
+  justify-content: space-between; /* Distribuye los elementos en los extremos */
   align-items: center;
   background-color: #4a90e2;
   padding: 20px;
   color: white;
-  position: relative;
+}
+
+/* Estilo para la sección izquierda */
+.left-side {
+  display: flex;
+  align-items: center;
 }
 
 /* Logo del proyecto */
-.main-header .logoproyect {
-  width: 60px; /* Ajusta el tamaño según el logo */
+.logoproyect {
+  width: 60px;
   height: 60px;
   margin-right: 15px;
 }
@@ -36,6 +42,12 @@
 .menu-icon:hover {
   transform: scale(1.1);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Estilo para la sección derecha */
+.right-side {
+  display: flex;
+  align-items: center;
 }
 
 /* Barra de navegación */

@@ -8,6 +8,7 @@
 .image-gallery img {
   width: 33.33%; /* Cada imagen ocupa un tercio del ancho */
   height: auto;
+  aspect-ratio: 20/10.5;
   object-fit: cover;
 }
 

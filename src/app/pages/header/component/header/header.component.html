@@ -1,12 +1,16 @@
 <header class="main-header">
-  <img src="assets/logoproyect.png" alt="Logoproyect" class=" logoproyect" (click)="navigateTo('home')">
-  <button class="menu-icon" (click)="toggleMenu()">☰</button>
-  <nav class="nav-bar" [class.visible]="menuVisible">
-    <button (click)="navigateTo('compra')">Compra</button>
-    <button (click)="navigateTo('vende')">Vende</button>
-    <button (click)="navigateTo('renta')">Renta</button>
-    <button (click)="navigateTo('intercambia')">Intercambio</button>
-    <input type="text" placeholder="Buscar" class="search-bar">
-    <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
-  </nav>
+  <div class="left-side">
+    <img src="assets/logoproyect.png" alt="Logoproyect" class="logoproyect" (click)="navigateTo('home')">
+    <button class="menu-icon" (click)="toggleMenu()">☰</button>
+  </div>
+  <div class="right-side">
+    <nav class="nav-bar" [class.visible]="menuVisible">
+      <button (click)="navigateTo('compra')">Compra</button>
+      <button (click)="navigateTo('vende')">Vende</button>
+      <button (click)="navigateTo('renta')">Renta</button>
+      <button (click)="navigateTo('intercambia')">Intercambio</button>
+      <input type="text" placeholder="Buscar" class="search-bar">
+      <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
+    </nav>
+  </div>
 </header>
