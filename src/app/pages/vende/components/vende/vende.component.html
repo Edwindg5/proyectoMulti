@@ -1,0 +1,34 @@
+<!-- Incluye el componente de encabezado -->
+<app-header></app-header>
+
+<div class="vende-container">
+  <h2>Registra tu artículo para vender</h2>
+
+  <form class="vende-form">
+    <label for="nombre">Nombre del artículo:</label>
+    <input type="text" id="nombre" placeholder="Ingresa el nombre del artículo">
+
+    <label for="cantidad">Cantidad disponible:</label>
+    <input type="number" id="cantidad" placeholder="Cantidad disponible">
+
+    <label for="precio">Precio:</label>
+    <input type="number" id="precio" placeholder="Precio en MXN">
+
+    <label for="categoria">Categoría:</label>
+    <select id="categoria">
+      <option value="">Selecciona la categoría</option>
+      <option value="electronica">Electrónica</option>
+      <option value="ropa">Ropa</option>
+      <option value="libros">Libros</option>
+      <option value="accesorios">Accesorios</option>
+    </select>
+
+    <label for="estado">Estado del artículo:</label>
+    <input type="text" id="estado" placeholder="Nuevo, Usado, etc.">
+
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" placeholder="Describe el artículo"></textarea>
+
+    <button type="submit" class="submit-button">Publicar artículo</button>
+  </form>
+</div>

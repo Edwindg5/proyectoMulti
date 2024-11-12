@@ -8,30 +8,47 @@
   position: relative;
 }
 
-.main-header .logo {
-  flex: 1;
-  font-size: 1.5rem;
+/* Logo del proyecto */
+.main-header .logoproyect {
+  width: 60px; /* Ajusta el tamaño según el logo */
+  height: 60px;
+  margin-right: 15px;
 }
 
+/* Ícono del menú */
 .menu-icon {
   font-size: 24px;
   background: none;
   border: none;
   color: white;
   cursor: pointer;
-  position: absolute;
-  left: 0;
-  bottom: -10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-right: 10px;
 }
 
+.menu-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Barra de navegación */
 .nav-bar {
   display: flex;
   align-items: center;
 }
 
-.nav-bar a {
+.nav-bar button {
+  background: none;
+  border: none;
   color: white;
-  text-decoration: none;
+  cursor: pointer;
   margin: 0 10px;
   font-size: 1.1rem;
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './pages/home/components/home/home.component';
-import { Router, RouterOutlet } from '@angular/router';
+import {  RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
