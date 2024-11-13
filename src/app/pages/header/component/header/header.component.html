@@ -13,4 +13,16 @@
       <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
     </nav>
   </div>
+
+  <!-- Menú de categorías -->
+  <nav *ngIf="menuVisible" class="categories-menu">
+    <ul>
+      <li (click)="navigateTo('electronica')">Electrónica</li>
+      <li (click)="navigateTo('material-estudio')">Material de Estudio</li>
+      <li (click)="navigateTo('herramientas')">Herramientas</li>
+      <li (click)="navigateTo('accesorios')">Accesorios</li>
+      <li (click)="navigateTo('componentes-electronicos')">Componentes Electrónicos</li>
+      <li (click)="navigateTo('todos-los-productos')">Todos los Productos</li>
+    </ul>
+  </nav>
 </header>

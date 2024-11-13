@@ -1,17 +1,66 @@
 /* Cabecera principal */
 .main-header {
   display: flex;
-  justify-content: space-between; /* Distribuye los elementos en los extremos */
   align-items: center;
+  justify-content: space-between;
   background-color: #4a90e2;
   padding: 20px;
   color: white;
 }
 
-/* Estilo para la sección izquierda */
+/* Sección izquierda con el logo y el botón de menú */
 .left-side {
   display: flex;
   align-items: center;
+}
+
+/* Sección derecha con los botones y el ícono de usuario */
+.right-side {
+  display: flex;
+  align-items: center;
+}
+
+/* Menú de navegación */
+.nav-bar button {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-right: 15px;
+}
+
+/* Menú de categorías oculto */
+.categories-menu {
+  display: flex;
+  flex-direction: column;
+  background-color: #4a90e2;
+  padding: 10px;
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  width: 200px;
+  border: 2px solid white;
+  border-radius: 8px;
+}
+
+.categories-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.categories-menu li {
+  background-color: #60a3d9;
+  color: white;
+  padding: 10px;
+  margin: 5px 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.categories-menu li:hover {
+  background-color: #4a90e2;
+  transform: scale(1.05);
+  transition: 0.3s;
 }
 
 /* Logo del proyecto */
@@ -35,8 +84,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-right: 10px;
 }
 
 .menu-icon:hover {
@@ -44,27 +91,7 @@
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 }
 
-/* Estilo para la sección derecha */
-.right-side {
-  display: flex;
-  align-items: center;
-}
-
-/* Barra de navegación */
-.nav-bar {
-  display: flex;
-  align-items: center;
-}
-
-.nav-bar button {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  margin: 0 10px;
-  font-size: 1.1rem;
-}
-
+/* Barra de búsqueda */
 .search-bar {
   padding: 5px;
   border-radius: 4px;
@@ -81,7 +108,6 @@
   border-radius: 50%;
   border: 2px solid white;
   object-fit: cover;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .user-icon:hover {
