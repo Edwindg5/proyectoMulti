@@ -1,1 +1,14 @@
-<p>material-estudio works!</p>
+<app-header></app-header>
+
+<div class="category-header">
+    <img src="assets/logo-accesorios.png" alt="Logo Accesorios" class="category-logo" />
+    <h1>Material de estudio</h1>
+  </div>
+  
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let product of products">
+      <img [src]="product.image" [alt]="product.name" class="product-image" />
+      <p class="product-name">{{ product.name }}</p>
+    </div>
+  </div>
+  
