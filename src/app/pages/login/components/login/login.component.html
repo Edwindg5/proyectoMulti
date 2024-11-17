@@ -1,19 +1,31 @@
 <div class="login-container">
   <div class="left-panel">
-    <img src="assets/logologin.png" alt="Illustration">
+    <img src="assets/logologin.png" alt="Illustration" />
   </div>
 
   <div class="right-panel">
     <div class="logo">
-      <img src="assets/logooriginal.png" alt="Trade It Logo">
+      <img src="assets/logooriginal.png" alt="Trade It Logo" />
     </div>
-    <h2>Welcome</h2>
+    <h2>Bienvenido</h2>
 
     <div class="form-group">
-      <input type="text" placeholder="Nombre" name="username" [(ngModel)]="username" required />
+      <input
+        type="text"
+        placeholder="Correo Electrónico"
+        name="correo_electronico"
+        [(ngModel)]="correo_electronico"
+        required
+      />
     </div>
     <div class="form-group">
-      <input type="password" placeholder="Contraseña" name="password" [(ngModel)]="password" required />
+      <input
+        type="password"
+        placeholder="Contraseña"
+        name="contrasena"
+        [(ngModel)]="contrasena"
+        required
+      />
     </div>
     <button (click)="onLoginClick()" class="login-button">Ingresar</button>
 

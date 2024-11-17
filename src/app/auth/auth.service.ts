@@ -1,31 +1,37 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private isAuthenticated: boolean = false;
+  private apiUrl = 'http://127.0.0.1:8000';
 
-  constructor() {}
+  constructor(private http: HttpClient, private router: Router) {}
 
-  // Método para iniciar sesión (puede recibir credenciales de usuario)
-  login(username: string, password: string): boolean {
-    // Aquí iría la lógica para autenticar con el backend.
-    // Por ahora, simularemos que el login es exitoso.
-    if (username === 'admin' && password === 'password') {
-      this.isAuthenticated = true;
-      return true;
-    }
-    return false;
+  login(credentials: { email: string; password: string }): Observable<any> {
+    // Convertir las credenciales en parámetros de consulta
+    const params = new URLSearchParams({
+      email: credentials.email,
+      password: credentials.password,
+    });
+
+    // Adjuntar los parámetros a la URL
+    return this.http.post(`${this.apiUrl}/users/users/login?${params.toString()}`, {});
   }
 
-  // Método para cerrar sesión
   logout(): void {
-    this.isAuthenticated = false;
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
-  // Método para verificar si el usuario está autenticado
-  isLoggedIn(): boolean {
-    return this.isAuthenticated;
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
+
+  saveToken(token: string): void {
+    localStorage.setItem('token', token);
   }
 }

@@ -1,38 +1,107 @@
-<div class="login-container">
+<div class="register-container">
   <!-- Panel Izquierdo con Imagen -->
   <div class="left-panel">
-    <img src="assets/logologin.png" alt="Illustration">
+    <img src="assets/logologin.png" alt="Imagen de Registro" />
   </div>
 
   <!-- Panel Derecho con el Formulario de Registro -->
   <div class="right-panel">
     <div class="logo">
-      <img src="assets/logooriginal.png" alt="Trade It Logo">
+      <img src="assets/logooriginal.png" alt="Logo Trade It" />
     </div>
     <h2>Registro</h2>
 
-    <form (ngSubmit)="onSubmit()">
+    <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
+<!-- Campo: Nombre -->
+<input
+  id="nombre"
+  type="text"
+  placeholder="Nombre completo"
+  name="nombre"
+  [(ngModel)]="username"
+  required
+  #nombreInput="ngModel"
+/>
+
+<!-- Campo: Correo Electrónico -->
+<input
+  id="correo"
+  type="email"
+  placeholder="Correo Electrónico"
+  name="correo"
+  [(ngModel)]="email"
+  required
+  #correoInput="ngModel"
+/>
+
+
+      <!-- Campo: Teléfono -->
       <div class="form-group">
-        <input type="text" placeholder="Nombre de usuario" name="username" required />
+        <label for="telefono">Teléfono</label>
+        <input
+          id="telefono"
+          type="text"
+          placeholder="Teléfono (opcional)"
+          name="telefono"
+          [(ngModel)]="telefono"
+        />
       </div>
+
+      <!-- Campo: Contraseña -->
       <div class="form-group">
-        <input type="email" placeholder="Correo Electrónico" name="email" required />
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Contraseña"
+          name="password"
+          [(ngModel)]="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <div *ngIf="passwordInput.invalid && passwordInput.touched" class="error">
+          La contraseña debe tener al menos 6 caracteres.
+        </div>
       </div>
+
+      <!-- Campo: Confirmar Contraseña -->
       <div class="form-group">
-        <input type="password" placeholder="Contraseña" name="password" required />
+        <label for="confirmPassword">Confirmar Contraseña</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirmar Contraseña"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword"
+          required
+          #confirmPasswordInput="ngModel"
+        />
+        <div
+          *ngIf="confirmPasswordInput.touched && confirmPassword !== password"
+          class="error"
+        >
+          Las contraseñas no coinciden.
+        </div>
       </div>
-      <div class="form-group">
-        <input type="password" placeholder="Confirmar Contraseña" name="confirmPassword" required />
-      </div>
-      <button type="submit" class="login-button">Registrarse</button>
+
+      <!-- Botón de Registro -->
+      <button
+        type="submit"
+        class="register-button"
+        [disabled]="registerForm.invalid || confirmPassword !== password"
+      >
+        Registrarse
+      </button>
     </form>
-    
-    <p class="register-link">
+
+    <!-- Enlace para Iniciar Sesión -->
+    <p class="login-link">
       ¿Ya tienes una cuenta?
       <a (click)="navigateToLogin()">Inicia sesión aquí</a>
     </p>
 
-    <!-- Botón para regresar a la vista anterior -->
-    <button class="login-button" (click)="goBack()">Regresar</button>
+    <!-- Botón para regresar -->
+    <button class="back-button" (click)="goBack()">Regresar</button>
   </div>
 </div>
