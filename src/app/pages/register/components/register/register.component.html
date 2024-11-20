@@ -12,28 +12,39 @@
     <h2>Registro</h2>
 
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
-<!-- Campo: Nombre -->
-<input
-  id="nombre"
-  type="text"
-  placeholder="Nombre completo"
-  name="nombre"
-  [(ngModel)]="username"
-  required
-  #nombreInput="ngModel"
-/>
+      <!-- Campo: Nombre -->
+      <div class="form-group">
+        <label for="username">Nombre completo</label>
+        <input
+          id="username"
+          type="text"
+          placeholder="Nombre completo"
+          name="username"
+          [(ngModel)]="username"
+          required
+          #usernameInput="ngModel"
+        />
+        <div *ngIf="usernameInput.invalid && usernameInput.touched" class="error">
+          El nombre completo es obligatorio.
+        </div>
+      </div>
 
-<!-- Campo: Correo Electrónico -->
-<input
-  id="correo"
-  type="email"
-  placeholder="Correo Electrónico"
-  name="correo"
-  [(ngModel)]="email"
-  required
-  #correoInput="ngModel"
-/>
-
+      <!-- Campo: Correo Electrónico -->
+      <div class="form-group">
+        <label for="email">Correo Electrónico</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Correo Electrónico"
+          name="email"
+          [(ngModel)]="email"
+          required
+          #emailInput="ngModel"
+        />
+        <div *ngIf="emailInput.invalid && emailInput.touched" class="error">
+          Por favor, ingresa un correo válido.
+        </div>
+      </div>
 
       <!-- Campo: Teléfono -->
       <div class="form-group">

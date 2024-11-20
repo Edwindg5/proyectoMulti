@@ -10,8 +10,7 @@ import { ElectronicaComponent } from './categories/component/electronica/electro
 import { MaterialEstudioComponent } from './categories/component/material-estudio/material-estudio.component';
 import { HerramientasComponent } from './categories/component/herramientas/herramientas.component';
 import { AccesoriosComponent } from './categories/component/accesorios/accesorios.component';
-import { TodosLosProductosComponent } from './categories/component/todos-los-productos/todos-los-productos.component';
-import { ComponentesElectronicosComponent } from './categories/component/componentes-electronicos/componentes-electronicos.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -26,6 +25,5 @@ export const routes: Routes = [
   {path: 'material-estudio', component:MaterialEstudioComponent },
   {path: 'herramientas', component:HerramientasComponent},
   {path:'accesorios', component:AccesoriosComponent},
-  {path: 'componentes-electronicos', component:ComponentesElectronicosComponent},
-  {path:'todos-los-productos', component:TodosLosProductosComponent}
+
 ];

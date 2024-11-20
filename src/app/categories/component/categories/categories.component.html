@@ -1,0 +1,20 @@
+<div class="categories-container" *ngIf="!isLoading; else loading">
+    <h3>Artículos de la Categoría {{ categoryId }}</h3>
+    <div *ngIf="articles.length; else noArticles">
+      <div class="article-card" *ngFor="let article of articles">
+        <h4>{{ article.nombre_articulo }}</h4>
+        <p>{{ article.descripcion }}</p>
+        <p><strong>Precio:</strong> {{ article.precio }} USD</p>
+        <p><strong>Estado:</strong> {{ article.estado }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <p>Cargando artículos...</p>
+  </ng-template>
+  
+  <ng-template #noArticles>
+    <p>No hay artículos disponibles en esta categoría.</p>
+  </ng-template>
+  

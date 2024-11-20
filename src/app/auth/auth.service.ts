@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -11,27 +11,55 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  // Login method
   login(credentials: { email: string; password: string }): Observable<any> {
-    // Convertir las credenciales en parámetros de consulta
     const params = new URLSearchParams({
       email: credentials.email,
       password: credentials.password,
+    }).toString();
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
     });
-
-    // Adjuntar los parámetros a la URL
-    return this.http.post(`${this.apiUrl}/users/users/login?${params.toString()}`, {});
+    return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers });
   }
 
+  // Logout method
   logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
+  // Check if the user is authenticated
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
   }
 
+  // Save token to localStorage
   saveToken(token: string): void {
     localStorage.setItem('token', token);
+  }
+
+  // Verify user identity using token
+  verifyIdentity(): Observable<any> {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('Token no encontrado');
+    }
+
+    return this.http.get(`${this.apiUrl}/users/users/verify`, {
+      headers: new HttpHeaders({ Authorization: `Bearer ${token}` }),
+    });
+  }
+
+  // Verify user by name and email
+  verifyUserByNameAndEmail(
+    name: string,
+    email: string
+  ): Observable<{ exists: boolean; userId?: number }> {
+    const body = { name, email }; // Ajustar los nombres aquí
+    return this.http.post<{ exists: boolean; userId?: number }>(
+      `${this.apiUrl}/users/users/verify`,
+      body
+    );
   }
 }

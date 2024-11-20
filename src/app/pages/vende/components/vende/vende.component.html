@@ -1,34 +1,103 @@
-<!-- Incluye el componente de encabezado -->
-<app-header></app-header>
-
 <div class="vende-container">
-  <h2>Registra tu artículo para vender</h2>
+  <app-header></app-header>
 
-  <form class="vende-form">
-    <label for="nombre">Nombre del artículo:</label>
-    <input type="text" id="nombre" placeholder="Ingresa el nombre del artículo">
+  <h2>Registrar Artículo</h2>
 
-    <label for="cantidad">Cantidad disponible:</label>
-    <input type="number" id="cantidad" placeholder="Cantidad disponible">
+  <form [formGroup]="form" (ngSubmit)="registerArticle()">
+    <div class="form-group">
+      <label for="articleName">Nombre del Artículo</label>
+      <input
+        type="text"
+        id="articleName"
+        formControlName="articleName"
+        placeholder="Introduce el nombre del artículo"
+      />
+      <small *ngIf="form.get('articleName')?.invalid && form.get('articleName')?.touched">
+        El nombre del artículo es obligatorio.
+      </small>
+    </div>
 
-    <label for="precio">Precio:</label>
-    <input type="number" id="precio" placeholder="Precio en MXN">
+    <div class="form-group">
+      <label for="articleDescription">Descripción</label>
+      <textarea
+        id="articleDescription"
+        formControlName="articleDescription"
+        placeholder="Describe el artículo"
+      ></textarea>
+      <small *ngIf="form.get('articleDescription')?.invalid && form.get('articleDescription')?.touched">
+        La descripción es obligatoria.
+      </small>
+    </div>
 
-    <label for="categoria">Categoría:</label>
-    <select id="categoria">
-      <option value="">Selecciona la categoría</option>
-      <option value="electronica">Electrónica</option>
-      <option value="ropa">Ropa</option>
-      <option value="libros">Libros</option>
-      <option value="accesorios">Accesorios</option>
-    </select>
+    <div class="form-group">
+      <label for="selectedCategoryId">Categoría</label>
+      <select id="selectedCategoryId" formControlName="selectedCategoryId">
+        <option value="" disabled selected>Selecciona una categoría</option>
+        <option
+          *ngFor="let category of categories"
+          [value]="category.id_categoria"
+        >
+          {{ category.nombre_categoria }}
+        </option>
+      </select>
+      <small *ngIf="form.get('selectedCategoryId')?.invalid && form.get('selectedCategoryId')?.touched">
+        Selecciona una categoría válida.
+      </small>
+    </div>
 
-    <label for="estado">Estado del artículo:</label>
-    <input type="text" id="estado" placeholder="Nuevo, Usado, etc.">
+    <div class="form-group">
+      <label for="articlePrice">Precio</label>
+      <input
+        type="number"
+        id="articlePrice"
+        formControlName="articlePrice"
+        min="1"
+        placeholder="Introduce el precio"
+      />
+      <small *ngIf="form.get('articlePrice')?.invalid && form.get('articlePrice')?.touched">
+        El precio debe ser mayor a 0.
+      </small>
+    </div>
 
-    <label for="descripcion">Descripción:</label>
-    <textarea id="descripcion" placeholder="Describe el artículo"></textarea>
+    <div class="form-group">
+      <label for="transactionType">Tipo de Transacción</label>
+      <select id="transactionType" formControlName="transactionType">
+        <option value="VENTA">Venta</option>
+        <option value="INTERCAMBIO">Intercambio</option>
+        <option value="DONACION">Donación</option>
+      </select>
+    </div>
 
-    <button type="submit" class="submit-button">Publicar artículo</button>
+    <div class="form-group">
+      <label for="userName">Nombre del Usuario</label>
+      <input
+        type="text"
+        id="userName"
+        formControlName="userName"
+        placeholder="Introduce tu nombre"
+      />
+      <small *ngIf="form.get('userName')?.invalid && form.get('userName')?.touched">
+        El nombre es obligatorio.
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="userEmail">Correo Electrónico</label>
+      <input
+        type="email"
+        id="userEmail"
+        formControlName="userEmail"
+        placeholder="Introduce tu correo electrónico"
+      />
+      <small *ngIf="form.get('userEmail')?.invalid && form.get('userEmail')?.touched">
+        Ingresa un correo electrónico válido.
+      </small>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+      {{ isLoading ? 'Cargando...' : 'Registrar Artículo' }}
+    </button>
   </form>
+
+  
 </div>

@@ -1,14 +1,13 @@
 <app-header></app-header>
-
-<div class="category-header">
-    <img src="assets/logo-accesorios.png" alt="Logo Accesorios" class="category-logo" />
-    <h1>Electronica</h1>
+<div *ngFor="let product of products" class="product-card">
+  <img [src]="product.image" alt="{{ product.nombre_articulo }}" class="product-image" />
+  <div class="product-info">
+    <h3>{{ product.nombre_articulo }}</h3>
+    <p>{{ product.descripcion }}</p>
+    <p>Precio: {{ product.precio | currency }}</p>
+    <p>Vendedor: {{ product.userName }}</p>
+    <p>Teléfono: {{ product.userPhone }}</p>
+    <button (click)="updateProduct(product)">Actualizar</button>
+    <button (click)="deleteProduct(product)">Eliminar</button>
   </div>
-  
-  <div class="products-grid">
-    <div class="product-card" *ngFor="let product of products">
-      <img [src]="product.image" [alt]="product.name" class="product-image" />
-      <p class="product-name">{{ product.name }}</p>
-    </div>
-  </div>
-  
+</div>
