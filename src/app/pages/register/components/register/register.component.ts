@@ -56,6 +56,6 @@ export class RegisterComponent {
   }
 
   goBack() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
 }

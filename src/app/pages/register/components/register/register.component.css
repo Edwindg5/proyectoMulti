@@ -1,5 +1,5 @@
 /* Contenedor principal */
-.login-container {
+.register-container {
     display: flex;
     height: 100vh;
     font-family: Arial, sans-serif;
@@ -88,5 +88,31 @@
   
   .register-link a:hover {
     text-decoration: underline;
+  }
+
+  .back-button{
+    width: 54.5%;
+    padding: 10px;
+    font-size: 1rem;
+    color: white;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
+  }
+
+  .register-button{
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    color: white;
+    background-color: #2ecc71;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 15px;
   }
   
