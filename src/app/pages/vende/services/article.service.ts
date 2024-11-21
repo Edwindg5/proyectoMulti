@@ -17,15 +17,15 @@ export class ArticleService {
   getProductsByCategory(categoryId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/items?categoryId=${categoryId}`);
   }
-  
-  createArticle(articleData: any): Observable<any> {
+  createArticle(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.post(`${this.apiUrl}/items/`, articleData, {
+    return this.http.post(`${this.apiUrl}/items/`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
       },
     });
   }
+  
+  
   
 }
