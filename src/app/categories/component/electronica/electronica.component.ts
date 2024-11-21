@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../services/category.service';
+import { Router } from '@angular/router';
 import { Item } from '../../models/item.model';
 import { HeaderComponent } from '../../../pages/header/component/header/header.component';
 import Swal from 'sweetalert2';
@@ -15,7 +16,7 @@ import Swal from 'sweetalert2';
 export class ElectronicaComponent implements OnInit {
   products: Item[] = [];
 
-  constructor(private categoryService: CategoryService) {}
+  constructor(private categoryService: CategoryService, private router: Router) {}
 
   ngOnInit(): void {
     const categoryId = 17; // ID de la categoría Electrónica
@@ -107,5 +108,9 @@ export class ElectronicaComponent implements OnInit {
         );
       }
     });
+  }
+
+  goToExchange(productId: number): void {
+    this.router.navigate(['/intercambia'], { state: { productId } });
   }
 }
