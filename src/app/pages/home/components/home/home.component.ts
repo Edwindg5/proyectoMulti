@@ -1,28 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../header/component/header/header.component';
+import { AuthService } from '../../../../auth/auth.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, FontAwesomeModule, HeaderComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   faStar = faStar;
   items = [
     { id: 1, name: 'Item 1' },
     { id: 2, name: 'Item 2' },
-    // Agrega más elementos según sea necesario
   ];
 
   menuVisible = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {}
+
+  ngOnInit(): void {
+    // Ya no se redirige automáticamente al login.
+  }
 
   addToFavorites(item: any) {
     let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');

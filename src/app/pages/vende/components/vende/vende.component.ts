@@ -17,10 +17,7 @@ import { finalize } from 'rxjs/operators';
 export class VendeComponent implements OnInit {
   form: FormGroup;
   categories: { id_categoria: number; nombre_categoria: string }[] = [];
-  products: any[] = []; // Aquí se guardarán los productos de la categoría seleccionada
   isLoading: boolean = false;
-  selectedFile: File | null = null;
-  imageError: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -35,7 +32,7 @@ export class VendeComponent implements OnInit {
       userName: ['', Validators.required],
       userEmail: ['', [Validators.required, Validators.email]],
       transactionType: ['VENTA', Validators.required],
-      articleState: ['DISPONIBLE', Validators.required],
+      articleState: ['DISPONIBLE', Validators.required], // Estado inicial por defecto
     });
   }
 
@@ -48,7 +45,8 @@ export class VendeComponent implements OnInit {
       next: (categories) => {
         this.categories = categories;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al cargar categorías:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error al cargar categorías',
@@ -58,81 +56,35 @@ export class VendeComponent implements OnInit {
     });
   }
 
-  loadProductsByCategory(): void {
-    const selectedCategoryId = this.form.get('selectedCategoryId')?.value;
-    if (!selectedCategoryId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Selecciona una categoría',
-        text: 'Por favor, elige una categoría para ver los productos.',
-      });
-      return;
-    }
-
-    this.isLoading = true;
-    this.articleService
-      .getProductsByCategory(selectedCategoryId)
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (products) => {
-          this.products = products;
-          Swal.fire({
-            icon: 'success',
-            title: 'Productos cargados',
-            text: `Se encontraron ${products.length} productos en esta categoría.`,
-          });
-        },
-        error: () => {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al cargar productos',
-            text: 'No se pudieron cargar los productos. Inténtalo más tarde.',
-          });
-        },
-      });
-  }
-
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      this.selectedFile = file;
-      this.imageError = false;
-    } else {
-      this.imageError = true;
-      this.selectedFile = null;
-    }
-  }
-
   registerArticle(): void {
-    if (this.form.invalid || !this.selectedFile) {
+    if (this.form.invalid) {
       Swal.fire({
         icon: 'warning',
         title: 'Formulario incompleto',
-        text: 'Por favor, completa todos los campos y selecciona una imagen.',
+        text: 'Por favor, completa todos los campos correctamente.',
       });
       return;
     }
-  
+
     this.isLoading = true;
     const { userName, userEmail, selectedCategoryId, ...articleData } = this.form.value;
-  
-    this.authService
-      .verifyUserByNameAndEmail(userName, userEmail)
+
+    this.authService.verifyUserByNameAndEmail(userName, userEmail)
       .pipe(finalize(() => (this.isLoading = false)))
       .subscribe({
         next: (response) => {
           if (response.exists && response.userId) {
-            const formData = new FormData();
-            formData.append('nombre_articulo', articleData.articleName);
-            formData.append('descripcion', articleData.articleDescription);
-            formData.append('id_categoria', selectedCategoryId.toString());
-            formData.append('precio', articleData.articlePrice.toString());
-            formData.append('tipo_transaccion', articleData.transactionType);
-            formData.append('usuario_id', response.userId.toString());
-            formData.append('estado', articleData.articleState);
-            formData.append('imagen', this.selectedFile!); // Agregas la imagen seleccionada aquí
-  
-            this.createArticle(formData);
+            const formattedArticle = {
+              nombre_articulo: articleData.articleName,
+              descripcion: articleData.articleDescription,
+              id_categoria: selectedCategoryId,
+              precio: articleData.articlePrice,
+              tipo_transaccion: articleData.transactionType,
+              usuario_id: response.userId,
+              estado: articleData.articleState,
+            };
+
+            this.createArticle(formattedArticle);
           } else {
             Swal.fire({
               icon: 'error',
@@ -141,7 +93,8 @@ export class VendeComponent implements OnInit {
             });
           }
         },
-        error: () => {
+        error: (error) => {
+          console.error('Error al verificar usuario:', error);
           Swal.fire({
             icon: 'error',
             title: 'Error al verificar usuario',
@@ -150,10 +103,9 @@ export class VendeComponent implements OnInit {
         },
       });
   }
-  
 
-  private createArticle(formData: FormData): void {
-    this.articleService.createArticle(formData).subscribe({
+  private createArticle(articleData: any): void {
+    this.articleService.createArticle(articleData).subscribe({
       next: () => {
         Swal.fire({
           icon: 'success',
@@ -162,14 +114,14 @@ export class VendeComponent implements OnInit {
           timer: 1500,
         });
         this.form.reset();
-        this.selectedFile = null;
         this.form.patchValue({ transactionType: 'VENTA', articleState: 'DISPONIBLE' });
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al registrar el artículo:', error);
         Swal.fire({
           icon: 'error',
           title: 'Error al registrar el artículo',
-          text: 'Inténtalo más tarde.',
+          text: error.error?.detail || 'Inténtalo más tarde.',
         });
       },
     });

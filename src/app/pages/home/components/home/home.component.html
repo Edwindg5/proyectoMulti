@@ -8,22 +8,9 @@
 </section>
 
 <div class="main-content">
-  <aside class="category-sidebar" [class.active]="menuVisible">
-    <button>BIOMEDICA</button>
-    <button>PETROLERA</button>
-    <button>MANUFACTURA</button>
-    <button>MECATRONICA</button>
-    <button>SOFTWARE</button>
-    <button>NANOTECNOLOGIA</button>
-    <button>ADMINISTRACION</button>
-    <button>AGROINDUSTRIAL</button>
-    <button>AMBIENTAL</button>
-    <button>ENERGIA</button>
-  </aside>
-
   <section class="featured-products">
     <div *ngFor="let item of items" class="product-card">
-      <img src="assets/img/product.jpg" alt="{{item.name}}">
+      <img src="assets/img/product.jpg" alt="{{ item.name }}">
       <p>{{ item.name }}</p>
       <fa-icon [icon]="faStar" (click)="addToFavorites(item)" class="favorite-icon"></fa-icon>
     </div>

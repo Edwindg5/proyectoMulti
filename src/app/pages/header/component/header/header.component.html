@@ -5,17 +5,21 @@
   </div>
   <div class="right-side">
     <nav class="nav-bar" [class.visible]="menuVisible">
-      <button (click)="navigateTo('compra')">Compra</button>
-      <button (click)="navigateTo('vende')">Vende</button>
-      <button (click)="navigateTo('renta')">Renta</button>
-      <button (click)="navigateTo('intercambia')">Intercambio</button>
+      <!-- Opciones restringidas -->
+      <ng-container *ngIf="isAuthenticated">
+        <button (click)="navigateTo('compra')">Compra</button>
+        <button (click)="navigateTo('vende')">Vende</button>
+        <button (click)="navigateTo('renta')">Renta</button>
+        <button (click)="navigateTo('intercambia')">Intercambio</button>
+      </ng-container>
+      
       <input type="text" placeholder="Buscar" class="search-bar">
       <img src="assets/usuario.png" alt="Usuario" class="user-icon" (click)="navigateToLogin()">
     </nav>
   </div>
 
-
-  <nav *ngIf="menuVisible" class="categories-menu">
+  <!-- Menú de categorías restringido -->
+  <nav *ngIf="menuVisible && isAuthenticated" class="categories-menu">
     <ul>
       <li (click)="navigateTo('electronica')">Electrónica</li>
       <li (click)="navigateTo('material-estudio')">Material de Estudio</li>
