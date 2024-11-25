@@ -1,33 +1,59 @@
 <app-header></app-header>
-
-<div class="intercambia-container">
+<div class="intercambio-container">
   <div class="product-details">
     <div class="product-image">
-      <img [src]="product?.image" alt="Producto" />
+      <img [src]="product?.url_imagen" alt="Imagen del producto" />
     </div>
     <div class="product-info">
       <h2>{{ product?.nombre_articulo }}</h2>
       <p class="price">{{ product?.precio | currency }}</p>
-      <p class="availability">Entrega inmediata en universidad</p>
-      <p class="product-description">{{ product?.descripcion }}</p>
+      <p class="tax">IVA incluido</p>
+      <div class="dropdown">
+        <label for="building">Elige edificio de entrega:</label>
+        <select id="building">
+          <option>UD1</option>
+          <option>UD2</option>
+          <option>UD3</option>
+          <option>UD4</option>
+        </select>
+      </div>
+      <p>Cantidad: 1 disponible</p>
     </div>
-    <div class="seller-info">
-      <p>Vendido por: {{ product?.userName }}</p>
-      <p>Teléfono: {{ product?.userPhone }}</p>
+  </div>
+
+  <div class="vendor-info">
+    <h3>Información del vendedor</h3>
+    <img
+      [src]="product?.profile_picture_url || 'ruta/a/imagen/default.png'"
+      alt="Imagen del vendedor"
+    />
+    <p><strong>Vendido por:</strong> {{ product?.userName }}</p>
+    <p><strong>Teléfono:</strong> {{ product?.userPhone }}</p>
+  
+    <div class="contact-info">
+      <h4>Contactar</h4>
+      <a 
+        [href]="'https://wa.me/' + product?.userPhone" 
+        target="_blank" 
+        class="social-icon"
+        title="Contactar en WhatsApp"
+      >
+        <img src="ruta/a/icono-whatsapp.png" alt="WhatsApp" />
+      </a>
     </div>
+  </div>
+  
+  <div class="product-characteristics">
+    <h3>Características del producto</h3>
+    <p *ngIf="product?.descripcion"><strong></strong> {{ product?.descripcion }}</p>
   </div>
 
   <div class="exchange-section">
     <h3>Artículo a intercambiar</h3>
-    <div class="upload-section">
-      <label for="upload">Subir imágenes:</label>
-      <input type="file" id="upload" class="upload-input" />
+    <div class="upload-container">
+      <input type="file" id="upload" />
+      <textarea placeholder="Descripción del artículo"></textarea>
     </div>
-    <div class="exchange-info">
-      <input type="text" placeholder="Nombre" />
-      <input type="text" placeholder="Estado" />
-      <textarea placeholder="Descripción"></textarea>
-    </div>
-    <button class="exchange-button">Solicitar intercambio ahora</button>
+    <button class="btn-exchange">Solicitar intercambio ahora</button>
   </div>
 </div>

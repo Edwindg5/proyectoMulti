@@ -1,11 +1,42 @@
 <app-header></app-header>
-
-<div class="products-container">
+<div class="card-container">
   <div *ngFor="let product of products" class="product-card">
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p><strong>Precio:</strong> ${{ product.price }}</p>
-    <p><strong>Usuario:</strong> {{ product.userName }}</p>
-    <p><strong>Teléfono:</strong> {{ product.userPhone }}</p>
+    <div class="main">
+      <img 
+        [src]="product.url_imagen" 
+        alt="{{ product.nombre_articulo }}" 
+        class="tokenImage" 
+      />
+      <h1>DESCRIPCION
+        <h2>Nombre Arti.: {{ product.nombre_articulo }}</h2>
+      </h1>
+      <p class="description">{{ product.descripcion }}</p>
+      <div class="tokenInfo">
+        <div class="price">
+          <p>{{ product.precio | currency }}</p>
+        </div>
+        <div class="duration">
+          <ins>TEL:</ins>
+          <p>{{ product.userPhone }}</p>
+        </div>
+      </div>
+      <hr />
+      <div class="creator">
+        <div class="wrapper">
+          <img 
+            [src]="product.profile_picture_url || 'ruta/a/imagen/default.png'" 
+            alt="Imagen del vendedor" 
+            class="creatorImage" 
+          />
+        </div>
+        <p><ins>Propietario: </ins> {{ product.userName }}</p>
+      </div>
+      
+      <div class="actions">
+        <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
+        <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
+        <button (click)="goToExchange(product)" class="btn-exchange">Ir a Intercambio</button>
+      </div>
+    </div>
   </div>
 </div>

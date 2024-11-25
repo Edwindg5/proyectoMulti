@@ -6,17 +6,27 @@ import { HeaderComponent } from '../../../header/component/header/header.compone
 @Component({
   selector: 'app-intercambia',
   standalone: true,
-  imports: [CommonModule, HeaderComponent], // Asegúrate de incluir CommonModule
+  imports: [CommonModule, HeaderComponent],
   templateUrl: './intercambia.component.html',
   styleUrls: ['./intercambia.component.css'],
 })
 export class IntercambiaComponent implements OnInit {
-  product: any;
+  product: any = null;
 
   constructor(private router: Router) {}
 
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
-    this.product = navigation?.extras?.state?.['productId']; // Uso de corchetes para productId
+    const storedProduct = localStorage.getItem('selectedProduct');
+    this.product = storedProduct ? JSON.parse(storedProduct) : null;
+
+    if (!this.product) {
+      console.warn('No se encontró información del producto.');
+    } else {
+      console.log('Producto cargado desde localStorage:', this.product);
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/material-estudio']); // Redirige a la página anterior
   }
 }

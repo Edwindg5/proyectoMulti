@@ -19,7 +19,7 @@ export class ElectronicaComponent implements OnInit {
   constructor(private categoryService: CategoryService, private router: Router) {}
 
   ngOnInit(): void {
-    const categoryId = 17; // ID de la categoría Electrónica
+    const categoryId = 21; // ID de la categoría Electrónica
     this.loadItemsByCategory(categoryId);
   }
 
@@ -32,7 +32,8 @@ export class ElectronicaComponent implements OnInit {
           descripcion: item.descripcion,
           precio: item.precio,
           usuario_id: item.usuario_id,
-          image: item.image || 'ruta/default.jpg',
+          url_imagen: item.url_imagen,
+          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
           userName: item.user?.nombre || 'Usuario no especificado',
           userPhone: item.user?.telefono || 'Teléfono no especificado',
         }));
@@ -42,6 +43,9 @@ export class ElectronicaComponent implements OnInit {
       }
     );
   }
+  
+  
+  
 
   updateProduct(product: Item): void {
     Swal.fire({
@@ -75,7 +79,7 @@ export class ElectronicaComponent implements OnInit {
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(17); // Vuelve a cargar los datos
+            this.loadItemsByCategory(21); // Vuelve a cargar los datos
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -99,7 +103,7 @@ export class ElectronicaComponent implements OnInit {
         this.categoryService.deleteItem(product.id_articulo).subscribe(
           () => {
             Swal.fire('Eliminado', 'El producto ha sido eliminado correctamente', 'success');
-            this.loadItemsByCategory(17); // Vuelve a cargar los datos
+            this.loadItemsByCategory(21); // Vuelve a cargar los datos
           },
           (error) => {
             Swal.fire('Error', 'Hubo un problema al eliminar el producto', 'error');

@@ -24,6 +24,12 @@
   <button (click)="prevSlide()" class="carousel-control prev">◀</button>
   <button (click)="nextSlide()" class="carousel-control next">▶</button>
 </div>
+<!-- Sección para mostrar la imagen -->
+<section class="image-display">
+  <h3>Imagen desde S3</h3>
+  <img [src]="imageUrl" alt="Imagen desde S3" class="s3-image" />
+</section>
+
 
 <!-- Pie de página -->
 <footer class="description">

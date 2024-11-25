@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../../auth/auth.service';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,8 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+
+
   onLoginClick() {
     const credentials = { 
       email: this.correo_electronico, 
@@ -25,16 +28,37 @@ export class LoginComponent {
   
     this.authService.login(credentials).subscribe({
       next: (response: any) => {
-        this.authService.saveToken(response.access_token);
-        alert('Inicio de sesión exitoso.');
-        this.router.navigate(['/home']);
+        const token = response.access_token;
+        const user = response.user;
+  
+        if (token && user) {
+          this.authService.saveToken(token);
+          localStorage.setItem('user', JSON.stringify(user)); // Guardar usuario completo
+          localStorage.setItem('userId', user.id); // Guardar solo el ID del usuario
+  
+          Swal.fire({
+            icon: 'success',
+            title: 'Inicio de sesión exitoso',
+            text: `Bienvenido, ${user.name || 'Usuario'}!`,
+            confirmButtonText: 'Aceptar',
+          });
+  
+          this.router.navigate(['/home']);
+        }
       },
       error: (err) => {
-        console.error(err);
-        alert('Error al iniciar sesión. Verifica tus credenciales.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al iniciar sesión',
+          text: 'Verifica tus credenciales e intenta nuevamente.',
+          confirmButtonText: 'Aceptar',
+        });
       },
     });
   }
+  
+  
+  
 
   navigateToRegister() {
     this.router.navigate(['/register']);
