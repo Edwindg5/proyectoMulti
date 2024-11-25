@@ -7,16 +7,22 @@
   <img src="assets/home3.png" alt="Estudiantes en el campus">
 </section>
 
-<!-- Contenedor principal para las cards -->
-<div class="content-wrapper">
-  <section class="featured-products">
-    <div class="card">
-      <div class="card2">
-        <img src="assets/producto1.png" alt="Audífonos" class="imgcard">
-        <p class="name">Audífonos</p>
+<!-- Carrusel de tarjetas -->
+<div class="carousel">
+  <div class="carousel-container" [style.transform]="getTransform()">
+    <div class="carousel-card" *ngFor="let card of cards">
+      <div class="card">
+        <div class="card2">
+          <div class="imgcard">
+            <img [src]="card.img" [alt]="card.name">
+          </div>
+          <p class="name">{{ card.name }}</p>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
+  <button (click)="prevSlide()" class="carousel-control prev">◀</button>
+  <button (click)="nextSlide()" class="carousel-control next">▶</button>
 </div>
 
 <!-- Pie de página -->

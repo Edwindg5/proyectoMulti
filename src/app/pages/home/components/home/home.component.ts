@@ -13,39 +13,26 @@ import { AuthService } from '../../../../auth/auth.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })
-export class HomeComponent implements OnInit {
-  faStar = faStar;
-  items = [
-    { id: 1, name: 'Item 1' },
-    { id: 2, name: 'Item 2' },
+export class HomeComponent {
+  cards = [
+    { img: 'assets/producto1.png', name: 'Audífonos' },
+    { img: 'assets/producto2.png', name: 'Teclado' },
+    { img: 'assets/producto3.png', name: 'Mouse' },
+    { img: 'assets/producto4.png', name: 'Calculadora'}
   ];
 
-  menuVisible = false;
+  currentIndex: number = 0;
 
-  constructor(private router: Router, private authService: AuthService) {}
-
-  ngOnInit(): void {
-    // Ya no se redirige automáticamente al login.
+  prevSlide(): void {
+    this.currentIndex =
+      (this.currentIndex - 1 + this.cards.length) % this.cards.length;
   }
 
-  addToFavorites(item: any) {
-    let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
-    if (!favorites.some((fav: any) => fav.id === item.id)) {
-      favorites.push(item);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-      alert('Agregado a destacados');
-    }
+  nextSlide(): void {
+    this.currentIndex = (this.currentIndex + 1) % this.cards.length;
   }
 
-  toggleMenu() {
-    this.menuVisible = !this.menuVisible;
-  }
-
-  navigateToLogin() {
-    this.router.navigate(['/login']);
-  }
-
-  navigateTo(route: string) {
-    this.router.navigate([`/${route}`]);
+  getTransform(): string {
+    return `translateX(-${this.currentIndex * 100}%)`;
   }
 }
