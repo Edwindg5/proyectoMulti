@@ -19,8 +19,15 @@ export class HomeComponent implements OnInit {
     { id: 1, name: 'Item 1' },
     { id: 2, name: 'Item 2' },
   ];
-
   menuVisible = false;
+  cards = [
+    { img: 'assets/producto1.png', name: 'Audífonos' },
+    { img: 'assets/producto2.png', name: 'Teclado' },
+    { img: 'assets/producto3.png', name: 'Mouse' },
+    { img: 'assets/producto4.png', name: 'Calculadora' }
+  ];
+  currentIndex: number = 0;
+  imageUrl: string = 'https://segundamanoup.s3.us-east-1.amazonaws.com/uploads/agura.jpg';
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -48,6 +55,18 @@ export class HomeComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([`/${route}`]);
   }
-  imageUrl: string = 'https://segundamanoup.s3.us-east-1.amazonaws.com/uploads/agura.jpg';
 
+  // Métodos para el carrusel
+  prevSlide(): void {
+    this.currentIndex =
+      (this.currentIndex - 1 + this.cards.length) % this.cards.length;
+  }
+
+  nextSlide(): void {
+    this.currentIndex = (this.currentIndex + 1) % this.cards.length;
+  }
+
+  getTransform(): string {
+    return `translateX(-${this.currentIndex * 100}%)`;
+  }
 }
