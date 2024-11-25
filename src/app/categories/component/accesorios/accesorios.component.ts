@@ -23,7 +23,7 @@ export class AccesoriosComponent implements OnInit {
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    const categoryId = 16; // ID para "Accesorios"
+    const categoryId = 20; // ID para "Accesorios"
     this.categoryService.getItemsByCategory(categoryId).subscribe(
       (data) => {
         this.products = data.map((item: Item) => ({

@@ -9,7 +9,7 @@ export interface User {
     descripcion: string;
     precio: number;
     usuario_id: number;
-    image?: string;
+    url_imagen?: string,
     userName?: string;
     userPhone?: string;
     user?: User;

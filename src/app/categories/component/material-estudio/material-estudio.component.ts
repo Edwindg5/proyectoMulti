@@ -22,7 +22,7 @@ export class MaterialEstudioComponent implements OnInit {
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    const categoryId = 19; // ID para "Material de Estudio"
+    const categoryId = 23; // ID para "Material de Estudio"
 
     this.categoryService.getItemsByCategory(categoryId).subscribe(
       (data) => {

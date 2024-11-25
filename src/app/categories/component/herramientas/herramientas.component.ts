@@ -22,7 +22,7 @@ export class HerramientasComponent implements OnInit {
   constructor(private categoryService: CategoryService) {}
 
   ngOnInit(): void {
-    const categoryId = 18; // ID para "Herramientas"
+    const categoryId = 22; // ID para "Herramientas"
 
     this.categoryService.getItemsByCategory(categoryId).subscribe(
       (data) => {

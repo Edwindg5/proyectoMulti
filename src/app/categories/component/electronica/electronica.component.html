@@ -1,14 +1,38 @@
 <app-header></app-header>
-<div *ngFor="let product of products" class="product-card">
-  <img [src]="product.image" alt="{{ product.nombre_articulo }}" class="product-image" />
-  <div class="product-info">
-    <h3>{{ product.nombre_articulo }}</h3>
-    <p>{{ product.descripcion }}</p>
-    <p>Precio: {{ product.precio | currency }}</p>
-    <p>Vendedor: {{ product.userName }}</p>
-    <p>Teléfono: {{ product.userPhone }}</p>
-    <button (click)="updateProduct(product)">Actualizar</button>
-    <button (click)="deleteProduct(product)">Eliminar</button>
-    <button (click)="goToExchange(product.id_articulo)">Intercambiar</button>
+<div class="card-container">
+  <div *ngFor="let product of products" class="product-card">
+    <div class="main">
+      <img 
+        [src]="product.url_imagen" 
+        alt="{{ product.nombre_articulo }}" 
+        class="tokenImage" 
+      />
+      <h2>Nombre Arti.: {{ product.nombre_articulo }}</h2>
+      <p class="description">{{ product.descripcion }}</p>
+      <div class="tokenInfo">
+        <div class="price">
+          <p>{{ product.precio | currency }}</p>
+        </div>
+        <div class="duration">
+          <ins>TEL:</ins>
+          <p>{{ product.userPhone }}</p>
+        </div>
+      </div>
+      <hr />
+      <div class="creator">
+        <div class="wrapper">
+          <img 
+            [src]="product.url_imagen" 
+            alt="Imagen del vendedor" 
+            class="creatorImage" 
+          />
+        </div>
+        <p><ins>Propietario: </ins> {{ product.userName }}</p>
+      </div>
+      <div class="actions">
+        <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
+        <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
+      </div>
+    </div>
   </div>
 </div>

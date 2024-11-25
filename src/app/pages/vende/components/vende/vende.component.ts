@@ -5,7 +5,6 @@ import { AuthService } from '../../../../auth/auth.service';
 import { HeaderComponent } from '../../../header/component/header/header.component';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
-import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-vende',
@@ -16,8 +15,12 @@ import { finalize } from 'rxjs/operators';
 })
 export class VendeComponent implements OnInit {
   form: FormGroup;
+  imageForm: FormGroup;
   categories: { id_categoria: number; nombre_categoria: string }[] = [];
-  isLoading: boolean = false;
+  isLoading = false;
+  isImageLoading = false;
+  imageUploaded = false;
+  imageUrl = ''; // URL de la imagen subida
 
   constructor(
     private fb: FormBuilder,
@@ -28,11 +31,18 @@ export class VendeComponent implements OnInit {
       articleName: ['', Validators.required],
       articleDescription: ['', Validators.required],
       selectedCategoryId: [null, Validators.required],
-      articlePrice: [null, [Validators.required, Validators.min(1)]],
+      articlePrice: [
+        null,
+        [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')],
+      ],
+      transactionType: ['VENTA', Validators.required],
+      articleState: ['DISPONIBLE', Validators.required],
       userName: ['', Validators.required],
       userEmail: ['', [Validators.required, Validators.email]],
-      transactionType: ['VENTA', Validators.required],
-      articleState: ['DISPONIBLE', Validators.required], // Estado inicial por defecto
+    });
+
+    this.imageForm = this.fb.group({
+      articleImage: [null, Validators.required],
     });
   }
 
@@ -45,8 +55,7 @@ export class VendeComponent implements OnInit {
       next: (categories) => {
         this.categories = categories;
       },
-      error: (error) => {
-        console.error('Error al cargar categorías:', error);
+      error: () => {
         Swal.fire({
           icon: 'error',
           title: 'Error al cargar categorías',
@@ -56,72 +65,124 @@ export class VendeComponent implements OnInit {
     });
   }
 
-  registerArticle(): void {
-    if (this.form.invalid) {
+  onImageSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Formato de imagen no válido',
+          text: 'Solo se permiten imágenes JPG y PNG.',
+        });
+        this.imageForm.patchValue({ articleImage: null });
+        return;
+      }
+      this.imageForm.patchValue({ articleImage: file });
+      this.imageForm.get('articleImage')?.updateValueAndValidity();
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result as string; // Vista previa
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onImageSubmit(): void {
+    if (this.imageForm.invalid) {
       Swal.fire({
         icon: 'warning',
-        title: 'Formulario incompleto',
-        text: 'Por favor, completa todos los campos correctamente.',
+        title: 'Formulario de imagen incompleto',
+        text: 'Por favor, selecciona una imagen.',
       });
       return;
     }
 
-    this.isLoading = true;
-    const { userName, userEmail, selectedCategoryId, ...articleData } = this.form.value;
+    this.isImageLoading = true;
+    const file = this.imageForm.get('articleImage')?.value;
 
-    this.authService.verifyUserByNameAndEmail(userName, userEmail)
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe({
-        next: (response) => {
-          if (response.exists && response.userId) {
-            const formattedArticle = {
-              nombre_articulo: articleData.articleName,
-              descripcion: articleData.articleDescription,
-              id_categoria: selectedCategoryId,
-              precio: articleData.articlePrice,
-              tipo_transaccion: articleData.transactionType,
-              usuario_id: response.userId,
-              estado: articleData.articleState,
-            };
-
-            this.createArticle(formattedArticle);
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Usuario no encontrado',
-              text: 'Por favor verifica tu nombre y correo.',
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Error al verificar usuario:', error);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error al verificar usuario',
-            text: 'Inténtalo más tarde.',
-          });
-        },
-      });
-  }
-
-  private createArticle(articleData: any): void {
-    this.articleService.createArticle(articleData).subscribe({
-      next: () => {
+    this.articleService.uploadImage(file).subscribe({
+      next: (response) => {
+        this.imageUrl = response.url; // URL desde el backend
+        this.imageUploaded = true;
         Swal.fire({
           icon: 'success',
-          title: 'Artículo registrado exitosamente',
-          showConfirmButton: false,
-          timer: 1500,
+          title: 'Imagen subida exitosamente',
+          text: 'Ahora puedes registrar el artículo.',
         });
-        this.form.reset();
-        this.form.patchValue({ transactionType: 'VENTA', articleState: 'DISPONIBLE' });
       },
-      error: (error) => {
-        console.error('Error al registrar el artículo:', error);
+      error: () => {
         Swal.fire({
           icon: 'error',
-          title: 'Error al registrar el artículo',
-          text: error.error?.detail || 'Inténtalo más tarde.',
+          title: 'Error al subir la imagen',
+          text: 'Hubo un problema al subir la imagen. Intenta nuevamente.',
+        });
+      },
+      complete: () => {
+        this.isImageLoading = false;
+      },
+    });
+  }
+
+  submitForm(): void {
+    if (this.form.invalid || !this.imageUploaded) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario incompleto',
+        text: 'Por favor, completa todos los campos requeridos y sube una imagen.',
+      });
+      return;
+    }
+
+    const name = this.form.get('userName')?.value;
+    const email = this.form.get('userEmail')?.value;
+
+    this.authService.verifyUserByNameAndEmail(name, email).subscribe({
+      next: (response) => {
+        if (response.exists && response.userId) {
+          const articleData = {
+            nombre_articulo: this.form.get('articleName')?.value,
+            descripcion: this.form.get('articleDescription')?.value,
+            id_categoria: Number(this.form.get('selectedCategoryId')?.value),
+            precio: this.form.get('articlePrice')?.value,
+            tipo_transaccion: this.form.get('transactionType')?.value,
+            estado: this.form.get('articleState')?.value,
+            usuario_id: response.userId,
+            imagen_url: this.imageUrl, // URL de la imagen subida
+          };
+
+          this.isLoading = true;
+          this.articleService.createArticle(articleData).subscribe({
+            next: () => {
+              Swal.fire('Éxito', 'El artículo fue registrado correctamente.', 'success');
+              this.form.reset();
+            },
+            error: (err) => {
+              console.error('Error del backend:', err);
+              Swal.fire(
+                'Error',
+                err.error.detail || 'No se pudo registrar el artículo.',
+                'error'
+              );
+            },
+            complete: () => {
+              this.isLoading = false;
+            },
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Usuario no autenticado',
+            text: 'El nombre o correo no coinciden con un usuario autenticado.',
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error de autenticación:', err);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error al verificar autenticación',
+          text: err.error.message || 'No se pudo verificar la autenticación.',
         });
       },
     });

@@ -10,6 +10,7 @@ export class ArticleService {
 
   constructor(private http: HttpClient) {}
 
+
   getCategories(): Observable<any> {
     return this.http.get(`${this.apiUrl}/categories/`);
   }
@@ -19,13 +20,28 @@ export class ArticleService {
   }
   
   createArticle(articleData: any): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); // Obtén el token del localStorage
     return this.http.post(`${this.apiUrl}/items/`, articleData, {
       headers: {
-        Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // Añade el token en los encabezados
       },
     });
+  }
+  verifyUserByNameAndEmail(name: string, email: string): Observable<{ exists: boolean; userId?: number }> {
+    const body = { name, email };
+    return this.http.post<{ exists: boolean; userId?: number }>(
+      `${this.apiUrl}/users/verify`,
+      body
+    );
+  }
+  
+  
+  
+  uploadImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<{ url: string }>(`${this.apiUrl}/upload`, formData); // Cambia a `/upload`
   }
   
 }

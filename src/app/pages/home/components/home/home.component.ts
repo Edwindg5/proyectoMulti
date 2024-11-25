@@ -48,4 +48,6 @@ export class HomeComponent implements OnInit {
   navigateTo(route: string) {
     this.router.navigate([`/${route}`]);
   }
+  imageUrl: string = 'https://segundamanoup.s3.us-east-1.amazonaws.com/uploads/agura.jpg';
+
 }
