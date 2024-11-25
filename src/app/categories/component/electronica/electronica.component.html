@@ -21,14 +21,15 @@
       <hr />
       <div class="creator">
         <div class="wrapper">
-          <img 
-            [src]="product.url_imagen" 
-            alt="Imagen del vendedor" 
-            class="creatorImage" 
-          />
+            <img 
+                [src]="product.profile_picture_url || 'ruta/a/imagen/default.png'" 
+                alt="Imagen del vendedor" 
+                class="creatorImage" 
+            />
         </div>
         <p><ins>Propietario: </ins> {{ product.userName }}</p>
-      </div>
+    </div>
+    
       <div class="actions">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>

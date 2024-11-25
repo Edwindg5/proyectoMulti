@@ -41,7 +41,7 @@
       </div>
 
       <div class="form-group">
-        <label for="articleDescription">Descripción</label>
+        <label for="articleDescription">Caracterisiticas</label>
         <textarea
           id="articleDescription"
           formControlName="articleDescription"
@@ -51,6 +51,20 @@
           La descripción es obligatoria.
         </small>
       </div>
+      <div class="form-group">
+        <label for="articleQuantity">Cantidad</label>
+        <input
+          type="number"
+          id="articleQuantity"
+          formControlName="articleQuantity"
+          min="1"
+          placeholder="Introduce la cantidad disponible"
+        />
+        <small *ngIf="form.get('articleQuantity')?.invalid && form.get('articleQuantity')?.touched">
+          La cantidad debe ser mayor a 0.
+        </small>
+      </div>
+      
 
       <div class="form-group">
         <label for="selectedCategoryId">Categoría</label>

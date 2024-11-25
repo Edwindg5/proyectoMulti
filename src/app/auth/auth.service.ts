@@ -19,24 +19,27 @@
     
     // Login method
     login(credentials: { email: string; password: string }): Observable<any> {
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
       const params = new URLSearchParams({
         email: credentials.email,
         password: credentials.password,
       }).toString();
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     
       return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers }).pipe(
         tap((response: any) => {
-          const token = response.token;
-          const user = response.user; // Asegúrate de que el backend envíe los datos del usuario
+          console.log('Respuesta del backend:', response);
+          const token = response.access_token;
+          const user = response.user;
     
           if (token && user) {
             this.saveToken(token);
-            localStorage.setItem('user', JSON.stringify(user)); // Guarda el objeto del usuario
+            localStorage.setItem('user', JSON.stringify(user)); // Guardar información del usuario
           }
         })
       );
     }
+    
+    
     
     // Logout method
     logout(): void {

@@ -35,11 +35,16 @@ export class VendeComponent implements OnInit {
         null,
         [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')],
       ],
+      articleQuantity: [
+        null,
+        [Validators.required, Validators.min(1), Validators.pattern('^[0-9]+$')], // NUEVO CAMPO
+      ],
       transactionType: ['VENTA', Validators.required],
       articleState: ['DISPONIBLE', Validators.required],
       userName: ['', Validators.required],
       userEmail: ['', [Validators.required, Validators.email]],
     });
+    
 
     this.imageForm = this.fb.group({
       articleImage: [null, Validators.required],
@@ -145,11 +150,13 @@ export class VendeComponent implements OnInit {
             descripcion: this.form.get('articleDescription')?.value,
             id_categoria: Number(this.form.get('selectedCategoryId')?.value),
             precio: this.form.get('articlePrice')?.value,
+            cantidad: this.form.get('articleQuantity')?.value, // NUEVO CAMPO
             tipo_transaccion: this.form.get('transactionType')?.value,
             estado: this.form.get('articleState')?.value,
             usuario_id: response.userId,
-            imagen_url: this.imageUrl, // URL de la imagen subida
+            imagen_url: this.imageUrl,
           };
+          
 
           this.isLoading = true;
           this.articleService.createArticle(articleData).subscribe({

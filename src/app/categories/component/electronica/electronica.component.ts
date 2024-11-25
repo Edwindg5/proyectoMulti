@@ -32,7 +32,8 @@ export class ElectronicaComponent implements OnInit {
           descripcion: item.descripcion,
           precio: item.precio,
           usuario_id: item.usuario_id,
-          url_imagen: item.url_imagen, // Aquí debería estar la URL de la imagen
+          url_imagen: item.url_imagen,
+          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
           userName: item.user?.nombre || 'Usuario no especificado',
           userPhone: item.user?.telefono || 'Teléfono no especificado',
         }));
@@ -42,6 +43,7 @@ export class ElectronicaComponent implements OnInit {
       }
     );
   }
+  
   
   
 
