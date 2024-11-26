@@ -1,98 +1,106 @@
-.product-container {
-  width: 90%;
+.intercambio-container {
+  width: 80%;
   max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  gap: 20px;
+  margin: 40px auto; /* Agrega espacio entre el header y las secciones */
+  display: flex; /* Alinea las secciones en fila */
+  gap: 40px; /* Aumenta el espacio entre las secciones */
   font-family: Arial, sans-serif;
+  justify-content: space-between; /* Distribuye uniformemente las secciones */
+  align-items: stretch; /* Asegura que todas las secciones tengan el mismo largo */
 }
 
-.image-section img {
-  width: 300px;
+.section {
+  flex: 1; /* Distribuye uniformemente el espacio entre las secciones */
+  padding: 20px;
+  border: 3px solid #0a0a0a;
+  border-radius: 5px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 400px; /* Define un largo fijo */
+}
+.product-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.product-image img {
+  width: 120px;
   height: auto;
 }
 
-.details-container {
-  flex: 1;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.title-section h2 {
-  font-size: 24px;
+.product-info h2, .vendor-info h3, .product-characteristics h3 {
+  font-size: 20px;
   font-weight: bold;
+  margin-bottom: 10px;
+  color: #000000;
 }
 
-.badge {
-  background-color: #FFD700;
-  color: #000;
-  padding: 5px;
-  font-size: 14px;
+.vendor-info img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+.product-characteristics {
+  width: 100%; /* Abarca todo el ancho del contenedor principal */
+  max-width: 1200px; /* Evita que se desborde en pantallas grandes */
+  margin: 20px auto; /* Centra la sección y agrega separación vertical */
+  padding: 10px 15px; /* Reduce el espacio interno para evitar exceso de alto */
+  border: 3px solid #0d0d0d;
   border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
 }
 
-.details-container .price {
-  font-size: 24px;
-  color: #1a73e8;
+
+.product-characteristics h3 {
+  font-size: 18px;
   font-weight: bold;
-}
-
-.details-container .price span {
-  font-size: 16px;
-  color: #666;
-}
-
-.description-section {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-.delivery-info {
-  font-weight: bold;
-  color: #1a73e8;
-}
-
-.delivery-section select {
-  margin-top: 10px;
-  padding: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.seller-info {
-  width: 250px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  margin-bottom: 10px; /* Reduce el margen inferior */
+  color: #000000;
   text-align: center;
 }
-
-.specifications {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.product-characteristics table {
+  width: 100%; /* Ocupa todo el ancho del contenedor */
+  max-width: 100%; /* Evita desbordamiento horizontal */
+  border-collapse: collapse; /* Elimina espacios entre celdas */
+  margin: 0 auto; /* Centra la tabla dentro de la sección */
+  overflow-x: auto; /* Asegura que el contenido no cause scroll horizontal */
 }
 
-.specifications table {
-  width: 100%;
-  border-collapse: collapse;
-}
 
-.specifications th, .specifications td {
-  padding: 8px;
-  border: 1px solid #ccc;
+.product-characteristics th,
+.product-characteristics td {
   text-align: left;
+  padding: 8px; /* Reduce el padding interno de las celdas */
+  border: 1px solid #ddd; /* Define bordes internos */
 }
 
-.buy-now {
-  background-color: #1a73e8;
-  color: white;
+.product-characteristics th {
+  background-color: #f0f0f0; /* Fondo para encabezados */
+  font-weight: bold;
+}
+
+.btn-exchange {
+  display: block;
+  margin: 20px auto;
   padding: 10px 20px;
+  background-color: #6ca8d8;
+  color: white;
+  font-size: 16px;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+.btn-exchange:hover {
+  background-color: #0056b3; /* Color al pasar el mouse */
+}
+

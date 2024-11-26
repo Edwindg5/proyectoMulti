@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ArticleService } from '../../services/article.service';
 import { AuthService } from '../../../../auth/auth.service';
+import { CarouselService } from '../../../home/services/carousel.service';
 import { HeaderComponent } from '../../../header/component/header/header.component';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
@@ -25,7 +26,8 @@ export class VendeComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private articleService: ArticleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private carouselService: CarouselService
   ) {
     this.form = this.fb.group({
       articleName: ['', Validators.required],
@@ -148,13 +150,13 @@ export class VendeComponent implements OnInit {
           const articleData = {
             nombre_articulo: this.form.get('articleName')?.value,
             descripcion: this.form.get('articleDescription')?.value,
-            id_categoria: Number(this.form.get('selectedCategoryId')?.value),
+            id_categoria: this.form.get('selectedCategoryId')?.value,
             precio: this.form.get('articlePrice')?.value,
-            cantidad: this.form.get('articleQuantity')?.value, // NUEVO CAMPO
             tipo_transaccion: this.form.get('transactionType')?.value,
+            usuario_id: this.authService.getUserId(),
             estado: this.form.get('articleState')?.value,
-            usuario_id: response.userId,
-            imagen_url: this.imageUrl,
+            url_imagen: this.imageUrl,  // Asegúrate de enviar la URL de la imagen
+            cantidad: this.form.get('articleQuantity')?.value,
           };
           
 
@@ -163,6 +165,12 @@ export class VendeComponent implements OnInit {
             next: () => {
               Swal.fire('Éxito', 'El artículo fue registrado correctamente.', 'success');
               this.form.reset();
+              this.carouselService.addArticle({
+                id: Date.now(), // Genera un ID único
+                name: articleData.nombre_articulo,
+                img: articleData.url_imagen,
+              });
+              
             },
             error: (err) => {
               console.error('Error del backend:', err);

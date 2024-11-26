@@ -9,5 +9,6 @@ import { HeaderComponent } from '../../../header/component/header/header.compone
   styleUrl: './compra.component.css'
 })
 export class CompraComponent {
+  
 
 }
