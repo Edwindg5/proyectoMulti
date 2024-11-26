@@ -120,6 +120,7 @@ export class MaterialEstudioComponent implements OnInit {
 goToExchange(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
   this.router.navigate(['/intercambia']); // Navegar a la ruta
+  this.router.navigate(['/compra']);
 }
 
   

@@ -65,27 +65,29 @@
   border-radius: 3px; /* Bordes ligeramente redondeados (opcional) */
 }
 
+.textodeboton{
+  color: #004FC5;
+  margin-top: 40px;
+}
 
 .dropdown {
-  margin-top: 10px; /* Separación superior inicial */
+  margin-top: 50px; /* Ajusta este valor para moverlo más abajo */
   color: #000000; /* Color del texto */
   border: 2px solid #000000; /* Borde del color deseado */
   background-color: #6ca8d8; /* Color de fondo */
-  font-size: 20px; /* Tamaño de la fuente */
-  padding: 3px 3px; /* Espaciado interno */
-  
-  border-radius: 15px; /* Bordes redondeados opcionales */
+  font-size: 12px; /* Tamaño de la fuente más pequeño */
+  padding: 2px 5px; /* Relleno interno más pequeño */
+  border-radius: 10px; /* Bordes redondeados */
 }
 
 .cantidad {
+  margin-top:50px; /* Ajusta este valor para moverlo más abajo */
   color: #000000; /* Color del texto */
   border: 2px solid #000000; /* Borde del color deseado */
   background-color: #6ca8d8; /* Color de fondo */
-  font-size: 16px; /* Tamaño de la fuente */
-  padding: 5px 10px; /* Espaciado interno */
-  display: inline-block; /* Asegura que el tamaño se ajuste al contenido */
-  border-radius: 15px; /* Bordes redondeados opcionales */
-  margin-top: 15px; /* Separación adicional entre botones */
+  font-size: 12px; /* Tamaño de la fuente más pequeño */
+  padding: 2px 5px; /* Relleno interno más pequeño */
+  border-radius: 10px; /* Bordes redondeados */
 }
 
 
@@ -180,4 +182,11 @@
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+}
+.product-characteristics h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px; /* Reduce el margen inferior */
+  color: #000000;
+  text-align: center;
 }
