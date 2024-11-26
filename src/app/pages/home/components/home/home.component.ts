@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
     { img: 'assets/producto4.png', name: 'Calculadora' }
   ];
   currentIndex: number = 0;
-  imageUrl: string = 'https://segundamanoup.s3.us-east-1.amazonaws.com/uploads/agura.jpg';
 
   constructor(private router: Router, private authService: AuthService) {}
 

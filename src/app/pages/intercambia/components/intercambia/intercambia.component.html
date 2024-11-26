@@ -1,4 +1,5 @@
 <app-header></app-header>
+
 <div class="intercambio-container">
   <div class="product-details">
     <div class="product-image">
@@ -8,6 +9,7 @@
       <h2>{{ product?.nombre_articulo }}</h2>
       <p class="price">{{ product?.precio | currency }}</p>
       <p class="tax">IVA incluido</p>
+      <p>Recoge dentro de las instalaciones</p>
       <div class="dropdown">
         <label for="building">Elige edificio de entrega:</label>
         <select id="building">
@@ -17,17 +19,17 @@
           <option>UD4</option>
         </select>
       </div>
-      <p>Cantidad: 1 disponible</p>
+      <p class="cantidad">Cantidad: {{ product?.cantidad }} disponible</p>
     </div>
   </div>
 
   <div class="vendor-info">
     <h3>Información del vendedor</h3>
     <img
-      [src]="product?.profile_picture_url || 'ruta/a/imagen/default.png'"
+      [src]="product?.profile_picture_url || 'assets/default-vendor.png'"
       alt="Imagen del vendedor"
     />
-    <p><strong>Vendido por:</strong> {{ product?.userName }}</p>
+    <p><strong>Intercambiar con:</strong> {{ product?.userName }}</p>
     <p><strong>Teléfono:</strong> {{ product?.userPhone }}</p>
   
     <div class="contact-info">
@@ -38,14 +40,14 @@
         class="social-icon"
         title="Contactar en WhatsApp"
       >
-        <img src="ruta/a/icono-whatsapp.png" alt="WhatsApp" />
+        <img src="assets/whats.jpg" alt="WhatsApp" />
       </a>
     </div>
   </div>
   
   <div class="product-characteristics">
     <h3>Características del producto</h3>
-    <p *ngIf="product?.descripcion"><strong></strong> {{ product?.descripcion }}</p>
+    <p *ngIf="product?.descripcion">{{ product?.descripcion }}</p>
   </div>
 
   <div class="exchange-section">
