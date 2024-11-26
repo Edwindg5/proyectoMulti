@@ -1,47 +1,42 @@
 <app-header></app-header>
-
-<div class="product-container">
-  <div class="image-section">
+<div class="intercambio-container">
+  <!-- Imagen del producto como sección independiente -->
+  <div class="section product-image">
     <img src="path/to/arduino-image.jpg" alt="Arduino UNO R3">
   </div>
-  <div class="details-container">
-    <div class="title-section">
-      <h2>Arduino UNO R3 Desmontable</h2>
-      <p><span class="badge">Más vendido</span></p>
-      <p><strong>$150</strong> IVA incluido</p>
-    </div>
-    <div class="description-section">
-      <p>Entrega inmediata en universidad</p>
-      <ul>
-        <li>Microcontrolador: atmega328</li>
-        <li>Tensión de funcionamiento: 5V</li>
-        <li>Frecuencia de reloj: 16 MHz</li>
-        <li>Capacidad de SRAM: 2 KB</li>
-        <li>Capacidad EEPROM: 1 KB</li>
-      </ul>
-    </div>
-    <div class="delivery-section">
-      <p class="delivery-info">Entrega gratis en las instalaciones</p>
-      <select>
-        <option>Elige edificio de entrega</option>
+
+  <!-- Información del producto -->
+  <div class="section product-info">
+    <h2>Arduino UNO R3 Desmontable</h2>
+    <p class="badge">Más vendido</p>
+    <p class="price"><strong>$150</strong> IVA incluido</p>
+    <p class="textodeboton">Entrega inmediata en universidad</p>
+
+    <div class="dropdown">
+      <label for="building">Elige edificio de entrega:</label>
+      <select id="building">
         <option>UD1</option>
         <option>UD2</option>
         <option>UD3</option>
         <option>UD4</option>
       </select>
-      <p>Cantidad: 1 (1 disponible)</p>
     </div>
+    <p class="cantidad">Cantidad: 1 (1 disponible)</p>
   </div>
-  <div class="seller-info">
+
+  <!-- Información del vendedor -->
+  <div class="section vendor-info">
     <h3>Información del vendedor</h3>
-    <p>Vendido por: Alex Diaz Gomez</p>
-    <p>Teléfono: 961-1313-999</p>
-    <p>Carrera: Ingeniería mecatrónica</p>
-    <p>Correo: AlexDiaz24gmail.com</p>
+    <img src="assets/default-vendor.png" alt="Imagen del vendedor" />
+    <p><strong>Vendido por:</strong> Alex Diaz Gomez</p>
+    <p><strong>Teléfono:</strong> 961-1313-999</p>
+    <p><strong>Correo:</strong> AlexDiaz24gmail.com</p>
   </div>
 </div>
 
-<div class="specifications">
+<!-- Nueva sección -->
+<div class="product-characteristics">
+  <h3>Características del producto</h3>
   <table>
     <tr>
       <th>Marca</th>
@@ -53,9 +48,12 @@
       <th>Modelo</th>
       <td>UNOR35MD</td>
       <th>Voltaje de funcionamiento</th>
-      <td>5V</td>
+      <td>5</td>
     </tr>
   </table>
 </div>
 
-<button class="buy-now">Comprar ahora</button>
+<!-- Botón de compra -->
+<button class="btn-exchange">
+  Comprar ahora <span role="img" aria-label="cart">🛒</span>
+</button>

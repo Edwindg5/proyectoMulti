@@ -2,22 +2,13 @@
 <div class="card-container">
   <div *ngFor="let product of products" class="product-card">
     <div class="main">
-      <img 
-        [src]="product.url_imagen" 
-        alt="{{ product.nombre_articulo }}" 
-        class="tokenImage" 
-      />
-      <h1>DESCRIPCION
-        <h2>Nombre Arti.: {{ product.nombre_articulo }}</h2>
-      </h1>
+      <img [src]="product.url_imagen" alt="{{ product.nombre_articulo }}" class="hero-image" />
+      <h1>DESCRIPCIÓN</h1>
+      <h2>Nombre Artículo: {{ product.nombre_articulo }}</h2>
       <p class="description">{{ product.descripcion }}</p>
       <div class="tokenInfo">
         <div class="price">
           <p>{{ product.precio | currency }}</p>
-        </div>
-        <div class="duration">
-          <ins>TEL:</ins>
-          <p>{{ product.userPhone }}</p>
         </div>
       </div>
       <hr />
@@ -29,9 +20,8 @@
             class="creatorImage" 
           />
         </div>
-        <p><ins>Propietario: </ins> {{ product.userName }}</p>
+        <p><ins>Propietario:</ins> {{ product.userName }}</p>
       </div>
-      
       <div class="actions">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
@@ -39,4 +29,6 @@
       </div>
     </div>
   </div>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
 </div>

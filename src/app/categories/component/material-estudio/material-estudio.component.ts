@@ -35,7 +35,7 @@ export class MaterialEstudioComponent implements OnInit {
             descripcion: item.descripcion,
             precio: item.precio,
             usuario_id: item.usuario_id,
-            url_imagen: item.url_imagen,
+            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png', // URL de la imagen
             profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
             userName: item.user?.nombre || 'Usuario no especificado',
             userPhone: item.user?.telefono || 'Teléfono no especificado',
@@ -46,6 +46,7 @@ export class MaterialEstudioComponent implements OnInit {
       }
     );
   }
+  
 
   updateProduct(product: Item): void {
     Swal.fire({
@@ -116,10 +117,11 @@ export class MaterialEstudioComponent implements OnInit {
       }
     });
   }
-  goToExchange(product: Item): void {
-    localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
-    this.router.navigate(['/intercambia']); // Navegar a la ruta
-  }
-  
+goToExchange(product: Item): void {
+  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
+  this.router.navigate(['/intercambia']); // Navegar a la ruta
+  this.router.navigate(['/compra']);
+}
+
   
 }
