@@ -30,7 +30,11 @@ export class CarouselService {
   // Carga artículos desde el almacenamiento local
   private loadArticlesFromStorage(): { id: number; name: string; img: string }[] {
     const storedArticles = localStorage.getItem(this.STORAGE_KEY);
-    const articles = storedArticles ? JSON.parse(storedArticles) : [];
+    const articles = storedArticles ? JSON.parse(storedArticles) : [{
+      id : 1,
+      img : "assets/calculadora.jpg",
+      name : "Calculadora cientifica",
+    }];
     return articles;
   }
 
