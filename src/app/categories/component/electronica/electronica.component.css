@@ -1,6 +1,6 @@
 .card-container {
   width: 100%;
-  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(156, 193, 236, 0.766) 100%);
+  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(127, 147, 164, 0.766) 100%);
   backdrop-filter: blur(7px);
   overflow: hidden;
   transition: 0.5s all;
