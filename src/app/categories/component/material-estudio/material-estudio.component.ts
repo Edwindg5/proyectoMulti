@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../services/category.service';
 import { Router } from '@angular/router';
 import { Item } from '../../models/item.model';
 import { HeaderComponent } from '../../../pages/header/component/header/header.component';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { SearchService } from '../../../pages/header/services/search.service';
 
 @Component({
   selector: 'app-material-estudio',
@@ -13,40 +16,92 @@ import Swal from 'sweetalert2';
   templateUrl: './material-estudio.component.html',
   styleUrls: ['./material-estudio.component.css'],
 })
-export class MaterialEstudioComponent implements OnInit {
+export class MaterialEstudioComponent implements OnInit, OnDestroy {
   products: Item[] = [];
+  filteredProducts: Item[] = [];
+  searchTerm: string = '';
+  searchSubscription: Subscription | undefined;
+  authenticatedUserName: string = '';
 
-  constructor(private categoryService: CategoryService, private router: Router) {}
+  constructor(
+    private categoryService: CategoryService,
+    private router: Router,
+    private authService: AuthService,
+    private searchService: SearchService
+  ) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      this.router.navigate(['/login']);
+    }
+  }
 
   ngOnInit(): void {
-    const categoryId = 23; // ID de la categoría
-    const userId = parseInt(localStorage.getItem('userId') || '0', 10); // Obtener ID del usuario
+    const categoryId = 23;
+    const userId = parseInt(localStorage.getItem('userId') || '0', 10);
     this.loadItemsByCategory(categoryId, userId);
+
+    // Suscribirse al término de búsqueda
+    this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
+      this.searchTerm = term;
+      this.filteredProducts = this.products.filter((product) =>
+        (product.nombre_articulo || '').toLowerCase().includes(term.toLowerCase()) ||
+        (product.descripcion || '').toLowerCase().includes(term.toLowerCase())
+      );
+    });
   }
 
   loadItemsByCategory(categoryId: number, userId: number): void {
     this.categoryService.getItemsByCategory(categoryId).subscribe(
       (data: any[]) => {
+        this.products = data.map((item) => ({
+          ...item,
+          url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
+          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
+          userName: item.user?.nombre || 'Usuario no especificado',
+          userPhone: item.user?.telefono || 'Teléfono no especificado',
+        }));
         this.products = data
-          .filter((item) => item.usuario_id === userId) // Filtrar por usuario
+          .filter((item) => item.usuario_id === userId)
           .map((item) => ({
             id_articulo: item.id_articulo,
             nombre_articulo: item.nombre_articulo,
             descripcion: item.descripcion,
             precio: item.precio,
             usuario_id: item.usuario_id,
-            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png', // URL de la imagen
+            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
             profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
             userName: item.user?.nombre || 'Usuario no especificado',
             userPhone: item.user?.telefono || 'Teléfono no especificado',
           }));
+        this.filteredProducts = [...this.products];
       },
       (error) => {
         console.error('Error al obtener los artículos:', error);
       }
     );
   }
-  
+
+  // Nueva funcionalidad: procesar descripción en filas de 3 elementos
+  getProcessedDescription(description: string): string[][] {
+    if (!description) return [];
+    const items = description.split(',').map((item) => item.trim());
+    const rows = [];
+    for (let i = 0; i < items.length; i += 3) {
+      rows.push(items.slice(i, i + 3));
+    }
+    return rows;
+  }
+  // Fin de la nueva funcionalidad
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
+  }
+  onSearch(searchTerm: string): void {
+    this.filteredProducts = this.products.filter((product) =>
+      product.nombre_articulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
   updateProduct(product: Item): void {
     Swal.fire({
@@ -89,6 +144,7 @@ export class MaterialEstudioComponent implements OnInit {
           }
         );
       }
+      
     });
   }
 
@@ -120,8 +176,13 @@ export class MaterialEstudioComponent implements OnInit {
 goToExchange(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
   this.router.navigate(['/intercambia']); // Navegar a la ruta
-  this.router.navigate(['/compra']);
+ 
 }
+goToPurchase(product: Item): void {
+  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
+  this.router.navigate(['/compra']); // Navegar a la ruta de compra
+}
+
 
   
 }

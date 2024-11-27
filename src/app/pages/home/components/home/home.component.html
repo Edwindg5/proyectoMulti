@@ -1,25 +1,24 @@
 <app-header></app-header>
 
-<!-- Carrusel de tarjetas -->
-<!-- Nueva sección envolvente -->
-<div class="carousel-section">
-  <!-- Carrusel existente -->
-  <div class="carousel">
-    <div class="carousel-container" [style.transform]="getTransform()">
-      <div class="carousel-card" *ngFor="let item of items">
+<div class="slider">
+  <div class="slider-container" [style.transform]="getTransform()">
+    <div class="slider-row">
+      <div class="slider-card" *ngFor="let item of items">
         <div class="card">
-          <div class="card2">
-            <div class="imgcard">
-              <img [src]="item.img" [alt]="item.name">
-            </div>
+          <div class="imgcard">
+            <img class="imgcardd" [src]="item.img" [alt]="item.name" />
+          </div>
+          <div class="infocardd">
+            <p class="TitiloMS">Titulo del Producto:</p>
             <p class="name">{{ item.name }}</p>
           </div>
         </div>
       </div>
     </div>
-    <button (click)="prevSlide()" class="carousel-control prev">◀</button>
-    <button (click)="nextSlide()" class="carousel-control next">▶</button>
   </div>
+  <!-- Botones de navegación -->
+  <button (click)="prevSlide()" class="slider-control prev">◀</button>
+  <button (click)="nextSlide()" class="slider-control next">▶</button>
 </div>
 
 

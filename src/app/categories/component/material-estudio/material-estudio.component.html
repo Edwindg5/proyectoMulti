@@ -1,11 +1,19 @@
 <app-header></app-header>
 <div class="card-container">
-  <div *ngFor="let product of products" class="product-card">
+  <div *ngFor="let product of filteredProducts" class="product-card">
     <div class="main">
       <img [src]="product.url_imagen" alt="{{ product.nombre_articulo }}" class="hero-image" />
       <h1>DESCRIPCIÓN</h1>
       <h2>Nombre Artículo: {{ product.nombre_articulo }}</h2>
-      <p class="description">{{ product.descripcion }}</p>
+      
+      <!-- Mostrar descripción procesada -->
+      <div class="description">
+        <h3>Características:</h3>
+        <ul *ngFor="let row of getProcessedDescription(product.descripcion)">
+          <li *ngFor="let feature of row">{{ feature }}</li>
+        </ul>
+      </div>
+      
       <div class="tokenInfo">
         <div class="price">
           <p>{{ product.precio | currency }}</p>
@@ -23,9 +31,39 @@
         <p><ins>Propietario:</ins> {{ product.userName }}</p>
       </div>
       <div class="actions">
-        <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
-        <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
-        <button (click)="goToExchange(product)" class="btn-exchange">Ir a Intercambio</button>
+        <!-- Botones habilitados solo para el propietario -->
+        <button 
+          *ngIf="product.userName === authenticatedUserName" 
+          (click)="updateProduct(product)" 
+          class="btn-update">
+          Actualizar
+        </button>
+        <button 
+          *ngIf="product.userName === authenticatedUserName" 
+          (click)="deleteProduct(product)" 
+          class="btn-delete">
+          Eliminar
+        </button>
+
+        <!-- Botón deshabilitado para usuarios que no son propietarios -->
+        <button 
+          *ngIf="product.userName !== authenticatedUserName" 
+          disabled 
+          class="disabled-button">
+          No puedes interactuar
+        </button>
+
+        <!-- Acciones comunes para todos los usuarios -->
+        <button 
+          (click)="goToExchange(product)" 
+          class="btn-exchange">
+          Ir a Intercambio
+        </button>
+        <button 
+          (click)="goToPurchase(product)" 
+          class="btn-purchase">
+          Comprar
+        </button>
       </div>
     </div>
   </div>

@@ -131,5 +131,20 @@
         return null;
       }
     }
+    getUserName(): string | null {
+      const userString = localStorage.getItem('user');
+      if (!userString) {
+        return null; // Retorna null si no hay información de usuario
+      }
+    
+      try {
+        const user = JSON.parse(userString);
+        return user.name || 'Usuario'; // Devuelve el nombre del usuario o un valor por defecto
+      } catch (error) {
+        console.error('Error al analizar el usuario de localStorage:', error);
+        return null;
+      }
+    }
+    
     
   }

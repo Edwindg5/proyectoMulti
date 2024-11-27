@@ -1,8 +1,12 @@
 <header class="main-header">
+  
   <div class="left-side">
     <img src="assets/logoproyect.png" alt="Logoproyect" class="logoproyect" (click)="navigateTo('home')" />
     <button class="menu-icon" (click)="toggleMenu()">☰</button>
+    
+    
   </div>
+  
   <div class="right-side">
     <nav class="nav-bar" [class.visible]="menuVisible">
       <ng-container *ngIf="isAuthenticated">

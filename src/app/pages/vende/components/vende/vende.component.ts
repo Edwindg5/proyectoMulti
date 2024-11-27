@@ -22,6 +22,7 @@ export class VendeComponent implements OnInit {
   isImageLoading = false;
   imageUploaded = false;
   imageUrl = ''; // URL de la imagen subida
+  descriptionRows: string[][] = []; // **Nueva propiedad** para gestionar las filas de descripción
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +47,6 @@ export class VendeComponent implements OnInit {
       userName: ['', Validators.required],
       userEmail: ['', [Validators.required, Validators.email]],
     });
-    
 
     this.imageForm = this.fb.group({
       articleImage: [null, Validators.required],
@@ -55,6 +55,11 @@ export class VendeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
+
+    // **Listener para detectar cambios en la descripción**
+    this.form.get('articleDescription')?.valueChanges.subscribe((value) => {
+      this.updateDescriptionRows(value);
+    });
   }
 
   loadCategories(): void {
@@ -155,22 +160,24 @@ export class VendeComponent implements OnInit {
             tipo_transaccion: this.form.get('transactionType')?.value,
             usuario_id: this.authService.getUserId(),
             estado: this.form.get('articleState')?.value,
-            url_imagen: this.imageUrl,  // Asegúrate de enviar la URL de la imagen
+            url_imagen: this.imageUrl, // Asegúrate de enviar la URL de la imagen
             cantidad: this.form.get('articleQuantity')?.value,
           };
-          
 
           this.isLoading = true;
           this.articleService.createArticle(articleData).subscribe({
             next: () => {
-              Swal.fire('Éxito', 'El artículo fue registrado correctamente.', 'success');
+              Swal.fire(
+                'Éxito',
+                'El artículo fue registrado correctamente.',
+                'success'
+              );
               this.form.reset();
               this.carouselService.addArticle({
                 id: Date.now(), // Genera un ID único
                 name: articleData.nombre_articulo,
                 img: articleData.url_imagen,
               });
-              
             },
             error: (err) => {
               console.error('Error del backend:', err);
@@ -201,5 +208,16 @@ export class VendeComponent implements OnInit {
         });
       },
     });
+  }
+
+  /**
+   * **Nueva función** para dividir la descripción en filas de tres elementos.
+   */
+  private updateDescriptionRows(description: string): void {
+    const items = description.split(',').map((item) => item.trim());
+    this.descriptionRows = [];
+    for (let i = 0; i < items.length; i += 3) {
+      this.descriptionRows.push(items.slice(i, i + 3));
+    }
   }
 }

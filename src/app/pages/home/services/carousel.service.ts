@@ -8,7 +8,7 @@ export class CarouselService {
   private readonly STORAGE_KEY = 'carouselArticles';
   private articlesSubject = new BehaviorSubject<
     { id: number; name: string; img: string }[]
-  >(this.loadArticlesFromStorage());
+  >(this.loadArticlesFromStorage(3));
   articles$ = this.articlesSubject.asObservable();
 
   constructor() {}
@@ -27,10 +27,15 @@ export class CarouselService {
     this.saveArticlesToStorage(articles);
   }
 
+  nextArticles() : { id: number; name: string; img: string }[] {
+    return this.loadArticlesFromStorage(3)
+  }
+
   // Carga artículos desde el almacenamiento local
-  private loadArticlesFromStorage(): { id: number; name: string; img: string }[] {
+  private loadArticlesFromStorage(idx : number = 3): { id: number; name: string; img: string }[] {
     const storedArticles = localStorage.getItem(this.STORAGE_KEY);
-    return storedArticles ? JSON.parse(storedArticles) : [];
+    const articles = storedArticles ? JSON.parse(storedArticles) : [];
+    return articles.slice(0,  idx);
   }
 
   // Guarda artículos en el almacenamiento local

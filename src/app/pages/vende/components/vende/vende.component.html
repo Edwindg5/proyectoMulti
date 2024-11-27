@@ -1,143 +1,138 @@
 <app-header></app-header>
-<div class="vende-container">
-  <h2>Subir Imagen del Artículo</h2>
+<div class="container">
+  <h1>Vende tu artículo</h1>
 
-  <!-- Sección para subir la imagen -->
-  <form [formGroup]="imageForm" (ngSubmit)="onImageSubmit()">
+  <!-- Formulario de registro de artículo -->
+  <form [formGroup]="form" (ngSubmit)="submitForm()">
     <div class="form-group">
-      <label for="articleImage">Imagen del artículo</label>
+      <label for="articleName">Nombre del artículo</label>
       <input
-        type="file"
-        id="articleImage"
-        (change)="onImageSelected($event)"
-        accept="image/*"
+        type="text"
+        id="articleName"
+        class="form-control"
+        formControlName="articleName"
+        placeholder="Introduce el nombre del artículo"
       />
-      <small *ngIf="imageForm.get('articleImage')?.invalid && imageForm.get('articleImage')?.touched">
-        Debes subir una imagen válida en formato JPG o PNG.
-      </small>
-      
     </div>
-    <button type="submit" [disabled]="isImageLoading || !imageForm.valid">
-      {{ isImageLoading ? 'Subiendo...' : 'Subir Imagen' }}
+
+    <div class="form-group">
+      <label for="articleDescription">Descripción</label>
+      <textarea
+        id="articleDescription"
+        class="form-control"
+        formControlName="articleDescription"
+        placeholder="Introduce las características separadas por comas"
+      ></textarea>
+    </div>
+
+    <!-- Nueva funcionalidad: Lista procesada de descripción -->
+    <div class="description-list" *ngIf="descriptionRows.length > 0">
+      <h3>Características procesadas:</h3>
+      <ul *ngFor="let row of descriptionRows">
+        <li *ngFor="let item of row">{{ item }}</li>
+      </ul>
+    </div>
+    <!-- Fin de la nueva funcionalidad -->
+
+    <div class="form-group">
+      <label for="selectedCategoryId">Categoría</label>
+      <select
+        id="selectedCategoryId"
+        class="form-control"
+        formControlName="selectedCategoryId"
+      >
+        <option *ngFor="let category of categories" [value]="category.id_categoria">
+          {{ category.nombre_categoria }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="articlePrice">Precio</label>
+      <input
+        type="number"
+        id="articlePrice"
+        class="form-control"
+        formControlName="articlePrice"
+        placeholder="Introduce el precio en MXN"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="articleQuantity">Cantidad</label>
+      <input
+        type="number"
+        id="articleQuantity"
+        class="form-control"
+        formControlName="articleQuantity"
+        placeholder="Introduce la cantidad disponible"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="transactionType">Tipo de transacción</label>
+      <select id="transactionType" class="form-control" formControlName="transactionType">
+        <option value="VENTA">Venta</option>
+        <option value="INTERCAMBIO">Intercambio</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="articleState">Estado del artículo</label>
+      <select id="articleState" class="form-control" formControlName="articleState">
+        <option value="DISPONIBLE">Disponible</option>
+        <option value="NO_DISPONIBLE">No Disponible</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="userName">Nombre del usuario</label>
+      <input
+        type="text"
+        id="userName"
+        class="form-control"
+        formControlName="userName"
+        placeholder="Introduce tu nombre"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="userEmail">Correo electrónico</label>
+      <input
+        type="email"
+        id="userEmail"
+        class="form-control"
+        formControlName="userEmail"
+        placeholder="Introduce tu correo"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+      {{ isLoading ? 'Cargando...' : 'Registrar Artículo' }}
     </button>
   </form>
 
-  <!-- Solo se muestra después de subir la imagen -->
-  <div *ngIf="imageUploaded">
-    <h2>Registrar Artículo</h2>
-
-    <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <!-- Formulario para cargar imagen -->
+  <div class="image-upload mt-4">
+    <h2>Sube una imagen</h2>
+    <form [formGroup]="imageForm" (ngSubmit)="onImageSubmit()">
       <div class="form-group">
-        <label for="articleName">Nombre del Artículo</label>
         <input
-          type="text"
-          id="articleName"
-          formControlName="articleName"
-          placeholder="Introduce el nombre del artículo"
+          type="file"
+          class="form-control-file"
+          (change)="onImageSelected($event)"
+          accept=".jpg,.jpeg,.png"
         />
-        <small *ngIf="form.get('articleName')?.invalid && form.get('articleName')?.touched">
-          El nombre del artículo es obligatorio.
-        </small>
       </div>
-
-      <div class="form-group">
-        <label for="articleDescription">Caracterisiticas</label>
-        <textarea
-          id="articleDescription"
-          formControlName="articleDescription"
-          placeholder="Describe el artículo"
-        ></textarea>
-        <small *ngIf="form.get('articleDescription')?.invalid && form.get('articleDescription')?.touched">
-          La descripción es obligatoria.
-        </small>
-      </div>
-      <div class="form-group">
-        <label for="articleQuantity">Cantidad</label>
-        <input
-          type="number"
-          id="articleQuantity"
-          formControlName="articleQuantity"
-          min="1"
-          placeholder="Introduce la cantidad disponible"
-        />
-        <small *ngIf="form.get('articleQuantity')?.invalid && form.get('articleQuantity')?.touched">
-          La cantidad debe ser mayor a 0.
-        </small>
-      </div>
-      
-
-      <div class="form-group">
-        <label for="selectedCategoryId">Categoría</label>
-        <select id="selectedCategoryId" formControlName="selectedCategoryId">
-          <option value="" disabled selected>Selecciona una categoría</option>
-          <option *ngFor="let category of categories" [value]="category.id_categoria">
-            {{ category.nombre_categoria }}
-          </option>
-        </select>
-        <small *ngIf="form.get('selectedCategoryId')?.invalid && form.get('selectedCategoryId')?.touched">
-          Selecciona una categoría válida.
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="articlePrice">Precio</label>
-        <input
-          type="number"
-          id="articlePrice"
-          formControlName="articlePrice"
-          min="1"
-          placeholder="Introduce el precio"
-        />
-        <small *ngIf="form.get('articlePrice')?.invalid && form.get('articlePrice')?.touched">
-          El precio debe ser mayor a 0.
-        </small>
-      </div>
-
-      <div class="form-group">
-        <label for="transactionType">Tipo de Transacción</label>
-        <select id="transactionType" formControlName="transactionType">
-          <option value="VENTA">Venta</option>
-          <option value="INTERCAMBIO">Intercambio</option>
-          <option value="DONACION">Donación</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="userName">Nombre del Usuario</label>
-        <input
-          type="text"
-          id="userName"
-          formControlName="userName"
-          placeholder="Introduce tu nombre"
-          required
-        />
-        <small *ngIf="form.get('userName')?.invalid && form.get('userName')?.touched">
-          El nombre es obligatorio.
-        </small>
-      </div>
-      
-      <div class="form-group">
-        <label for="userEmail">Correo Electrónico</label>
-        <input
-          type="email"
-          id="userEmail"
-          formControlName="userEmail"
-          placeholder="Introduce tu correo electrónico"
-          required
-        />
-        <small *ngIf="form.get('userEmail')?.invalid && form.get('userEmail')?.touched">
-          Ingresa un correo electrónico válido.
-        </small>
-      </div>
-
-      <button type="submit" [disabled]="isLoading">
-        {{ isLoading ? 'Enviando...' : 'Registrar artículo' }}
+      <button type="submit" class="btn btn-secondary" [disabled]="isImageLoading">
+        {{ isImageLoading ? 'Subiendo...' : 'Subir Imagen' }}
       </button>
     </form>
+
+    <!-- Vista previa de la imagen -->
+    <div class="image-preview mt-3" *ngIf="imageUrl">
+      <h3>Vista previa:</h3>
+      <img [src]="imageUrl" alt="Vista previa de la imagen" class="img-thumbnail" />
+    </div>
   </div>
-  <div *ngIf="imageUrl">
-    <h3>Vista previa de la imagen:</h3>
-    <img [src]="imageUrl" alt="Imagen seleccionada" width="100">
-  </div>
-  
 </div>

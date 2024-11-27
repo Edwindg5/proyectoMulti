@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CategoryService } from '../../services/category.service';
 import { Router } from '@angular/router';
 import { Item } from '../../models/item.model';
 import { HeaderComponent } from '../../../pages/header/component/header/header.component';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../auth/auth.service';
+import { Subscription } from 'rxjs';
+import { SearchService } from '../../../pages/header/services/search.service';
 @Component({
   selector: 'app-herramientas',
   standalone: true,
@@ -14,36 +17,69 @@ import Swal from 'sweetalert2';
 })
 export class HerramientasComponent implements OnInit {
   products: Item[] = [];
-
-  constructor(private categoryService: CategoryService, private router: Router) {}
+  filteredProducts: Item[] = []; // Productos filtrados
+  searchTerm: string = ''; // Término de búsqueda
+  searchSubscription: Subscription | undefined;
+  constructor(private categoryService: CategoryService, private router: Router, private authService: AuthService, private searchService: SearchService) {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      this.router.navigate(['/login']);
+    }
+  }
+  
 
   ngOnInit(): void {
-    const categoryId = 22; // ID de la categoría Electrónica
-    this.loadItemsByCategory(categoryId);
+    const categoryId = 22; // ID de la categoría
+    const userId = parseInt(localStorage.getItem('userId') || '0', 10); // Obtener ID del usuario
+    this.loadItemsByCategory(categoryId, userId);
+        // Suscribirse al término de búsqueda
+        this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
+          this.searchTerm = term;
+          this.filteredProducts = this.products.filter((product) =>
+            (product.nombre_articulo || '').toLowerCase().includes(term.toLowerCase()) ||
+            (product.descripcion || '').toLowerCase().includes(term.toLowerCase())
+          );
+          
+        });
   }
 
-  loadItemsByCategory(categoryId: number): void {
+  loadItemsByCategory(categoryId: number, userId: number): void {
     this.categoryService.getItemsByCategory(categoryId).subscribe(
       (data: any[]) => {
         this.products = data.map((item) => ({
-          id_articulo: item.id_articulo,
-          nombre_articulo: item.nombre_articulo,
-          descripcion: item.descripcion,
-          precio: item.precio,
-          usuario_id: item.usuario_id,
-          url_imagen: item.url_imagen,
+          ...item,
+          url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
           profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
           userName: item.user?.nombre || 'Usuario no especificado',
           userPhone: item.user?.telefono || 'Teléfono no especificado',
         }));
+        this.products = data
+          .filter((item) => item.usuario_id === userId) // Filtrar por usuario
+          .map((item) => ({
+            id_articulo: item.id_articulo,
+            nombre_articulo: item.nombre_articulo,
+            descripcion: item.descripcion,
+            precio: item.precio,
+            usuario_id: item.usuario_id,
+            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png', // URL de la imagen
+            profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
+            userName: item.user?.nombre || 'Usuario no especificado',
+            userPhone: item.user?.telefono || 'Teléfono no especificado',
+          }));
+          this.filteredProducts = [...this.products];
       },
       (error) => {
         console.error('Error al obtener los artículos:', error);
       }
     );
+    
   }
-  
-  
+  onSearch(searchTerm: string): void {
+    this.filteredProducts = this.products.filter((product) =>
+      product.nombre_articulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
 
   updateProduct(product: Item): void {
     Swal.fire({
@@ -73,11 +109,12 @@ export class HerramientasComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         const updatedData = result.value;
+        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
 
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(22); // Vuelve a cargar los datos
+            this.loadItemsByCategory(22, userId); // Vuelve a cargar los datos
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -85,6 +122,7 @@ export class HerramientasComponent implements OnInit {
           }
         );
       }
+      
     });
   }
 
@@ -98,10 +136,12 @@ export class HerramientasComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
+        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
+
         this.categoryService.deleteItem(product.id_articulo).subscribe(
           () => {
             Swal.fire('Eliminado', 'El producto ha sido eliminado correctamente', 'success');
-            this.loadItemsByCategory(22); // Vuelve a cargar los datos
+            this.loadItemsByCategory(22, userId); // Vuelve a cargar los datos
           },
           (error) => {
             Swal.fire('Error', 'Hubo un problema al eliminar el producto', 'error');
@@ -111,8 +151,15 @@ export class HerramientasComponent implements OnInit {
       }
     });
   }
+goToExchange(product: Item): void {
+  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
+  this.router.navigate(['/intercambia']); // Navegar a la ruta
+ 
+}
+goToPurchase(product: Item): void {
+  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
+  this.router.navigate(['/compra']); // Navegar a la ruta de compra
+}
 
-  goToExchange(productId: number): void {
-    this.router.navigate(['/intercambia'], { state: { productId } });
-  }
+
 }

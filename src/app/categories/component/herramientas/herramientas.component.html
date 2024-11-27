@@ -1,4 +1,8 @@
 <app-header></app-header>
+<div class="header-banner">
+  <img src="assets/herramientas.png" alt="Icono" class="banner-icon" />
+  <h1>MATERIAL DE ESTUDIO</h1>
+</div>
 <div class="card-container">
   <div *ngFor="let product of products" class="product-card">
     <div class="main">
@@ -28,13 +32,13 @@
             />
         </div>
         <p><ins>Propietario: </ins> {{ product.userName }}</p>
-    </div>
-    
-      
+      </div>
       <div class="actions">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
       </div>
     </div>
   </div>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+
 </div>

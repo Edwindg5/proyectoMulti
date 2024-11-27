@@ -1,15 +1,15 @@
 <app-header></app-header>
-<div class="intercambio-container">
+<div class="intercambio-container" *ngIf="product">
   <!-- Imagen del producto como sección independiente -->
   <div class="section product-image">
-    <img src="path/to/arduino-image.jpg" alt="Arduino UNO R3">
+    <img [src]="product.url_imagen" [alt]="product.nombre_articulo" />
   </div>
 
   <!-- Información del producto -->
   <div class="section product-info">
-    <h2>Arduino UNO R3 Desmontable</h2>
-    <p class="badge">Más vendido</p>
-    <p class="price"><strong>$150</strong> IVA incluido</p>
+    <h2>{{ product.nombre_articulo }}</h2>
+  
+    <p class="price"><strong>${{ product.precio }}</strong> IVA incluido</p>
     <p class="textodeboton">Entrega inmediata en universidad</p>
 
     <div class="dropdown">
@@ -21,39 +21,41 @@
         <option>UD4</option>
       </select>
     </div>
-    <p class="cantidad">Cantidad: 1 (1 disponible)</p>
+    <p class="cantidad">Cantidad: 1 ({{ product.stock || '1' }} disponible)</p>
   </div>
 
   <!-- Información del vendedor -->
   <div class="section vendor-info">
     <h3>Información del vendedor</h3>
-    <img src="assets/default-vendor.png" alt="Imagen del vendedor" />
-    <p><strong>Vendido por:</strong> Alex Diaz Gomez</p>
-    <p><strong>Teléfono:</strong> 961-1313-999</p>
-    <p><strong>Correo:</strong> AlexDiaz24gmail.com</p>
+    <div>
+      <img [src]="product.profile_picture_url || 'assets/default-vendor.png'" [alt]="product.userName" />
+    </div>
+    <p><strong>Vendido por:</strong> {{ product.userName }}</p>
+    <p><strong>Teléfono:</strong> {{ product.userPhone }}</p>
+    <p><strong>Correo:</strong> {{ product.userEmail || 'No disponible' }}</p>
   </div>
 </div>
 
 <!-- Nueva sección -->
-<div class="product-characteristics">
+<div class="product-characteristics" *ngIf="product.characteristics">
   <h3>Características del producto</h3>
   <table>
     <tr>
       <th>Marca</th>
-      <td>MRA</td>
+      <td>{{ product.characteristics.marca }}</td>
       <th>Microcontrolador</th>
-      <td>atmega328</td>
+      <td>{{ product.characteristics.microcontrolador }}</td>
     </tr>
     <tr>
       <th>Modelo</th>
-      <td>UNOR35MD</td>
+      <td>{{ product.characteristics.modelo }}</td>
       <th>Voltaje de funcionamiento</th>
-      <td>5</td>
+      <td>{{ product.characteristics.voltaje }}</td>
     </tr>
   </table>
 </div>
 
 <!-- Botón de compra -->
-<button class="btn-exchange">
+<button class="btn-exchange" (click)="onPurchaseClick()">
   Comprar ahora <span role="img" aria-label="cart">🛒</span>
 </button>

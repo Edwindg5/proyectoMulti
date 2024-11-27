@@ -1,30 +1,61 @@
 <app-header></app-header>
 
-<div class="renta-container">
+<div class="intercambio-container">
   <div class="product-details">
     <div class="product-image">
-      <img src="assets/calculator.jpg" alt="Calculadora Científica">
+      <img [src]="product?.url_imagen" alt="Imagen del producto" />
     </div>
     <div class="product-info">
-      <h2>Calculadora Científica Casio Fx-82la Plus2</h2>
-      <p class="price">$85 <span>IVA incluido</span></p>
-      <p class="availability">Entrega inmediata en universidad</p>
-      <p class="product-description">Lo que tienes que saber de este producto:</p>
-      <ul>
-        <li>Con 252 funciones.</li>
-        <li>Incluye memoria.</li>
-        <li>Cantidad de líneas de la pantalla: 4.</li>
-        <li>Almacena hasta 0GB.</li>
-      </ul>
-      <p class="pickup-info">Recoge dentro de las instalaciones</p>
-      <select class="pickup-select">
-        <option>Elige edificio de entrega</option>
-        <option>UD1</option>
-        <option>UD2</option>
-        <option>UD3</option>
-        <option>UD4</option>
-      </select>
-      <button class="loan-button">Solicitar Renta</button>
+      <h2>{{ product?.nombre_articulo }}</h2>
+      <p class="price">{{ product?.precio | currency }}</p>
+      <p class="tax">IVA incluido</p>
+      <p class="texto">Recoge dentro de las instalaciones</p>
+      <div class="dropdown">
+        <label for="building">Elige edificio de entrega:</label>
+        <select id="building">
+          <option>UD1</option>
+          <option>UD2</option>
+          <option>UD3</option>
+          <option>UD4</option>
+        </select>
+      </div>
+      <p class="cantidad">Cantidad: {{ product?.cantidad }} disponible</p>
     </div>
+  </div>
+
+  <div class="vendor-info">
+    <h3>Información del vendedor</h3>
+    <img
+      [src]="product?.profile_picture_url || 'assets/default-vendor.png'"
+      alt="Imagen del vendedor"
+    />
+    <p><strong>Intercambiar con:</strong> {{ product?.userName }}</p>
+    <p><strong>Teléfono:</strong> {{ product?.userPhone }}</p>
+  
+    <div class="contact-info">
+      <h4>Contactar</h4>
+      <a 
+        [href]="'https://wa.me/' + product?.userPhone" 
+        target="_blank" 
+        class="social-icon"
+        title="Contactar en WhatsApp"
+      >
+        <img src="assets/whats.jpg" alt="WhatsApp" />
+      </a>
+    </div>
+  </div>
+  
+  <div class="product-characteristics">
+    <h3>Características del producto</h3>
+    <p *ngIf="product?.descripcion">{{ product?.descripcion }}</p>
+  </div>
+
+  <div class="exchange-section">
+    <h3>Artículo a intercambiar</h3>
+    <div class="upload-container">
+      <input type="file" id="upload" />
+      <textarea placeholder="Descripción del artículo"></textarea>
+    </div>
+    <button class="btn-exchange">Solicitar intercambio ahora</button>
   </div>
 </div>

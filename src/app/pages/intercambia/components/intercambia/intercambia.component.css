@@ -20,6 +20,7 @@
   margin: 0; /* Elimina márgenes adicionales */
   padding: 20px;
   width: 7%; /* Permite que sea más grande */
+  border:  2px  #000000;
 }
 
 .product-image img {
@@ -30,7 +31,7 @@
 
 .product-info {
   width: 30%; /* Reduce el ancho */
-  margin: 71px auto; /* Centra horizontalmente y añade margen superior */
+  margin: 80px auto; /* Centra horizontalmente y añade margen superior */
   padding: 20px;
   border: 3px solid #0a0a0a;
   border-radius: 5px;
