@@ -22,25 +22,33 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
   searchSubscription: Subscription | undefined;
   authenticatedUserName: string = '';
-
+  isAuthenticated: boolean;
+  
   constructor(
     private categoryService: CategoryService,
     private router: Router,
     private authService: AuthService,
     private searchService: SearchService
   ) {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.authenticatedUserName = user.name || '';
+    if (!user.id) {
       this.router.navigate(['/login']);
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
+
   ngOnInit(): void {
-    const categoryId = 23;
+    const categoryId = 1;
     const userId = parseInt(localStorage.getItem('userId') || '0', 10);
     this.loadItemsByCategory(categoryId, userId);
 
-    // Suscribirse al término de búsqueda
     this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
       this.searchTerm = term;
       this.filteredProducts = this.products.filter((product) =>
@@ -49,6 +57,7 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       );
     });
   }
+
 
   loadItemsByCategory(categoryId: number, userId: number): void {
     this.categoryService.getItemsByCategory(categoryId).subscribe(
@@ -83,19 +92,12 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
 
   // Nueva funcionalidad: procesar descripción en filas de 3 elementos
   getProcessedDescription(description: string): string[][] {
-    if (!description) return [];
-    const items = description.split(',').map((item) => item.trim());
-    const rows = [];
-    for (let i = 0; i < items.length; i += 3) {
-      rows.push(items.slice(i, i + 3));
-    }
-    return rows;
+    const features = description.split(',').map((item) => item.trim());
+    return [features];
   }
   // Fin de la nueva funcionalidad
 
-  ngOnDestroy(): void {
-    this.searchSubscription?.unsubscribe();
-  }
+
   onSearch(searchTerm: string): void {
     this.filteredProducts = this.products.filter((product) =>
       product.nombre_articulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -136,7 +138,7 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(23, userId); // Vuelve a cargar los datos
+            this.loadItemsByCategory(1, userId); // Vuelve a cargar los datos
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -150,24 +152,23 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
 
   deleteProduct(product: Item): void {
     Swal.fire({
-      title: `¿Estás seguro de eliminar "${product.nombre_articulo}"?`,
-      text: 'Esta acción no se puede deshacer',
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará el artículo permanentemente.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
-
         this.categoryService.deleteItem(product.id_articulo).subscribe(
           () => {
-            Swal.fire('Eliminado', 'El producto ha sido eliminado correctamente', 'success');
-            this.loadItemsByCategory(23, userId); // Vuelve a cargar los datos
+            this.products = this.products.filter((item) => item.id_articulo !== product.id_articulo);
+            this.filteredProducts = [...this.products];
+            Swal.fire('Eliminado', 'El artículo fue eliminado correctamente.', 'success');
           },
           (error) => {
-            Swal.fire('Error', 'Hubo un problema al eliminar el producto', 'error');
-            console.error('Error al eliminar el producto:', error);
+            Swal.fire('Error', 'No se pudo eliminar el artículo.', 'error');
+            console.error(error);
           }
         );
       }

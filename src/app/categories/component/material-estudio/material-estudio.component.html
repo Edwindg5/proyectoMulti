@@ -6,7 +6,6 @@
       <h1>DESCRIPCIÓN</h1>
       <h2>Nombre Artículo: {{ product.nombre_articulo }}</h2>
       
-      <!-- Mostrar descripción procesada -->
       <div class="description">
         <h3>Características:</h3>
         <ul *ngFor="let row of getProcessedDescription(product.descripcion)">
@@ -22,38 +21,34 @@
       <hr />
       <div class="creator">
         <div class="wrapper">
-          <img 
-            [src]="product.profile_picture_url || 'ruta/a/imagen/default.png'" 
-            alt="Imagen del vendedor" 
-            class="creatorImage" 
-          />
+          <img [src]="product.profile_picture_url" alt="Imagen del vendedor" class="creatorImage" />
         </div>
         <p><ins>Propietario:</ins> {{ product.userName }}</p>
       </div>
       <div class="actions">
-        <!-- Botones habilitados solo para el propietario -->
+        <!-- Habilitar acciones solo para usuarios autenticados -->
         <button 
-          *ngIf="product.userName === authenticatedUserName" 
+          *ngIf="isAuthenticated && product.userName === authenticatedUserName" 
           (click)="updateProduct(product)" 
           class="btn-update">
           Actualizar
         </button>
         <button 
-          *ngIf="product.userName === authenticatedUserName" 
+          *ngIf="isAuthenticated && product.userName === authenticatedUserName" 
           (click)="deleteProduct(product)" 
           class="btn-delete">
           Eliminar
         </button>
 
-        <!-- Botón deshabilitado para usuarios que no son propietarios -->
+        <!-- Mostrar botón deshabilitado para no autenticados -->
         <button 
-          *ngIf="product.userName !== authenticatedUserName" 
+          *ngIf="!isAuthenticated" 
           disabled 
           class="disabled-button">
           No puedes interactuar
         </button>
 
-        <!-- Acciones comunes para todos los usuarios -->
+        <!-- Acciones comunes disponibles para todos -->
         <button 
           (click)="goToExchange(product)" 
           class="btn-exchange">
@@ -64,6 +59,10 @@
           class="btn-purchase">
           Comprar
         </button>
+        <!-- Botón deshabilitado para usuarios que no son propietarios -->
+        <button *ngIf="product.userName !== authenticatedUserName"  disabled class="disabled-button">No puedes interactuar</button>
+
+
       </div>
     </div>
   </div>

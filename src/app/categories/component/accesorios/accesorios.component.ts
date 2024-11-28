@@ -30,7 +30,7 @@ export class AccesoriosComponent implements OnInit {
   
 
   ngOnInit(): void {
-    const categoryId = 20; // ID de la categoría
+    const categoryId = 4; // ID de la categoría
     const userId = parseInt(localStorage.getItem('userId') || '0', 10); // Obtener ID del usuario
     this.loadItemsByCategory(categoryId, userId);
         // Suscribirse al término de búsqueda
@@ -115,7 +115,7 @@ export class AccesoriosComponent implements OnInit {
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(20, userId); // Vuelve a cargar los datos
+            this.loadItemsByCategory(4, userId); // Vuelve a cargar los datos
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -142,7 +142,7 @@ export class AccesoriosComponent implements OnInit {
         this.categoryService.deleteItem(product.id_articulo).subscribe(
           () => {
             Swal.fire('Eliminado', 'El producto ha sido eliminado correctamente', 'success');
-            this.loadItemsByCategory(20, userId); // Vuelve a cargar los datos
+            this.loadItemsByCategory(4, userId); // Vuelve a cargar los datos
           },
           (error) => {
             Swal.fire('Error', 'Hubo un problema al eliminar el producto', 'error');

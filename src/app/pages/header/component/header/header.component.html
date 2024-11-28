@@ -9,12 +9,7 @@
   
   <div class="right-side">
     <nav class="nav-bar" [class.visible]="menuVisible">
-      <ng-container *ngIf="isAuthenticated">
-        <button (click)="navigateTo('compra')">Compra</button>
-        <button (click)="navigateTo('vende')">Vende</button>
-        <button (click)="navigateTo('renta')">Renta</button>
-        <button (click)="navigateTo('intercambia')">Intercambio</button>
-      </ng-container>
+
       <input type="text" placeholder="Buscar" class="search-bar" />
       <img
         src="assets/usuario.png"
@@ -24,7 +19,7 @@
       />
     </nav>
   </div>
-  <ng-container *ngIf="isAuthenticated">
+
     <nav *ngIf="menuVisible" class="categories-menu">
       <ul>
         <li (click)="navigateTo('electronica')">Electrónica</li>
@@ -33,5 +28,5 @@
         <li (click)="navigateTo('accesorios')">Accesorios</li>
       </ul>
     </nav>
-  </ng-container>
+  
 </header>
