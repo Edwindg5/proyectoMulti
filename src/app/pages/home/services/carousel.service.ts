@@ -8,7 +8,7 @@ export class CarouselService {
   private readonly STORAGE_KEY = 'carouselArticles';
   private articlesSubject = new BehaviorSubject<
     { id: number; name: string; img: string }[]
-  >(this.loadArticlesFromStorage(3));
+  >(this.loadArticlesFromStorage());
   articles$ = this.articlesSubject.asObservable();
 
   constructor() {}
@@ -27,19 +27,39 @@ export class CarouselService {
     this.saveArticlesToStorage(articles);
   }
 
-  nextArticles() : { id: number; name: string; img: string }[] {
-    return this.loadArticlesFromStorage(3)
-  }
-
   // Carga artículos desde el almacenamiento local
-  private loadArticlesFromStorage(idx : number = 3): { id: number; name: string; img: string }[] {
+  private loadArticlesFromStorage(): {
+    id: number;
+    name: string;
+    img: string;
+  }[] {
     const storedArticles = localStorage.getItem(this.STORAGE_KEY);
-    const articles = storedArticles ? JSON.parse(storedArticles) : [];
-    return articles.slice(0,  idx);
+    const articles = storedArticles
+      ? JSON.parse(storedArticles)
+      : [
+          {
+            id: 1,
+            img: 'assets/calculadora.jpg',
+            name: 'Calculadora cientifica',
+          },
+          {
+            id: 2,
+            img: 'assets/anatomia_libro.jpg',
+            name: 'Anatomia sexta edicion',
+          },
+          {
+            id: 3,
+            img: 'assets/mouse.jpg',
+            name: 'Mouse',
+          },
+        ];
+    return articles;
   }
 
   // Guarda artículos en el almacenamiento local
-  private saveArticlesToStorage(articles: { id: number; name: string; img: string }[]): void {
+  private saveArticlesToStorage(
+    articles: { id: number; name: string; img: string }[]
+  ): void {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(articles));
   }
 }

@@ -1,9 +1,9 @@
 <app-header></app-header>
 
-<div class="slider">
+<div class="slider-section">
   <div class="slider-container" [style.transform]="getTransform()">
-    <div class="slider-row">
-      <div class="slider-card" *ngFor="let item of items">
+    <div class="slider-row"> 
+      <div class="slider-card" *ngFor="let item of items" [style]="getTransformContentLayout()">
         <div class="card">
           <div class="imgcard">
             <img class="imgcardd" [src]="item.img" [alt]="item.name" />
@@ -13,7 +13,7 @@
             <p class="name">{{ item.name }}</p>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
   </div>
   <!-- Botones de navegación -->

@@ -25,7 +25,6 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.carouselService.articles$.subscribe((articles) => {
       this.items = articles;
-      console.log(this.items)
     });
   }
 
@@ -41,19 +40,31 @@ export class HomeComponent implements OnInit {
     this.router.navigate([`/${route}`]);
   }
 
-  // Métodos para el slider
+  handleLooping(numberIdx = this.itemsPerPage): void {
+    this.currentIndex = numberIdx; 
+  }
+
   prevSlide(): void {
-    const maxIndex = Math.ceil(this.items.length / this.itemsPerPage) - 1;
-    this.currentIndex = (this.currentIndex - 1 + (maxIndex + 1)) % (maxIndex + 1);
+    if (this.currentIndex > 0) {
+      this.currentIndex--;
+    } else {
+      this.handleLooping(this.items.length - 1);
+    }
   }
   nextSlide(): void {
-    this.currentIndex +=3;
-    this.items =this.carouselService.nextArticles()
-    console.log(this.items)
+    if (this.currentIndex < this.items.length - this.itemsPerPage) {
+      this.currentIndex++;
+    } else {
+       this.handleLooping(0);
+    }
   }
 
   // Devuelve el valor de la transformación para el slider
   getTransform(): string {
-    return `translateX(-${this.currentIndex * 100}%)`;
+    return `translateX(-${this.currentIndex * (100 / this.itemsPerPage)}%)`;
+  }
+
+  getTransformContentLayout() : string {
+    return `flex: 0 0 calc((100% / ${this.itemsPerPage}) - 20px) `;
   }
 }
