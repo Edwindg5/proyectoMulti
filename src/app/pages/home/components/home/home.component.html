@@ -2,18 +2,30 @@
 
 <div class="slider-section">
   <div class="slider-container" [style.transform]="getTransform()">
-    <div class="slider-row"> 
+    <div class="slider-row">
       <div class="slider-card" *ngFor="let item of items" [style]="getTransformContentLayout()">
         <div class="card">
           <div class="imgcard">
             <img class="imgcardd" [src]="item.img" [alt]="item.name" />
           </div>
           <div class="infocardd">
-            <p class="TitiloMS">Titulo del Producto:</p>
+            <p class="TitiloMS">Título del Producto:</p>
             <p class="name">{{ item.name }}</p>
           </div>
+          <div class="card-overlay">
+            <button *ngIf="item.transactionType === 'VENTA'" (click)="navigateTo('venta')">
+              Comprar
+            </button>
+            <button *ngIf="item.transactionType === 'INTERCAMBIO'" (click)="navigateTo('intercambio')">
+              Intercambiar
+            </button>
+            <button *ngIf="item.transactionType === 'PRESTAMO'" (click)="navigateTo('prestamo')">
+              Rentar
+            </button>
+          </div>
         </div>
-      </div> 
+        
+      </div>
     </div>
   </div>
   <!-- Botones de navegación -->
@@ -21,10 +33,40 @@
   <button (click)="nextSlide()" class="slider-control next">▶</button>
 </div>
 
+<!-- Nueva Sección -->
+<div class="why-use-app-section">
+  <div class="text-image-container">
+    <div class="text-section">
+      <h2>¿Conoce un poco de esta app?</h2>
+      <p>
+        Esta aplicación ha sido diseñada para facilitar la compra, venta y renta
+        de artículos de manera eficiente, segura y accesible. Es la herramienta ideal
+        para estudiantes y profesionales que buscan maximizar sus recursos.
+      </p>
+    </div>
+    <div class="image-section">
+      <img src="assets/img/why-use-app.jpg" alt="" />
+    </div>
+  </div>
+</div>
+
+<!-- Icono de ayuda -->
+<div class="help-icon" (click)="toggleHelpPanel()">
+  <i class="fa fa-question-circle"></i>
+</div>
+<div class="help-panel" *ngIf="helpPanelVisible">
+  <p>
+    Si tienes dudas sobre cómo utilizar esta aplicación, revisa nuestra sección de ayuda
+    o contacta a nuestro equipo de soporte para obtener asistencia personalizada.
+  </p>
+</div>
 
 <!-- Pie de página -->
 <footer class="description">
   <p>
-    La creación de esta plataforma para la compra, venta y renta de artículos fue pensada para poder ayudar a los estudiantes universitarios a adquirir artículos para su carrera a un precio accesible y en buen estado. Así mismo, también ayuda a los estudiantes a deshacerse de artículos que ya no utilizan y de los cuales se quieren deshacer.
+    La creación de esta plataforma para la compra, venta y renta de artículos fue pensada
+    para poder ayudar a los estudiantes universitarios a adquirir artículos para su carrera
+    a un precio accesible y en buen estado. Así mismo, también ayuda a los estudiantes a
+    deshacerse de artículos que ya no utilizan y de los cuales se quieren deshacer.
   </p>
 </footer>

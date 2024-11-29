@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Item } from '../models/item.model';
 
@@ -19,9 +19,23 @@ export class CategoryService {
     return this.http.put(`${this.apiUrl}/items/${id_articulo}`, data);
   }
   
-  
   deleteItem(itemId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/items/${itemId}`);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('El token no está disponible.');
+    }
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  
+    return this.http.delete(`${this.apiUrl}/items/${itemId}`, { headers });
   }
+  
+  
+  getAllArticles(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/articles`);
+  }
+  
   
 }

@@ -1,9 +1,12 @@
 <app-header></app-header>
-<div class="container">
-  <h1>Vende tu artículo</h1>
+<div class="vende-container">
+  <div class="form-header">
+    <h1>Vende tu artículo</h1>
+    <p>Completa el formulario para registrar tu artículo y mostrarlo al público.</p>
+  </div>
 
   <!-- Formulario de registro de artículo -->
-  <form [formGroup]="form" (ngSubmit)="submitForm()">
+  <form [formGroup]="form" (ngSubmit)="submitForm()" class="vende-form">
     <div class="form-group">
       <label for="articleName">Nombre del artículo</label>
       <input
@@ -25,14 +28,13 @@
       ></textarea>
     </div>
 
-    <!-- Nueva funcionalidad: Lista procesada de descripción -->
-    <div class="description-list" *ngIf="descriptionRows.length > 0">
+    <!-- Características procesadas -->
+    <div *ngIf="descriptionRows.length > 0" class="description-list">
       <h3>Características procesadas:</h3>
-      <ul *ngFor="let row of descriptionRows">
-        <li *ngFor="let item of row">{{ item }}</li>
+      <ul>
+        <li *ngFor="let row of descriptionRows">{{ row }}</li>
       </ul>
     </div>
-    <!-- Fin de la nueva funcionalidad -->
 
     <div class="form-group">
       <label for="selectedCategoryId">Categoría</label>
@@ -47,26 +49,28 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label for="articlePrice">Precio</label>
-      <input
-        type="number"
-        id="articlePrice"
-        class="form-control"
-        formControlName="articlePrice"
-        placeholder="Introduce el precio en MXN"
-      />
-    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="articlePrice">Precio (MXN)</label>
+        <input
+          type="number"
+          id="articlePrice"
+          class="form-control"
+          formControlName="articlePrice"
+          placeholder="Precio en MXN"
+        />
+      </div>
 
-    <div class="form-group">
-      <label for="articleQuantity">Cantidad</label>
-      <input
-        type="number"
-        id="articleQuantity"
-        class="form-control"
-        formControlName="articleQuantity"
-        placeholder="Introduce la cantidad disponible"
-      />
+      <div class="form-group">
+        <label for="articleQuantity">Cantidad</label>
+        <input
+          type="number"
+          id="articleQuantity"
+          class="form-control"
+          formControlName="articleQuantity"
+          placeholder="Cantidad disponible"
+        />
+      </div>
     </div>
 
     <div class="form-group">
@@ -74,6 +78,7 @@
       <select id="transactionType" class="form-control" formControlName="transactionType">
         <option value="VENTA">Venta</option>
         <option value="INTERCAMBIO">Intercambio</option>
+        <option value="PRESTAMO">Renta</option>
       </select>
     </div>
 
@@ -82,6 +87,8 @@
       <select id="articleState" class="form-control" formControlName="articleState">
         <option value="DISPONIBLE">Disponible</option>
         <option value="NO_DISPONIBLE">No Disponible</option>
+        <option value="PENDING">Pndiente</option>
+        <option value="COMPLETED">Completado </option>
       </select>
     </div>
 
@@ -107,13 +114,13 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+    <button type="submit" class="btn btn-primary submit-button" [disabled]="isLoading">
       {{ isLoading ? 'Cargando...' : 'Registrar Artículo' }}
     </button>
   </form>
 
-  <!-- Formulario para cargar imagen -->
-  <div class="image-upload mt-4">
+  <!-- Carga de imágenes -->
+  <div class="image-upload">
     <h2>Sube una imagen</h2>
     <form [formGroup]="imageForm" (ngSubmit)="onImageSubmit()">
       <div class="form-group">
@@ -124,15 +131,13 @@
           accept=".jpg,.jpeg,.png"
         />
       </div>
-      <button type="submit" class="btn btn-secondary" [disabled]="isImageLoading">
+      <button type="submit" class="btn btn-secondary upload-button" [disabled]="isImageLoading">
         {{ isImageLoading ? 'Subiendo...' : 'Subir Imagen' }}
       </button>
     </form>
-
-    <!-- Vista previa de la imagen -->
-    <div class="image-preview mt-3" *ngIf="imageUrl">
+    <div class="image-preview" *ngIf="imageUrl">
       <h3>Vista previa:</h3>
-      <img [src]="imageUrl" alt="Vista previa de la imagen" class="img-thumbnail" />
+      <img [src]="imageUrl" alt="Vista previa de la imagen" />
     </div>
   </div>
 </div>

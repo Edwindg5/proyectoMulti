@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/components/home/home.component';
+
 import { LoginComponent } from './pages/login/components/login/login.component';
 import { RegisterComponent } from './pages/register/components/register/register.component';
 import { CompraComponent } from './pages/compra/components/compra/compra.component';
@@ -11,6 +12,8 @@ import { MaterialEstudioComponent } from './categories/component/material-estudi
 import { HerramientasComponent } from './categories/component/herramientas/herramientas.component';
 import { AccesoriosComponent } from './categories/component/accesorios/accesorios.component';
 import { AuthGuard } from './auth/auth.guard';
+import { UsersComponent } from './pages/users/components/users/users.component';
+
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -20,9 +23,10 @@ export const routes: Routes = [
   { path: 'compra', component: CompraComponent, canActivate: [AuthGuard] },
   { path: 'vende', component: VendeComponent, canActivate: [AuthGuard] },
   { path: 'renta', component: RentaComponent, canActivate: [AuthGuard] },
-  { path: 'intercambia', component: IntercambiaComponent},
+  { path: 'intercambia', component: IntercambiaComponent },
   { path: 'electronica', component: ElectronicaComponent },
-  { path: 'material-estudio', component: MaterialEstudioComponent},
+  { path: 'material-estudio', component: MaterialEstudioComponent },
   { path: 'herramientas', component: HerramientasComponent },
-  { path: 'accesorios', component: AccesoriosComponent},
+  { path: 'accesorios', component: AccesoriosComponent },
+  { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard] }, // Solo accesible para admin
 ];

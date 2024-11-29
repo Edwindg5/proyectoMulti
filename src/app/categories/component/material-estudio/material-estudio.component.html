@@ -1,6 +1,6 @@
 <app-header></app-header>
 <div class="card-container">
-  <div *ngFor="let product of filteredProducts" class="product-card">
+  <div *ngFor="let product of filteredProducts" class="product-card" (click)="onCardClick()">
     <div class="main">
       <img [src]="product.url_imagen" alt="{{ product.nombre_articulo }}" class="hero-image" />
       <h1>DESCRIPCIÓN</h1>
@@ -26,7 +26,7 @@
         <p><ins>Propietario:</ins> {{ product.userName }}</p>
       </div>
       <div class="actions">
-        <!-- Habilitar acciones solo para usuarios autenticados -->
+        <!-- Habilitar acciones solo para usuarios autenticados y propietarios -->
         <button 
           *ngIf="isAuthenticated && product.userName === authenticatedUserName" 
           (click)="updateProduct(product)" 
@@ -59,13 +59,11 @@
           class="btn-purchase">
           Comprar
         </button>
+
         <!-- Botón deshabilitado para usuarios que no son propietarios -->
         <button *ngIf="product.userName !== authenticatedUserName"  disabled class="disabled-button">No puedes interactuar</button>
-
-
       </div>
     </div>
   </div>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-
 </div>

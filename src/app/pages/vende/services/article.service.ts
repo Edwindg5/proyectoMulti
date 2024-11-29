@@ -14,6 +14,9 @@ export class ArticleService {
   getCategories(): Observable<any> {
     return this.http.get(`${this.apiUrl}/categories/`);
   }
+  getAllArticles(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/items/`);
+  }
   
   getProductsByCategory(categoryId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/items?categoryId=${categoryId}`);

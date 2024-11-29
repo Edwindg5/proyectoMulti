@@ -33,8 +33,8 @@ export class LoginComponent {
   
         if (token && user) {
           this.authService.saveToken(token);
-          localStorage.setItem('user', JSON.stringify(user)); // Guardar usuario completo
-          localStorage.setItem('userId', user.id); // Guardar solo el ID del usuario
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('userId', user.id);
   
           Swal.fire({
             icon: 'success',

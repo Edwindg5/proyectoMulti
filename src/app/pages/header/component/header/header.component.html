@@ -1,32 +1,78 @@
+
+
+
+
 <header class="main-header">
-  
   <div class="left-side">
     <img src="assets/logoproyect.png" alt="Logoproyect" class="logoproyect" (click)="navigateTo('home')" />
     <button class="menu-icon" (click)="toggleMenu()">☰</button>
-    
-    
+    <!-- Icono de notificaciones -->
+    <div class="notifications-wrapper" (click)="toggleNotifications()">
+      <img src="assets/notification.png" alt="Notificaciones" class="notifications-icon" />
+      <span class="notifications-count" *ngIf="unreadNotifications > 0">{{ unreadNotifications }}</span>
+    </div>
   </div>
-  
+
   <div class="right-side">
     <nav class="nav-bar" [class.visible]="menuVisible">
+      <ng-container *ngIf="isAuthenticated">
+        <button (click)="navigateTo('vende')">Vende</button>
+    
+        <!-- Mostrar solo si el usuario es un administrador -->
+        <ng-container *ngIf="isAdmin">
+          <button (click)="navigateTo('usuarios')">Usuarios</button>
+        </ng-container>
+      </ng-container>
+      <input
+      type="text"
+      placeholder="Buscar"
+      class="search-bar"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+    />
+    <input
+  type="text"
+  placeholder="Buscar"
+  class="search-bar"
+  [(ngModel)]="searchTerm"
+  (input)="onSearch()"
+/>
+<div class="search-results" *ngIf="searchResults.length > 0">
+  <div class="result-item" *ngFor="let item of searchResults">
+    <img [src]="item.url_imagen" alt="{{ item.nombre_articulo }}" class="result-image" />
+    <span class="result-name">{{ item.nombre_articulo }}</span>
+    <button class="result-details" (click)="navigateToCategory(item.categoria)">Detalles</button>
+  </div>
+</div>
 
-      <input type="text" placeholder="Buscar" class="search-bar" />
+    
       <img
         src="assets/usuario.png"
         alt="Usuario"
         class="user-icon"
         (click)="isAuthenticated ? logout() : navigateToLogin()"
       />
+
     </nav>
+    
   </div>
 
-    <nav *ngIf="menuVisible" class="categories-menu">
-      <ul>
-        <li (click)="navigateTo('electronica')">Electrónica</li>
-        <li (click)="navigateTo('material-estudio')">Material de Estudio</li>
-        <li (click)="navigateTo('herramientas')">Herramientas</li>
-        <li (click)="navigateTo('accesorios')">Accesorios</li>
-      </ul>
-    </nav>
-  
+  <!-- Menú de categorías -->
+  <nav *ngIf="menuVisible" class="categories-menu">
+    <ul>
+      <li (click)="navigateTo('electronica')">Electrónica</li>
+      <li (click)="navigateTo('material-estudio')">Material de Estudio</li>
+      <li (click)="navigateTo('herramientas')">Herramientas</li>
+      <li (click)="navigateTo('accesorios')">Accesorios</li>
+    </ul>
+  </nav>
+
+  <!-- Panel de notificaciones -->
+  <div class="notifications-panel" *ngIf="notificationsVisible">
+    <h3>Notificaciones</h3>
+    <ul>
+      <li *ngFor="let notification of notifications">{{ notification.message }}</li>
+    </ul>
+  </div>
 </header>
+

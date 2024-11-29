@@ -22,7 +22,8 @@ export class VendeComponent implements OnInit {
   isImageLoading = false;
   imageUploaded = false;
   imageUrl = ''; // URL de la imagen subida
-  descriptionRows: string[][] = []; // **Nueva propiedad** para gestionar las filas de descripción
+  descriptionRows: string[][] = []; // **Nueva propiedad** para gestionar las filas de descripción}
+  
 
   constructor(
     private fb: FormBuilder,
@@ -151,7 +152,7 @@ export class VendeComponent implements OnInit {
 
     this.authService.verifyUserByNameAndEmail(name, email).subscribe({
       next: (response) => {
-        if (response.exists && response.userId) {
+        if (response.exists && response.userId === this.authService.getUserId()) {
           const articleData = {
             nombre_articulo: this.form.get('articleName')?.value,
             descripcion: this.form.get('articleDescription')?.value,
@@ -160,7 +161,7 @@ export class VendeComponent implements OnInit {
             tipo_transaccion: this.form.get('transactionType')?.value,
             usuario_id: this.authService.getUserId(),
             estado: this.form.get('articleState')?.value,
-            url_imagen: this.imageUrl, // Asegúrate de enviar la URL de la imagen
+            url_imagen: this.imageUrl,
             cantidad: this.form.get('articleQuantity')?.value,
           };
 
@@ -174,9 +175,10 @@ export class VendeComponent implements OnInit {
               );
               this.form.reset();
               this.carouselService.addArticle({
-                id: Date.now(), // Genera un ID único
+                id: Date.now(),
                 name: articleData.nombre_articulo,
                 img: articleData.url_imagen,
+                transactionType: articleData.tipo_transaccion,
               });
             },
             error: (err) => {
@@ -195,7 +197,7 @@ export class VendeComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Usuario no autenticado',
-            text: 'El nombre o correo no coinciden con un usuario autenticado.',
+            text: 'El nombre o correo no coinciden con el usuario logueado.',
           });
         }
       },

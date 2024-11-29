@@ -10,17 +10,16 @@
 .left-side {
   display: flex;
   align-items: center;
-  width: 50%;
+  width: auto;
+  gap: 15px; /* Espaciado uniforme entre los elementos */
 }
 
-/* Sección derecha con los botones y el ícono de usuario */
 .right-side {
   display: flex;
   align-items: center;
-  justify-content: end;
-  width: 50%;
+  justify-content: space-between; /* Espaciado entre los elementos */
+  width: 100%; /* Asegurarse de que ocupe el ancho completo */
 }
-
 /* Menú de navegación */
 .nav-bar button {
   background: none;
@@ -30,19 +29,76 @@
   margin-right: 15px;
 }
 
-/* Menú de categorías restringido */
+/* Barra de búsqueda */
+.search-bar {
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+  margin: 0; /* Elimina márgenes anteriores */
+  width: 200px; /* Ancho fijo para mejor alineación */
+  order: 2; /* Asegura que la barra esté antes del ícono de usuario */
+}
+
+
+
+.notifications-wrapper {
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.notifications-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.notifications-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ícono de usuario */
+.user-icon {
+  margin-left: 10px; /* Ajusta el espaciado entre la barra y el ícono */
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  order: 3; /* Asegura que esté al final de la fila */
+}
+
+.user-icon:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Menú de categorías */
 .categories-menu {
   display: flex;
   flex-direction: column;
   background-color: #4a90e2;
   padding: 10px;
-  position: fixed; /* Cambiado a fixed para asegurar que quede en la vista */
-  top: 80px; /* Ajustar según el tamaño de tu header */
+  position: fixed;
+  top: 80px;
   left: 20px;
   width: 200px;
   border: 2px solid white;
   border-radius: 8px;
-  z-index: 1000; /* Asegura que el menú esté encima de otros elementos */
+  z-index: 1000;
 }
 
 .categories-menu ul {
@@ -64,6 +120,38 @@
   transform: scale(1.05);
   transition: 0.3s;
 }
+
+/* Panel de notificaciones */
+.notifications-panel {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.notifications-panel h3 {
+  margin-top: 0;
+}
+
+.notifications-panel ul {
+  list-style: none;
+  padding: 0;
+}
+
+.notifications-panel li {
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.notifications-panel li:last-child {
+  border-bottom: none;
+}
+
 /* Logo del proyecto */
 .logoproyect {
   width: 60px;
@@ -92,46 +180,75 @@
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 }
 
-/* Barra de búsqueda */
-.search-bar {
-  padding: 5px;
-  border-radius: 4px;
-  border: none;
-  margin-left: 15px;
+/* Ajustar el contenedor */
+.right-side, .nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Alinea todo hacia la derecha */
+  gap: 10px; /* Espaciado uniforme entre elementos */
 }
 
-/* Icono de usuario */
-.user-icon {
-  margin-left: 20px;
+
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-results {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.search-result-item:hover {
+  background: #f5f5f5;
   cursor: pointer;
+}
+
+.result-image {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  border: 2px solid white;
+  margin-right: 10px;
+  border-radius: 4px;
   object-fit: cover;
 }
 
-.user-icon:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
-}
-.search-results {
-  position: absolute;
-  background: white;
-  border: 1px solid #ccc;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-  width: 100%;
+.result-name {
+  flex: 1;
+  font-size: 14px;
 }
 
-.result-item {
-  padding: 8px;
+button {
+  padding: 6px 10px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
   cursor: pointer;
-  border-bottom: 1px solid #eaeaea;
 }
 
-.result-item:hover {
-  background-color: #f5f5f5;
+button:hover {
+  background-color: #0056b3;
 }
-

@@ -1,24 +1,24 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Item } from '../../../categories/models/item.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
-  private searchTerm = new BehaviorSubject<string>('');
-  searchTerm$ = this.searchTerm.asObservable();
+  private apiUrl = 'http://127.0.0.1:8000/items/search';
+  private searchTermSubject = new BehaviorSubject<string>(''); // Inicializa con valor vacío
+  searchTerm$ = this.searchTermSubject.asObservable(); // Exponer observable
 
-  updateSearchTerm(term: string): void {
-    this.searchTerm.next(term);
+  constructor(private http: HttpClient) {}
+
+  searchItems(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`);
   }
 
-  getFilteredProducts(term: string, products: Item[]): Item[] {
-    const lowerTerm = term.toLowerCase();
-    return products.filter(
-      (product) =>
-        product.nombre_articulo.toLowerCase().startsWith(lowerTerm) || // Comienza con
-        product.nombre_articulo.toLowerCase().includes(lowerTerm) // Contiene el término
-    );
+  // Método para actualizar el término de búsqueda
+  setSearchTerm(term: string): void {
+    this.searchTermSubject.next(term);
   }
 }

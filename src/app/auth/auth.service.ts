@@ -18,37 +18,52 @@
     }
     
     // Login method
-    login(credentials: { email: string; password: string }): Observable<any> {
-      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-      const params = new URLSearchParams({
-        email: credentials.email,
-        password: credentials.password,
-      }).toString();
-    
-      return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers }).pipe(
-        tap((response: any) => {
-          console.log('Respuesta del backend:', response);
-          const token = response.access_token;
-          const user = response.user;
-    
-          if (token && user) {
-            this.saveToken(token);
-            localStorage.setItem('user', JSON.stringify(user)); // Guardar información del usuario
-          }
-        })
-      );
-    }
-    
+   // En el servicio AuthService
+login(credentials: { email: string; password: string }): Observable<any> {
+  const adminCredentials = { email: 'admin@admin.com', password: '123456' };
+
+  // Verificar si es administrador
+  if (credentials.email === adminCredentials.email && credentials.password === adminCredentials.password) {
+    const adminUser = {
+      name: 'Administrador',
+      email: credentials.email,
+      role: 'ADMIN',
+    };
+
+    const fakeToken = 'fake-admin-token'; // Simula un token para el admin
+
+    localStorage.setItem('user', JSON.stringify(adminUser));
+    localStorage.setItem('token', fakeToken); // Guarda el token falso para el admin
+
+    return new Observable(observer => observer.next({ access_token: fakeToken, user: adminUser }));
+  }
+
+  // Código para login normal (sin cambios)
+  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  const params = new URLSearchParams({
+    email: credentials.email,
+    password: credentials.password,
+  }).toString();
+  return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers }).pipe(
+    tap((response: any) => {
+      const token = response.access_token;
+      const user = response.user;
+      if (token && user) {
+        this.saveToken(token);
+        localStorage.setItem('user', JSON.stringify(user));
+      }
+    })
+  );
+}
+
     
     
     // Logout method
-    logout(): void {
-      // Ensure localStorage is available before accessing it
-      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-        localStorage.removeItem('token');
-      }
-      this.router.navigate(['/login']);
-    }
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.router.navigate(['/login']);
+  }
 
     // Check if the user is authenticated
     isAuthenticated(): boolean {
@@ -145,6 +160,12 @@
         return null;
       }
     }
+    
+    getRole(): string {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      return user.rol || 'USER';
+    }
+    
     
     
   }

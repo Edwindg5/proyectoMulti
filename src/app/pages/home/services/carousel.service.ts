@@ -7,14 +7,14 @@ import { BehaviorSubject } from 'rxjs';
 export class CarouselService {
   private readonly STORAGE_KEY = 'carouselArticles';
   private articlesSubject = new BehaviorSubject<
-    { id: number; name: string; img: string }[]
+    { id: number; name: string; img: string; transactionType?: string  }[]
   >(this.loadArticlesFromStorage());
   articles$ = this.articlesSubject.asObservable();
 
   constructor() {}
 
   // Agrega un artículo y actualiza el almacenamiento local
-  addArticle(article: { id: number; name: string; img: string }): void {
+  addArticle(article: { id: number; name: string; img: string ;transactionType?: string}): void {
     const currentArticles = this.articlesSubject.getValue();
     const updatedArticles = [...currentArticles, article];
     this.articlesSubject.next(updatedArticles);
@@ -32,6 +32,7 @@ export class CarouselService {
     id: number;
     name: string;
     img: string;
+    transactionType?: string 
   }[] {
     const storedArticles = localStorage.getItem(this.STORAGE_KEY);
     const articles = storedArticles

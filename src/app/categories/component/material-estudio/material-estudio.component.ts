@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { SearchService } from '../../../pages/header/services/search.service';
+import { ArticleService } from '../../../pages/vende/services/article.service';
 
 @Component({
   selector: 'app-material-estudio',
@@ -23,12 +24,15 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
   searchSubscription: Subscription | undefined;
   authenticatedUserName: string = '';
   isAuthenticated: boolean;
-  
+  articles: any[] = [];  // Arreglo para almacenar los artículos
+  isLoading = false;  
+
   constructor(
     private categoryService: CategoryService,
     private router: Router,
     private authService: AuthService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private articleService: ArticleService
   ) {
     this.isAuthenticated = this.authService.isAuthenticated();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -42,13 +46,33 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
+  }  
+  
+  loadAllArticles(): void {
+    this.isLoading = true;
+    this.categoryService.getAllArticles().subscribe({
+      next: (articles) => {
+        this.products = articles.map((item) => ({
+          ...item,
+          url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
+          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
+          userName: item.user?.nombre || 'Usuario no especificado',
+          userPhone: item.user?.telefono || 'Teléfono no especificado',
+        }));
+        this.filteredProducts = [...this.products];
+      },
+      error: () => {
+        console.error('Error al cargar los artículos');
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
   }
 
-  ngOnInit(): void {
-    const categoryId = 1;
-    const userId = parseInt(localStorage.getItem('userId') || '0', 10);
-    this.loadItemsByCategory(categoryId, userId);
 
+  ngOnInit(): void {
+    this.loadAllArticles(); // Cambio: cargamos todos los artículos
     this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
       this.searchTerm = term;
       this.filteredProducts = this.products.filter((product) =>
@@ -57,7 +81,21 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       );
     });
   }
-
+    // Cargar todos los artículos
+    loadArticles(): void {
+      this.isLoading = true;
+      this.articleService.getAllArticles().subscribe({
+        next: (articles) => {
+          this.articles = articles;
+        },
+        error: () => {
+          console.error('Error al cargar los artículos');
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    }
 
   loadItemsByCategory(categoryId: number, userId: number): void {
     this.categoryService.getItemsByCategory(categoryId).subscribe(
@@ -89,14 +127,12 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       }
     );
   }
+  
 
-  // Nueva funcionalidad: procesar descripción en filas de 3 elementos
   getProcessedDescription(description: string): string[][] {
     const features = description.split(',').map((item) => item.trim());
     return [features];
   }
-  // Fin de la nueva funcionalidad
-
 
   onSearch(searchTerm: string): void {
     this.filteredProducts = this.products.filter((product) =>
@@ -138,7 +174,7 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(1, userId); // Vuelve a cargar los datos
+            this.loadItemsByCategory(1, userId);
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -146,11 +182,15 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
           }
         );
       }
-      
     });
   }
 
   deleteProduct(product: Item): void {
+    if (product.userName !== this.authenticatedUserName) {
+      Swal.fire('Error', 'No tienes permiso para eliminar este artículo.', 'error');
+      return;
+    }
+  
     Swal.fire({
       title: '¿Estás seguro?',
       text: 'Esto eliminará el artículo permanentemente.',
@@ -160,30 +200,47 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.categoryService.deleteItem(product.id_articulo).subscribe(
-          () => {
+        this.categoryService.deleteItem(product.id_articulo).subscribe({
+          next: () => {
             this.products = this.products.filter((item) => item.id_articulo !== product.id_articulo);
             this.filteredProducts = [...this.products];
-            Swal.fire('Eliminado', 'El artículo fue eliminado correctamente.', 'success');
+            Swal.fire('Eliminado', 'El producto se eliminó correctamente', 'success');
           },
-          (error) => {
-            Swal.fire('Error', 'No se pudo eliminar el artículo.', 'error');
-            console.error(error);
-          }
-        );
+          error: (error) => {
+            console.error('Error al eliminar el producto:', error);
+            const errorMessage = error.status === 401
+              ? 'No estás autorizado para eliminar este producto.'
+              : 'No se pudo eliminar el producto. Inténtalo más tarde.';
+            Swal.fire('Error', errorMessage, 'error');
+          },
+        });
       }
     });
   }
-goToExchange(product: Item): void {
-  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
-  this.router.navigate(['/intercambia']); // Navegar a la ruta
- 
-}
-goToPurchase(product: Item): void {
-  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
-  this.router.navigate(['/compra']); // Navegar a la ruta de compra
-}
+  
+  
 
+  goToExchange(product: Item): void {
+    this.router.navigate([`/intercambiar/${product.id_articulo}`]);
+  }
 
+  goToPurchase(product: Item): void {
+    this.router.navigate([`/compra/${product.id_articulo}`]);
+  }
+  onCardClick(): void {
+    if (!this.isAuthenticated) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Inicia sesión',
+        text: 'Debes iniciar sesión para interactuar.',
+        confirmButtonText: 'Iniciar Sesión',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+      });
+    }
+  }
+  
   
 }
