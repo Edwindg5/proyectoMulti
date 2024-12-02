@@ -21,7 +21,7 @@ app-header {
 
 .slider-section {
   position: relative;
-  max-width: 1440px; /* Aumentado para mayor ancho */
+  max-width: 1240px; /* Aumentado para mayor ancho */
   margin: 0 auto;
   overflow: hidden;
   background-color: #eef3fc;
@@ -60,9 +60,11 @@ app-header {
 }
 
 .imgcard img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+  width: auto; 
+  max-width: 100%;
+  height: 150px; 
+  object-fit: cover; 
+  border-radius: 8px; 
 }
 
 .infocardd {
@@ -227,7 +229,11 @@ app-header {
   height: 50px;
   object-fit: contain;
 }
-
+.adjustable-image {
+  width: 400px;
+  height: 300px;
+  object-fit: cover;
+}
 /* Icono de ayuda */
 .help-icon {
   position: fixed;

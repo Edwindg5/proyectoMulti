@@ -53,6 +53,25 @@ export class CarouselService {
             img: 'assets/mouse.jpg',
             name: 'Mouse',
           },
+
+          {
+            id: 3,
+            img: 'assets/manos.png',
+            name: 'Mouse',
+          },
+
+          {
+            id: 3,
+            img: 'assets/manoazul.png',
+            name: 'Mouse',
+          },
+
+          {
+            id: 3,
+            img: 'assets/logo.png',
+            name: 'Mouse',
+          },
+
         ];
     return articles;
   }
