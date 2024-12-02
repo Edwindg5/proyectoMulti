@@ -25,7 +25,8 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
   authenticatedUserName: string = '';
   isAuthenticated: boolean;
   articles: any[] = [];  // Arreglo para almacenar los artículos
-  isLoading = false;  
+  isLoading = false; 
+  
 
   constructor(
     private categoryService: CategoryService,
@@ -103,19 +104,19 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
         },
       });
     }
-
     loadItemsByCategory(categoryId: number): void {
       this.isLoading = true;
     
       this.categoryService.getItemsByCategory(categoryId).subscribe({
-        next: (data: any[]) => {
-          console.log('Respuesta del backend:', data); // Depuración
+        next: (data: Item[]) => {
           this.products = data.map((item) => ({
             ...item,
             url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
             profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
             userName: item.user?.nombre || 'Usuario no especificado',
             userPhone: item.user?.telefono || 'Teléfono no especificado',
+            userEmail: item.user?.correo_electronico || 'Correo no especificado'
+ // Aquí se asigna correctamente
           }));
           this.filteredProducts = [...this.products];
         },
@@ -127,6 +128,8 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
         },
       });
     }
+    
+    
     
     
 
@@ -259,8 +262,18 @@ onMouseLeave(product: Item): void {
 }
 
 goToRent(product: Item): void {
-  Swal.fire('Rentar', `Has seleccionado rentar el artículo: ${product.nombre_articulo}`, 'info');
+  Swal.fire({
+    title: 'Rentar artículo',
+    html: `
+      <p><strong>Artículo:</strong> ${product.nombre_articulo}</p>
+      <p><strong>Propietario:</strong> ${product.userName || 'No especificado'}</p>
+      <p><strong>Correo:</strong> ${product.userEmail || 'Correo no especificado'}</p>
+    `,
+    icon: 'info',
+    confirmButtonText: 'Aceptar',
+  });
 }
+
 
 goToExchange(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product));
@@ -273,7 +286,20 @@ goToPurchase(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product));
   this.router.navigate(['/compra']); // Asegúrate de que la ruta esté definida
 }
+viewOwnerDetails(product: Item): void {
+  Swal.fire({
+    title: 'Detalles del Propietario',
+    html: `
+      <p><strong>Nombre:</strong> ${product.userName || 'No especificado'}</p>
+      <p><strong>Correo:</strong> ${product.userEmail || 'No especificado'}</p>
+      <p><strong>Teléfono:</strong> ${product.userPhone || 'No especificado'}</p>
+    `,
+    icon: 'info',
+    confirmButtonText: 'Cerrar',
+  });
+}
 
-  
+
+
 }
 

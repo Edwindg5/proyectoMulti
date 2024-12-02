@@ -1,6 +1,7 @@
 <app-header></app-header>
 
 <div class="intercambio-container">
+  <!-- Detalles del producto -->
   <div class="product-details">
     <div class="product-image">
       <img [src]="product?.url_imagen" alt="Imagen del producto" />
@@ -12,50 +13,48 @@
       <p class="texto">Recoge dentro de las instalaciones</p>
       <div class="dropdown">
         <label for="building">Elige edificio de entrega:</label>
-        <select id="building">
-          <option>UD1</option>
-          <option>UD2</option>
-          <option>UD3</option>
-          <option>UD4</option>
+        <select id="building" [(ngModel)]="selectedBuilding">
+          <option value="" disabled selected>Selecciona...</option>
+          <option value="UD1">UD1</option>
+          <option value="UD2">UD2</option>
+          <option value="UD3">UD3</option>
+          <option value="UD4">UD4</option>
         </select>
       </div>
       <p class="cantidad">Cantidad: {{ product?.cantidad }} disponible</p>
     </div>
   </div>
 
+  <!-- Información del vendedor -->
   <div class="vendor-info">
     <h3>Información del vendedor</h3>
-    <img
-      [src]="product?.profile_picture_url || 'assets/default-vendor.png'"
-      alt="Imagen del vendedor"
-    />
+    <img [src]="product?.profile_picture_url || 'assets/default-vendor.png'" alt="Imagen del vendedor" />
     <p><strong>Intercambiar con:</strong> {{ product?.userName }}</p>
     <p><strong>Teléfono:</strong> {{ product?.userPhone }}</p>
-  
     <div class="contact-info">
       <h4>Contactar</h4>
-      <a 
-        [href]="'https://wa.me/' + product?.userPhone" 
-        target="_blank" 
-        class="social-icon"
-        title="Contactar en WhatsApp"
-      >
+      <a [href]="'https://wa.me/' + product?.userPhone" target="_blank" class="social-icon" title="Contactar en WhatsApp">
         <img src="assets/whats.jpg" alt="WhatsApp" />
       </a>
     </div>
   </div>
-  
+
+  <!-- Características del producto -->
   <div class="product-characteristics">
     <h3>Características del producto</h3>
     <p *ngIf="product?.descripcion">{{ product?.descripcion }}</p>
   </div>
 
+  <!-- Sección de intercambio -->
   <div class="exchange-section">
     <h3>Artículo a intercambiar</h3>
     <div class="upload-container">
-      <input type="file" id="upload" />
-      <textarea placeholder="Descripción del artículo"></textarea>
+      <input type="file" (change)="handleFileInput($event)" accept="image/*" />
+      <textarea [(ngModel)]="description" placeholder="Descripción del artículo"></textarea>
     </div>
-    <button class="btn-exchange">Solicitar intercambio ahora</button>
+    <button class="btn-exchange" [disabled]="!isFormValid()" (click)="requestExchange()">
+      Solicitar intercambio ahora
+    </button>
+    
   </div>
 </div>

@@ -34,10 +34,15 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    
     this.isAuthenticated = this.authService.isAuthenticated();
   
     if (this.isAuthenticated) {
       const username = this.authService.getUserName();
+      const storedNotifications = JSON.parse(localStorage.getItem('notifications') || '[]');
+      this.notifications = storedNotifications;
+      this.unreadNotifications = storedNotifications.filter((n: any) => !n.leido).length;
+      
   
       // Verificar si el usuario es administrador
       this.isAdmin = username === 'Administrador';
@@ -50,6 +55,44 @@ export class HeaderComponent implements OnInit {
         showConfirmButton: false,
       });
     }
+  }
+  
+  acceptTrade(notification: any): void {
+    const storedExchanges = JSON.parse(localStorage.getItem('exchangeRequests') || '[]');
+    const exchange = storedExchanges.find((e: any) => e.articulo_solicitado_id === notification.tradeId);
+    
+    if (!exchange) {
+      Swal.fire('Error', 'No se encontró el intercambio.', 'error');
+      return;
+    }
+  
+    exchange.estado = 'accepted';
+    localStorage.setItem('exchangeRequests', JSON.stringify(storedExchanges));
+  
+    // Actualizar notificación como leída
+    notification.leido = true;
+    localStorage.setItem('notifications', JSON.stringify(this.notifications));
+  
+    Swal.fire('Éxito', 'Intercambio aceptado.', 'success');
+  }
+  
+  rejectTrade(notification: any): void {
+    const storedExchanges = JSON.parse(localStorage.getItem('exchangeRequests') || '[]');
+    const exchange = storedExchanges.find((e: any) => e.articulo_solicitado_id === notification.tradeId);
+    
+    if (!exchange) {
+      Swal.fire('Error', 'No se encontró el intercambio.', 'error');
+      return;
+    }
+  
+    exchange.estado = 'rejected';
+    localStorage.setItem('exchangeRequests', JSON.stringify(storedExchanges));
+  
+    // Actualizar notificación como leída
+    notification.leido = true;
+    localStorage.setItem('notifications', JSON.stringify(this.notifications));
+  
+    Swal.fire('Intercambio rechazado', 'Has rechazado la solicitud de intercambio.', 'info');
   }
   
   

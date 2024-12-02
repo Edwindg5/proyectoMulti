@@ -5,54 +5,47 @@
 </div>
 <div class="card-container">
   <div 
-  *ngFor="let product of filteredProducts" 
-  class="product-card"
-  (mouseenter)="onMouseEnter(product)"
-  (mouseleave)="onMouseLeave(product)"
-  (click)="onCardClick(product)"
->
-  <div class="main">
-    <img 
-      [src]="product.url_imagen" 
-      alt="{{ product.nombre_articulo }}" 
-      class="tokenImage" 
-    />
-    <h2>{{ product.nombre_articulo }}</h2>
-    <p class="description">{{ product.descripcion }}</p>
-    <div class="tokenInfo">
-      <div class="price">
-        <p>{{ product.precio | currency }}</p>
+    *ngFor="let product of filteredProducts" 
+    class="product-card"
+    (mouseenter)="onMouseEnter(product)"
+    (mouseleave)="onMouseLeave(product)"
+    (click)="onCardClick(product)"
+  >
+    <div class="main">
+      <img 
+        [src]="product.url_imagen" 
+        alt="{{ product.nombre_articulo }}" 
+        class="tokenImage" 
+      />
+      <h2>{{ product.nombre_articulo }}</h2>
+      <p class="description">{{ product.descripcion }}</p>
+      <div class="tokenInfo">
+        <div class="price">
+          <p>{{ product.precio | currency }}</p>
+        </div>
       </div>
-      <div class="duration">
-        <ins>TEL:</ins>
-        <p>{{ product.userPhone }}</p>
+      <hr />
+      <div class="creator">
+        <div class="wrapper">
+          <img 
+            [src]="product.profile_picture_url" 
+            alt="Imagen del vendedor" 
+            class="creatorImage"
+            (click)="viewOwnerDetails(product)"
+          />
+        </div>
+        <p><ins>Propietario:</ins> {{ product.userName }}</p>
       </div>
-    </div>
-    <hr />
-    <div class="creator">
-      <div class="wrapper">
-        <img 
-          [src]="product.profile_picture_url" 
-          alt="Imagen del vendedor" 
-          class="creatorImage" 
-        />
+      <div class="hover-actions" *ngIf="hoveredProduct === product">
+        <button class="btn-action" (click)="goToRent(product)">Rentar</button>
+        <button class="btn-action" (click)="goToExchange(product)">Intercambiar</button>
+        <button class="btn-action" (click)="goToPurchase(product)">Comprar</button>
       </div>
-      <p><ins>Propietario:</ins> {{ product.userName }}</p>
-    </div>
-    <div class="hover-actions" *ngIf="hoveredProduct === product">
-      <button class="btn-action" (click)="goToRent(product)">Rentar</button>
-      <button class="btn-action" (click)="goToExchange(product)">Intercambiar</button>
-      <button class="btn-action" (click)="goToPurchase(product)">Comprar</button>
-    </div>
-    
       <div class="actions" *ngIf="isAuthenticated && product.userName === authenticatedUserName">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
       </div>
-      
-      
     </div>
   </div>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
-
 </div>

@@ -275,6 +275,27 @@ goToPurchase(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product));
   this.router.navigate(['/compra']); // Asegúrate de que la ruta esté definida
 }
-  
+viewOwnerDetails(product: any): void {
+  // Validar que los datos del producto y del propietario estén disponibles
+  if (!product || !product.userName || !product.userPhone) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Datos no disponibles',
+      text: 'No se encontraron detalles del propietario.',
+    });
+    return;
+  }
+
+  // Mostrar una alerta con los datos del propietario
+  Swal.fire({
+    title: `Propietario: ${product.userName}`,
+    html: `
+      <p><strong>Teléfono:</strong> ${product.userPhone}</p>
+      <p><strong>Correo:</strong> ${product.userEmail || 'No especificado'}</p>
+    `,
+    icon: 'info',
+    confirmButtonText: 'Cerrar',
+  });
+}
 
 }

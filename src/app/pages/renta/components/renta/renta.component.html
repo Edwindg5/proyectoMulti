@@ -1,61 +1,62 @@
 <app-header></app-header>
-
-<div class="intercambio-container">
-  <div class="product-details">
-    <div class="product-image">
-      <img [src]="product?.url_imagen" alt="Imagen del producto" />
-    </div>
-    <div class="product-info">
-      <h2>{{ product?.nombre_articulo }}</h2>
-      <p class="price">{{ product?.precio | currency }}</p>
-      <p class="tax">IVA incluido</p>
-      <p class="texto">Recoge dentro de las instalaciones</p>
-      <div class="dropdown">
-        <label for="building">Elige edificio de entrega:</label>
-        <select id="building">
-          <option>UD1</option>
-          <option>UD2</option>
-          <option>UD3</option>
-          <option>UD4</option>
-        </select>
-      </div>
-      <p class="cantidad">Cantidad: {{ product?.cantidad }} disponible</p>
-    </div>
+<div class="intercambio-container" *ngIf="product">
+  <!-- Imagen del producto como sección independiente -->
+  <div class="section product-image">
+    <img [src]="product.url_imagen" [alt]="product.nombre_articulo" />
   </div>
 
-  <div class="vendor-info">
-    <h3>Información del vendedor</h3>
-    <img
-      [src]="product?.profile_picture_url || 'assets/default-vendor.png'"
-      alt="Imagen del vendedor"
-    />
-    <p><strong>Intercambiar con:</strong> {{ product?.userName }}</p>
-    <p><strong>Teléfono:</strong> {{ product?.userPhone }}</p>
+  <!-- Información del producto -->
+  <div class="section product-info">
+    <h2>{{ product.nombre_articulo }}</h2>
   
-    <div class="contact-info">
-      <h4>Contactar</h4>
-      <a 
-        [href]="'https://wa.me/' + product?.userPhone" 
-        target="_blank" 
-        class="social-icon"
-        title="Contactar en WhatsApp"
-      >
-        <img src="assets/whats.jpg" alt="WhatsApp" />
-      </a>
+    <p class="price"><strong>${{ product.precio }}</strong> IVA incluido</p>
+    <p class="textodeboton">Entrega inmediata en universidad</p>
+
+    <div class="dropdown">
+      <label for="building">Elige edificio de entrega:</label>
+      <select id="building">
+        <option>UD1</option>
+        <option>UD2</option>
+        <option>UD3</option>
+        <option>UD4</option>
+      </select>
     </div>
-  </div>
-  
-  <div class="product-characteristics">
-    <h3>Características del producto</h3>
-    <p *ngIf="product?.descripcion">{{ product?.descripcion }}</p>
+    <p class="cantidad">Cantidad: 1 ({{ product.stock || '1' }} disponible)</p>
   </div>
 
-  <div class="exchange-section">
-    <h3>Artículo a intercambiar</h3>
-    <div class="upload-container">
-      <input type="file" id="upload" />
-      <textarea placeholder="Descripción del artículo"></textarea>
+  <!-- Información del vendedor -->
+  <div class="section vendor-info">
+    <h3>Información del Rentador</h3>
+    <div>
+      <img [src]="product.profile_picture_url || 'assets/default-vendor.png'" [alt]="product.userName" />
     </div>
-    <button class="btn-exchange">Solicitar intercambio ahora</button>
+    <p><strong>Rentado por:</strong> {{ product.userName }}</p>
+    <p><strong>Teléfono:</strong> {{ product.userPhone }}</p>
+    <p><strong>Correo:</strong> {{ product.userEmail || 'No disponible' }}</p>
   </div>
 </div>
+
+<!-- Nueva sección -->
+<div *ngIf="product && product.characteristics">
+  <h3>Características del producto</h3>
+  <table>
+    <tr>
+      <th>Marca</th>
+      <td>{{ product.characteristics.marca }}</td>
+      <th>Microcontrolador</th>
+      <td>{{ product.characteristics.microcontrolador }}</td>
+    </tr>
+    <tr>
+      <th>Modelo</th>
+      <td>{{ product.characteristics.modelo }}</td>
+      <th>Voltaje de funcionamiento</th>
+      <td>{{ product.characteristics.voltaje }}</td>
+    </tr>
+  </table>
+</div>
+
+
+<!-- Botón de compra -->
+<button class="btn-exchange" (click)="onPurchaseClick()">
+  Comprar ahora <span role="img" aria-label="cart">🛒</span>
+</button>

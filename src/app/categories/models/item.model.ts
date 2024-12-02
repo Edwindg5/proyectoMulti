@@ -1,10 +1,12 @@
 export interface User {
   nombre: string;
   telefono: string;
-  profile_picture_url: string; // Nueva propiedad para la URL de imagen
+  correo_electronico: string;  // Nueva propiedad para el correo
+  profile_picture_url: string; // URL de la imagen de perfil
 }
 
 export interface Item {
+  userEmail: string;
   id_articulo: number;
   nombre_articulo: string;
   descripcion: string;
@@ -14,5 +16,5 @@ export interface Item {
   userName?: string;
   userPhone?: string;
   user?: User;
-  profile_picture_url: string; // Nueva propiedad para la URL de imagen
+  profile_picture_url: string; // URL de la imagen de perfil
 }
