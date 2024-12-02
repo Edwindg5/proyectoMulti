@@ -74,9 +74,9 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
   
 
   ngOnInit(): void {
-    this.loadAllArticles(); // Cargar todos los artículos al inicializar el componente
-    
-    // Suscribirse al término de búsqueda
+    const categoryId = 1; // ID de la categoría "material-estudio"
+    this.loadItemsByCategory(categoryId);
+  
     this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
       this.searchTerm = term;
       this.filteredProducts = this.products.filter((product) =>
@@ -85,6 +85,8 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       );
     });
   }
+  
+  
 
     // Cargar todos los artículos
     loadArticles(): void {
@@ -102,9 +104,12 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       });
     }
 
-    loadItemsByCategory(categoryId: number, userId: number): void {
-      this.categoryService.getItemsByCategory(categoryId).subscribe(
-        (data: any[]) => {
+    loadItemsByCategory(categoryId: number): void {
+      this.isLoading = true;
+    
+      this.categoryService.getItemsByCategory(categoryId).subscribe({
+        next: (data: any[]) => {
+          console.log('Respuesta del backend:', data); // Depuración
           this.products = data.map((item) => ({
             ...item,
             url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
@@ -114,11 +119,15 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
           }));
           this.filteredProducts = [...this.products];
         },
-        (error) => {
+        error: (error) => {
           console.error('Error al obtener los artículos:', error);
-        }
-      );
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
     }
+    
     
 
   getProcessedDescription(description: string): string[][] {
@@ -148,25 +157,25 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
         const nombre = (document.getElementById('nombre') as HTMLInputElement)?.value.trim();
         const descripcion = (document.getElementById('descripcion') as HTMLTextAreaElement)?.value.trim();
         const precioStr = (document.getElementById('precio') as HTMLInputElement)?.value;
-
+  
         const precio = parseFloat(precioStr);
-
+  
         if (!nombre || !descripcion || isNaN(precio) || precio <= 0) {
           Swal.showValidationMessage('Todos los campos son obligatorios y el precio debe ser mayor a 0.');
           return null;
         }
-
+  
         return { nombre_articulo: nombre, descripcion, precio };
       },
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         const updatedData = result.value;
-        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
-
+  
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(1, userId);
+            const categoryId = 1; // ID de la categoría "material-estudio"
+            this.loadItemsByCategory(categoryId);
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -176,6 +185,7 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       }
     });
   }
+  
 
   deleteProduct(product: Item): void {
     if (product.userName !== this.authenticatedUserName) {

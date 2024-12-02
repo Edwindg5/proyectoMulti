@@ -90,15 +90,48 @@ export class VendeComponent implements OnInit {
         this.imageForm.patchValue({ articleImage: null });
         return;
       }
+  
       this.imageForm.patchValue({ articleImage: file });
       this.imageForm.get('articleImage')?.updateValueAndValidity();
+  
       const reader = new FileReader();
       reader.onload = () => {
         this.imageUrl = reader.result as string; // Vista previa
       };
       reader.readAsDataURL(file);
+  
+      // Inicia el proceso de subida automáticamente
+      this.isImageLoading = true;
+      Swal.fire({
+        title: 'Subiendo imagen...',
+        text: 'Por favor, espera.',
+        didOpen: () => Swal.showLoading(),
+      });
+  
+      this.articleService.uploadImage(file).subscribe({
+        next: (response) => {
+          this.imageUrl = response.url; // URL desde el backend
+          this.imageUploaded = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Imagen subida exitosamente',
+            text: 'Ahora puedes registrar el artículo.',
+          });
+        },
+        error: () => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al subir la imagen',
+            text: 'Hubo un problema al subir la imagen. Intenta nuevamente.',
+          });
+        },
+        complete: () => {
+          this.isImageLoading = false;
+        },
+      });
     }
   }
+  
 
   onImageSubmit(): void {
     if (this.imageForm.invalid) {

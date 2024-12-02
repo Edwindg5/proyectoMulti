@@ -6,6 +6,8 @@ import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../header/component/header/header.component';
 import { CarouselService } from '../../services/carousel.service';
 import { ComponentsComponent } from '../../../footer/components/components.component';
+import { AuthService } from '../../../../auth/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-home',
@@ -22,14 +24,36 @@ export class HomeComponent implements OnInit {
   helpPanelVisible = false;
   currentIndex: number = 0;
   itemsPerPage: number = 3;
+  userRole: string = ''; 
+  isAdmin: boolean = false;
 
-  constructor(private router: Router, private carouselService: CarouselService) {}
+  constructor(private router: Router, private carouselService: CarouselService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    
     this.carouselService.articles$.subscribe((articles) => {
       this.items = articles;
     });
+    const userName = this.authService.getUserName(); // Método que obtiene el nombre del usuario logueado
+  this.isAdmin = userName === 'Administrador'; 
   }
+  deleteItem(itemId: number): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Este artículo será eliminado del carrusel.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Filtra el artículo de la lista local
+        this.items = this.items.filter((item) => item.id !== itemId);
+        Swal.fire('Eliminado', 'El artículo ha sido eliminado del carrusel.', 'success');
+      }
+    });
+  }
+  
 
   toggleMenu() {
     this.menuVisible = !this.menuVisible;

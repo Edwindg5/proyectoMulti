@@ -34,6 +34,10 @@
               (click)="navigateTo('prestamo')" >
               Rentar
             </button>
+            <ng-container *ngIf="isAdmin">
+              <button class="delete-button" (click)="deleteItem(item.id)">Eliminar</button>
+            </ng-container>
+          
           </div>
         </div>
       </div>

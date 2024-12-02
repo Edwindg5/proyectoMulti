@@ -122,22 +122,18 @@
   <!-- Carga de imágenes -->
   <div class="image-upload">
     <h2>Sube una imagen</h2>
-    <form [formGroup]="imageForm" (ngSubmit)="onImageSubmit()">
-      <div class="form-group">
-        <input
-          type="file"
-          class="form-control-file"
-          (change)="onImageSelected($event)"
-          accept=".jpg,.jpeg,.png"
-        />
-      </div>
-      <button type="submit" class="btn btn-secondary upload-button" [disabled]="isImageLoading">
-        {{ isImageLoading ? 'Subiendo...' : 'Subir Imagen' }}
-      </button>
-    </form>
+    <div class="form-group">
+      <input
+        type="file"
+        class="form-control-file"
+        (change)="onImageSelected($event)"
+        accept=".jpg,.jpeg,.png"
+      />
+    </div>
     <div class="image-preview" *ngIf="imageUrl">
       <h3>Vista previa:</h3>
       <img [src]="imageUrl" alt="Vista previa de la imagen" />
     </div>
   </div>
+  
 </div>

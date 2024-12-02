@@ -1,25 +1,32 @@
 .card-container {
   width: 100%;
-  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(0, 81, 255, 0.5) 100%);
+  max-width: 100%; /* Limita el ancho máximo para evitar desbordamientos */
+  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(82, 116, 183, 0.649) 100%);
   backdrop-filter: blur(7px);
-  overflow: hidden;
+  overflow-x: hidden; /* Oculta el scroll horizontal */
   transition: 0.5s all;
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 tarjetas por fila */
-  gap: 10rem; /* Espaciado entre las tarjetas */
+  grid-template-columns: repeat(3, 1fr); /* Siempre muestra 3 columnas */
+  gap: 2rem; /* Espaciado entre tarjetas */
   padding: 2rem; /* Espaciado interno del contenedor */
-  margin: auto; /* Centra el contenedor */
+  margin: 0 auto; /* Centra el contenedor horizontalmente */
+  box-sizing: border-box; /* Asegura que el padding no expanda el contenedor */
 }
+
 
 .product-card .main {
   text-align: left;
 }
 
+
 .product-card img {
   width: 100%;
+  max-width: 300px; /* Limita el tamaño máximo de la imagen */
+  height: auto; /* Mantiene la proporción de la imagen */
   border-radius: 15px;
+  object-fit: cover; /* Recorta la imagen si no encaja perfectamente */
   display: block;
   margin-bottom: 1rem;
 }
@@ -72,7 +79,20 @@
   border-radius: 50%;
   outline: 2px solid white;
   margin-right: 1rem;
+  object-fit: cover; /* Asegura que las imágenes de perfil no se deformen */
 }
+@media (max-width: 768px) {
+  .card-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .card-container {
+    grid-template-columns: 1fr; /* 1 columna en móviles */
+  }
+}
+
 
 .actions {
   display: flex;
@@ -132,3 +152,50 @@
   margin: 0;
   color: #fff; /* Color del texto */
 }
+.product-card {
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-card {
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.hover-actions {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+  display: flex;
+  gap: 10px;
+  visibility: visible;
+}
+
+.btn-action {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.btn-action:hover {
+  background-color: #45a049;
+}
+
+.product-card:hover .hover-actions {
+  visibility: visible;
+}
+

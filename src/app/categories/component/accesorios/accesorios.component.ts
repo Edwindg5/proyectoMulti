@@ -8,6 +8,9 @@ import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/auth.service';
 import { Subscription } from 'rxjs';
 import { SearchService } from '../../../pages/header/services/search.service';
+import { ArticleService } from '../../../pages/vende/services/article.service';
+
+
 
 @Component({
   selector: 'app-accesorios',
@@ -18,63 +21,122 @@ import { SearchService } from '../../../pages/header/services/search.service';
 })
 export class AccesoriosComponent implements OnInit {
   products: Item[] = [];
-  filteredProducts: Item[] = []; // Productos filtrados
-  searchTerm: string = ''; // Término de búsqueda
+  filteredProducts: Item[] = [];
+  searchTerm: string = '';
   searchSubscription: Subscription | undefined;
-  constructor(private categoryService: CategoryService, private router: Router, private authService: AuthService, private searchService: SearchService) {
-    const userId = localStorage.getItem('userId');
-    if (!userId) {
-      this.router.navigate(['/login']);
+  authenticatedUserName: string = '';
+  isAuthenticated: boolean;
+  articles: any[] = [];  // Arreglo para almacenar los artículos
+  isLoading = false;  
+
+  constructor(
+    private categoryService: CategoryService,
+    private router: Router,
+    private authService: AuthService,
+    private searchService: SearchService,
+    private articleService: ArticleService
+  ) {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.authenticatedUserName = user.name || '';
+   // if (!user.id) {
+    //  this.router.navigate(['/login']);
+    //}
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
     }
-  }
+  }  
+
   
-
-  ngOnInit(): void {
-    const categoryId = 4; // ID de la categoría
-    const userId = parseInt(localStorage.getItem('userId') || '0', 10); // Obtener ID del usuario
-    this.loadItemsByCategory(categoryId, userId);
-        // Suscribirse al término de búsqueda
-        this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
-          this.searchTerm = term;
-          this.filteredProducts = this.products.filter((product) =>
-            (product.nombre_articulo || '').toLowerCase().includes(term.toLowerCase()) ||
-            (product.descripcion || '').toLowerCase().includes(term.toLowerCase())
-          );
-          
-        });
-  }
-
-  loadItemsByCategory(categoryId: number, userId: number): void {
-    this.categoryService.getItemsByCategory(categoryId).subscribe(
-      (data: any[]) => {
-        this.products = data.map((item) => ({
+  
+  loadAllArticles(): void {
+    this.isLoading = true;
+    this.categoryService.getAllItems().subscribe({
+      next: (articles) => {
+        this.products = articles.map((item) => ({
           ...item,
           url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
           profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
           userName: item.user?.nombre || 'Usuario no especificado',
           userPhone: item.user?.telefono || 'Teléfono no especificado',
         }));
-        this.products = data
-          .filter((item) => item.usuario_id === userId) // Filtrar por usuario
-          .map((item) => ({
-            id_articulo: item.id_articulo,
-            nombre_articulo: item.nombre_articulo,
-            descripcion: item.descripcion,
-            precio: item.precio,
-            usuario_id: item.usuario_id,
-            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png', // URL de la imagen
+        this.filteredProducts = [...this.products]; // Actualizar los productos filtrados
+      },
+      error: (err) => {
+        console.error('Error al cargar los artículos:', err);
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+  
+
+  ngOnInit(): void {
+    const categoryId = 4; // ID de la categoría "material-estudio"
+    this.loadItemsByCategory(categoryId);
+  
+    this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
+      this.searchTerm = term;
+      this.filteredProducts = this.products.filter((product) =>
+        (product.nombre_articulo || '').toLowerCase().includes(term.toLowerCase()) ||
+        (product.descripcion || '').toLowerCase().includes(term.toLowerCase())
+      );
+    });
+  }
+  
+  
+
+    // Cargar todos los artículos
+    loadArticles(): void {
+      this.isLoading = true;
+      this.articleService.getAllArticles().subscribe({
+        next: (articles) => {
+          this.articles = articles;
+        },
+        error: () => {
+          console.error('Error al cargar los artículos');
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    }
+
+    loadItemsByCategory(categoryId: number): void {
+      this.isLoading = true;
+    
+      this.categoryService.getItemsByCategory(categoryId).subscribe({
+        next: (data: any[]) => {
+          console.log('Respuesta del backend:', data); // Depuración
+          this.products = data.map((item) => ({
+            ...item,
+            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
             profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
             userName: item.user?.nombre || 'Usuario no especificado',
             userPhone: item.user?.telefono || 'Teléfono no especificado',
           }));
           this.filteredProducts = [...this.products];
-      },
-      (error) => {
-        console.error('Error al obtener los artículos:', error);
-      }
-    );
+        },
+        error: (error) => {
+          console.error('Error al obtener los artículos:', error);
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+    }
     
+    
+
+  getProcessedDescription(description: string): string[][] {
+    const features = description.split(',').map((item) => item.trim());
+    return [features];
   }
+
   onSearch(searchTerm: string): void {
     this.filteredProducts = this.products.filter((product) =>
       product.nombre_articulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -97,25 +159,25 @@ export class AccesoriosComponent implements OnInit {
         const nombre = (document.getElementById('nombre') as HTMLInputElement)?.value.trim();
         const descripcion = (document.getElementById('descripcion') as HTMLTextAreaElement)?.value.trim();
         const precioStr = (document.getElementById('precio') as HTMLInputElement)?.value;
-
+  
         const precio = parseFloat(precioStr);
-
+  
         if (!nombre || !descripcion || isNaN(precio) || precio <= 0) {
           Swal.showValidationMessage('Todos los campos son obligatorios y el precio debe ser mayor a 0.');
           return null;
         }
-
+  
         return { nombre_articulo: nombre, descripcion, precio };
       },
     }).then((result) => {
       if (result.isConfirmed && result.value) {
         const updatedData = result.value;
-        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
-
+  
         this.categoryService.updateItem(product.id_articulo, updatedData).subscribe(
           () => {
             Swal.fire('Actualizado', 'El producto se actualizó correctamente', 'success');
-            this.loadItemsByCategory(4, userId); // Vuelve a cargar los datos
+            const categoryId = 4; // ID de la categoría "material-estudio"
+            this.loadItemsByCategory(categoryId);
           },
           (error) => {
             console.error('Error al actualizar el producto:', error);
@@ -123,44 +185,91 @@ export class AccesoriosComponent implements OnInit {
           }
         );
       }
-      
     });
   }
+  
 
   deleteProduct(product: Item): void {
+    if (product.userName !== this.authenticatedUserName) {
+      Swal.fire('Error', 'No tienes permiso para eliminar este artículo.', 'error');
+      return;
+    }
+  
     Swal.fire({
-      title: `¿Estás seguro de eliminar "${product.nombre_articulo}"?`,
-      text: 'Esta acción no se puede deshacer',
+      title: '¿Estás seguro?',
+      text: 'Esto eliminará el artículo permanentemente.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        const userId = parseInt(localStorage.getItem('userId') || '0', 10);
-
-        this.categoryService.deleteItem(product.id_articulo).subscribe(
-          () => {
-            Swal.fire('Eliminado', 'El producto ha sido eliminado correctamente', 'success');
-            this.loadItemsByCategory(4, userId); // Vuelve a cargar los datos
+        this.categoryService.deleteItem(product.id_articulo).subscribe({
+          next: () => {
+            this.products = this.products.filter((item) => item.id_articulo !== product.id_articulo);
+            this.filteredProducts = [...this.products];
+            Swal.fire('Eliminado', 'El producto se eliminó correctamente', 'success');
           },
-          (error) => {
-            Swal.fire('Error', 'Hubo un problema al eliminar el producto', 'error');
+          error: (error) => {
             console.error('Error al eliminar el producto:', error);
-          }
-        );
+            const errorMessage = error.status === 401
+              ? 'No estás autorizado para eliminar este producto.'
+              : 'No se pudo eliminar el producto. Inténtalo más tarde.';
+            Swal.fire('Error', errorMessage, 'error');
+          },
+        });
       }
     });
   }
-goToExchange(product: Item): void {
-  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
-  this.router.navigate(['/intercambia']); // Navegar a la ruta
- 
-}
-goToPurchase(product: Item): void {
-  localStorage.setItem('selectedProduct', JSON.stringify(product)); // Guardar producto en localStorage
-  this.router.navigate(['/compra']); // Navegar a la ruta de compra
+  
+  
+
+
+  onCardClick(product: Item): void {
+    if (!this.isAuthenticated) {
+      Swal.fire({
+        title: 'Acceso restringido',
+        text: 'Debes iniciar sesión para acceder a esta sección.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Iniciar sesión',
+        cancelButtonText: 'Cancelar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']); // Redirige al login
+        }
+      });
+      return; // Salir si no está autenticado
+    }
+  
+    // Si está autenticado, redirigir o mostrar detalles del producto
+    this.router.navigate([`/producto/${product.id_articulo}`]);
+  }
+  
+
+
+  hoveredProduct: Item | null = null;
+
+onMouseEnter(product: Item): void {
+  this.hoveredProduct = product;
 }
 
+onMouseLeave(product: Item): void {
+  if (this.hoveredProduct === product) {
+    this.hoveredProduct = null;
+  }
+}
+
+goToRent(product: Item): void {
+  Swal.fire('Rentar', `Has seleccionado rentar el artículo: ${product.nombre_articulo}`, 'info');
+}
+
+goToExchange(product: Item): void {
+  Swal.fire('Intercambiar', `Has seleccionado intercambiar el artículo: ${product.nombre_articulo}`, 'info');
+}
+
+goToPurchase(product: Item): void {
+  Swal.fire('Comprar', `Has seleccionado comprar el artículo: ${product.nombre_articulo}`, 'info');
+}
 
 }

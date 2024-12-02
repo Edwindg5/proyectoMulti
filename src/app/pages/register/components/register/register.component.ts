@@ -28,8 +28,40 @@ export class RegisterComponent {
   // Manejar la selección de archivo
   onFileSelected(event: any) {
     this.profilePictureFile = event.target.files[0];
-    this.imageUploaded = false; // Resetear estado de la subida
+  
+    if (this.profilePictureFile) {
+      const formData = new FormData();
+      formData.append('file', this.profilePictureFile);
+  
+      Swal.fire({
+        title: 'Subiendo imagen...',
+        text: 'Por favor, espera.',
+        didOpen: () => Swal.showLoading(),
+      });
+  
+      this.http.post('http://127.0.0.1:8000/upload', formData).subscribe(
+        (response: any) => {
+          this.profilePictureUrl = response.url; // Guardar la URL
+          this.imageUploaded = true;
+  
+          Swal.fire({
+            icon: 'success',
+            title: 'Imagen subida',
+            text: 'La imagen se ha subido correctamente. Continúa con el registro.',
+          });
+        },
+        (error) => {
+          console.error('Error al subir la imagen:', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al subir la imagen',
+            text: 'Hubo un problema al subir la imagen. Intenta nuevamente.',
+          });
+        }
+      );
+    }
   }
+  
 
   // Subir la imagen al servidor
   uploadImage(): void {

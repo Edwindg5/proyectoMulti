@@ -252,3 +252,25 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+.categories-button {
+  background-color: #60a3d9;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 10px 0; /* Espaciado opcional */
+}
+
+.categories-button:hover {
+  background-color: #4a90e2;
+  transform: scale(1.05);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
+.categories-menu {
+  margin-top: 10px; /* Ajuste para que no quede pegado al botón */
+}
+

@@ -12,13 +12,20 @@ export class CategoryService {
   constructor(private http: HttpClient) {}
 
 
-
+// Obtener todos los artículos
   getAllItems(): Observable<Item[]> {
     return this.http.get<Item[]>(`${this.apiUrl}/items/all`);
   }
-  getItemsByCategory(categoryId: number): Observable<Item[]> {
-    return this.http.get<Item[]>(`${this.apiUrl}/items/categories/${categoryId}/items`);
-  }
+
+// Obtener artículos por categoría
+ // Obtener artículos por categoría
+ getItemsByCategory(categoryId: number): Observable<Item[]> {
+  return this.http.get<Item[]>(`${this.apiUrl}/items/categories/${categoryId}/items`);
+}
+
+
+
+  
 
   updateItem(id_articulo: number, data: Partial<Item>): Observable<any> {
     return this.http.put(`${this.apiUrl}/items/${id_articulo}`, data);
@@ -37,7 +44,7 @@ export class CategoryService {
     return this.http.delete(`${this.apiUrl}/items/${itemId}`, { headers });
   }
   
-    
+
   getAllArticles(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/articles`);
   }
