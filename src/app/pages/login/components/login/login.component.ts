@@ -34,7 +34,6 @@ export class LoginComponent {
         if (token && user) {
           this.authService.saveToken(token);
           localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('userId', user.id);
   
           Swal.fire({
             icon: 'success',
@@ -43,7 +42,12 @@ export class LoginComponent {
             confirmButtonText: 'Aceptar',
           });
   
-          this.router.navigate(['/home']);
+          // Redirigir según el rol del usuario
+          if (user.role === 'ADMIN') {
+            this.router.navigate(['/users']); // Vista de administración
+          } else {
+            this.router.navigate(['/home']); // Vista normal
+          }
         }
       },
       error: (err) => {
@@ -59,6 +63,7 @@ export class LoginComponent {
   
   
   
+  
 
   navigateToRegister() {
     this.router.navigate(['/register']);
@@ -67,4 +72,5 @@ export class LoginComponent {
   navigateTo(page: string): void {
     this.router.navigate([`/${page}`]);
   }
+  
 }

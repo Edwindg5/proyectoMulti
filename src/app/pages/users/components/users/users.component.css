@@ -1,0 +1,64 @@
+/* Contenedor principal para centrar la tabla */
+.table-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo de la tabla */
+  .styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    text-align: left;
+    overflow: hidden;
+  }
+  
+  /* Encabezado de la tabla */
+  .styled-table thead tr {
+    background-color: #007bff;
+    color: #ffffff;
+    text-align: left;
+  }
+  
+  /* Filas y celdas */
+  .styled-table th,
+  .styled-table td {
+    padding: 12px 15px;
+  }
+  
+  /* Líneas entre filas */
+  .styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  /* Filas alternas */
+  .styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+  }
+  
+  /* Resaltar fila al pasar el mouse */
+  .styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Botón eliminar */
+  .btn-delete {
+    background-color: #f44336; /* Rojo */
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Efecto hover en el botón */
+  .btn-delete:hover {
+    background-color: #d32f2f;
+  }
+  

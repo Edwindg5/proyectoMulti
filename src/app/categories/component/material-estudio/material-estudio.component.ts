@@ -37,9 +37,9 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
     this.isAuthenticated = this.authService.isAuthenticated();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.authenticatedUserName = user.name || '';
-    if (!user.id) {
-      this.router.navigate(['/login']);
-    }
+   // if (!user.id) {
+    //  this.router.navigate(['/login']);
+    //}
   }
 
   ngOnDestroy(): void {
@@ -47,10 +47,12 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       this.searchSubscription.unsubscribe();
     }
   }  
+
+  
   
   loadAllArticles(): void {
     this.isLoading = true;
-    this.categoryService.getAllArticles().subscribe({
+    this.categoryService.getAllItems().subscribe({
       next: (articles) => {
         this.products = articles.map((item) => ({
           ...item,
@@ -59,20 +61,22 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
           userName: item.user?.nombre || 'Usuario no especificado',
           userPhone: item.user?.telefono || 'Teléfono no especificado',
         }));
-        this.filteredProducts = [...this.products];
+        this.filteredProducts = [...this.products]; // Actualizar los productos filtrados
       },
-      error: () => {
-        console.error('Error al cargar los artículos');
+      error: (err) => {
+        console.error('Error al cargar los artículos:', err);
       },
       complete: () => {
         this.isLoading = false;
       },
     });
   }
-
+  
 
   ngOnInit(): void {
-    this.loadAllArticles(); // Cambio: cargamos todos los artículos
+    this.loadAllArticles(); // Cargar todos los artículos al inicializar el componente
+    
+    // Suscribirse al término de búsqueda
     this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
       this.searchTerm = term;
       this.filteredProducts = this.products.filter((product) =>
@@ -81,6 +85,7 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       );
     });
   }
+
     // Cargar todos los artículos
     loadArticles(): void {
       this.isLoading = true;
@@ -97,37 +102,24 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
       });
     }
 
-  loadItemsByCategory(categoryId: number, userId: number): void {
-    this.categoryService.getItemsByCategory(categoryId).subscribe(
-      (data: any[]) => {
-        this.products = data.map((item) => ({
-          ...item,
-          url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
-          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
-          userName: item.user?.nombre || 'Usuario no especificado',
-          userPhone: item.user?.telefono || 'Teléfono no especificado',
-        }));
-        this.products = data
-          .filter((item) => item.usuario_id === userId)
-          .map((item) => ({
-            id_articulo: item.id_articulo,
-            nombre_articulo: item.nombre_articulo,
-            descripcion: item.descripcion,
-            precio: item.precio,
-            usuario_id: item.usuario_id,
+    loadItemsByCategory(categoryId: number, userId: number): void {
+      this.categoryService.getItemsByCategory(categoryId).subscribe(
+        (data: any[]) => {
+          this.products = data.map((item) => ({
+            ...item,
             url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
             profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
             userName: item.user?.nombre || 'Usuario no especificado',
             userPhone: item.user?.telefono || 'Teléfono no especificado',
           }));
-        this.filteredProducts = [...this.products];
-      },
-      (error) => {
-        console.error('Error al obtener los artículos:', error);
-      }
-    );
-  }
-  
+          this.filteredProducts = [...this.products];
+        },
+        (error) => {
+          console.error('Error al obtener los artículos:', error);
+        }
+      );
+    }
+    
 
   getProcessedDescription(description: string): string[][] {
     const features = description.split(',').map((item) => item.trim());
@@ -220,27 +212,54 @@ export class MaterialEstudioComponent implements OnInit, OnDestroy {
   
   
 
-  goToExchange(product: Item): void {
-    this.router.navigate([`/intercambiar/${product.id_articulo}`]);
-  }
 
-  goToPurchase(product: Item): void {
-    this.router.navigate([`/compra/${product.id_articulo}`]);
-  }
-  onCardClick(): void {
+  onCardClick(product: Item): void {
     if (!this.isAuthenticated) {
       Swal.fire({
+        title: 'Acceso restringido',
+        text: 'Debes iniciar sesión para acceder a esta sección.',
         icon: 'warning',
-        title: 'Inicia sesión',
-        text: 'Debes iniciar sesión para interactuar.',
-        confirmButtonText: 'Iniciar Sesión',
+        showCancelButton: true,
+        confirmButtonText: 'Iniciar sesión',
+        cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.router.navigate(['/login']);
+          this.router.navigate(['/login']); // Redirige al login
         }
       });
+      return; // Salir si no está autenticado
     }
+  
+    // Si está autenticado, redirigir o mostrar detalles del producto
+    this.router.navigate([`/producto/${product.id_articulo}`]);
   }
   
+
+
+  hoveredProduct: Item | null = null;
+
+onMouseEnter(product: Item): void {
+  this.hoveredProduct = product;
+}
+
+onMouseLeave(product: Item): void {
+  if (this.hoveredProduct === product) {
+    this.hoveredProduct = null;
+  }
+}
+
+goToRent(product: Item): void {
+  Swal.fire('Rentar', `Has seleccionado rentar el artículo: ${product.nombre_articulo}`, 'info');
+}
+
+goToExchange(product: Item): void {
+  Swal.fire('Intercambiar', `Has seleccionado intercambiar el artículo: ${product.nombre_articulo}`, 'info');
+}
+
+goToPurchase(product: Item): void {
+  Swal.fire('Comprar', `Has seleccionado comprar el artículo: ${product.nombre_articulo}`, 'info');
+}
+
   
 }
+

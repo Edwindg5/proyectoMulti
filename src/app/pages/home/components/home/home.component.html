@@ -1,9 +1,14 @@
 <app-header></app-header>
 
+<!-- Carrusel -->
 <div class="slider-section">
   <div class="slider-container" [style.transform]="getTransform()">
     <div class="slider-row">
-      <div class="slider-card" *ngFor="let item of items" [style]="getTransformContentLayout()">
+      <div
+        class="slider-card"
+        *ngFor="let item of items"
+        [style]="getTransformContentLayout()">
+        
         <div class="card">
           <div class="imgcard">
             <img class="imgcardd" [src]="item.img" [alt]="item.name" />
@@ -13,18 +18,24 @@
             <p class="name">{{ item.name }}</p>
           </div>
           <div class="card-overlay">
-            <button *ngIf="item.transactionType === 'VENTA'" (click)="navigateTo('venta')">
+            <button
+              *ngIf="item.transactionType === 'VENTA'"
+              (click)="navigateTo('venta')" >
               Comprar
             </button>
-            <button *ngIf="item.transactionType === 'INTERCAMBIO'" (click)="navigateTo('intercambio')">
+
+            <button
+              *ngIf="item.transactionType === 'INTERCAMBIO'"
+              (click)="navigateTo('intercambio')">
               Intercambiar
             </button>
-            <button *ngIf="item.transactionType === 'PRESTAMO'" (click)="navigateTo('prestamo')">
+            <button
+              *ngIf="item.transactionType === 'PRESTAMO'"
+              (click)="navigateTo('prestamo')" >
               Rentar
             </button>
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -33,20 +44,54 @@
   <button (click)="nextSlide()" class="slider-control next">▶</button>
 </div>
 
-<!-- Nueva Sección -->
-<div class="why-use-app-section">
-  <div class="text-image-container">
-    <div class="text-section">
-      <h2>¿Conoce un poco de esta app?</h2>
-      <p>
-        Esta aplicación ha sido diseñada para facilitar la compra, venta y renta
-        de artículos de manera eficiente, segura y accesible. Es la herramienta ideal
-        para estudiantes y profesionales que buscan maximizar sus recursos.
-      </p>
+<!-- Sección: Dale a tus artículos una segunda oportunidad -->
+<div class="first-section">
+  <div class="opportunity-item">
+    <span>DALE A TUS ARTÍCULOS</span>
+    <img src="assets/logoheader.jpeg" alt="Icono de artículos" />
+  </div>
+  <div class="opportunity-item">
+    <span>UNA SEGUNDA</span>
+    <img src="assets/electronica.png" alt="Icono de segunda oportunidad" />
+  </div>
+  <div class="opportunity-item">
+    <span>OPORTUNIDAD</span>
+    <img src="assets/electronica.png" alt="Icono de oportunidad" />
+  </div>
+</div>
+
+<!-- Sección: Conoce la plataforma -->
+<div class="second-section">
+  <div class="text-box">
+    <p>
+      Esta aplicación web desarrolla una plataforma digital, orientada a la
+      venta, compra, renta e intercambio.
+    </p>
+  </div>
+  <div class="image-container">
+    <img src="assets/electronica.png" alt="Intercambio de productos" />
+  </div>
+</div>
+
+<!-- Sección: Beneficios -->
+<div class="third-section">
+  <div class="column">
+    <div class="icon-container">
+      <img src="assets/electronica.png" alt="Elige dónde recoger" />
     </div>
-    <div class="image-section">
-      <img src="assets/img/why-use-app.jpg" alt="" />
+    <p>Elige dónde recoger</p>
+  </div>
+  <div class="column">
+    <div class="icon-container">
+      <img src="assets/electronica.png" alt="Entrega inmediata" />
     </div>
+    <p>Entrega inmediata</p>
+  </div>
+  <div class="column">
+    <div class="icon-container">
+      <img src="assets/electronica.png" alt="Seguridad garantizada" />
+    </div>
+    <p>Seguridad garantizada</p>
   </div>
 </div>
 
@@ -56,17 +101,19 @@
 </div>
 <div class="help-panel" *ngIf="helpPanelVisible">
   <p>
-    Si tienes dudas sobre cómo utilizar esta aplicación, revisa nuestra sección de ayuda
-    o contacta a nuestro equipo de soporte para obtener asistencia personalizada.
+    Si tienes dudas sobre cómo utilizar esta aplicación, revisa nuestra sección
+    de ayuda o contacta a nuestro equipo de soporte para obtener asistencia
+    personalizada.
   </p>
 </div>
 
 <!-- Pie de página -->
 <footer class="description">
   <p>
-    La creación de esta plataforma para la compra, venta y renta de artículos fue pensada
-    para poder ayudar a los estudiantes universitarios a adquirir artículos para su carrera
-    a un precio accesible y en buen estado. Así mismo, también ayuda a los estudiantes a
-    deshacerse de artículos que ya no utilizan y de los cuales se quieren deshacer.
+    La creación de esta plataforma para la compra, venta y renta de artículos
+    fue pensada para poder ayudar a los estudiantes universitarios a adquirir
+    artículos para su carrera a un precio accesible y en buen estado. Así
+    mismo, también ayuda a los estudiantes a deshacerse de artículos que ya no
+    utilizan y de los cuales se quieren deshacer.
   </p>
 </footer>

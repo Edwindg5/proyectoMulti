@@ -1,4 +1,7 @@
-<table>
+<app-header></app-header>
+
+<div class="table-container">
+  <table class="styled-table">
     <thead>
       <tr>
         <th>Nombre</th>
@@ -15,9 +18,9 @@
         <td>{{ user.telefono || 'N/A' }}</td>
         <td>{{ user.fecha_creacion | date }}</td>
         <td>
-          <button (click)="deleteUser(user.id)">Eliminar</button>
+          <button *ngIf="user.id_usuario" class="btn-delete" (click)="deleteUser(user.id_usuario)">Eliminar</button>
         </td>
       </tr>
     </tbody>
   </table>
-  
+</div>

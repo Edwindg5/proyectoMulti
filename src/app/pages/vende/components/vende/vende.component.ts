@@ -22,8 +22,7 @@ export class VendeComponent implements OnInit {
   isImageLoading = false;
   imageUploaded = false;
   imageUrl = ''; // URL de la imagen subida
-  descriptionRows: string[][] = []; // **Nueva propiedad** para gestionar las filas de descripción}
-  
+  descriptionRows: string[][] = []; // **Nueva propiedad** para gestionar las filas de descripción
 
   constructor(
     private fb: FormBuilder,
@@ -173,13 +172,16 @@ export class VendeComponent implements OnInit {
                 'El artículo fue registrado correctamente.',
                 'success'
               );
+              this.saveArticleToSharedStorage(articleData); // Guardar en localStorage
               this.form.reset();
-              this.carouselService.addArticle({
+              const articleForCarousel = {
                 id: Date.now(),
                 name: articleData.nombre_articulo,
                 img: articleData.url_imagen,
                 transactionType: articleData.tipo_transaccion,
-              });
+              };
+
+              this.carouselService.addArticle(articleForCarousel);
             },
             error: (err) => {
               console.error('Error del backend:', err);
@@ -212,14 +214,17 @@ export class VendeComponent implements OnInit {
     });
   }
 
-  /**
-   * **Nueva función** para dividir la descripción en filas de tres elementos.
-   */
   private updateDescriptionRows(description: string): void {
     const items = description.split(',').map((item) => item.trim());
     this.descriptionRows = [];
     for (let i = 0; i < items.length; i += 3) {
       this.descriptionRows.push(items.slice(i, i + 3));
     }
+  }
+
+  saveArticleToSharedStorage(article: any): void {
+    const sharedArticles = JSON.parse(localStorage.getItem('sharedArticles') || '[]');
+    sharedArticles.push(article);
+    localStorage.setItem('sharedArticles', JSON.stringify(sharedArticles));
   }
 }

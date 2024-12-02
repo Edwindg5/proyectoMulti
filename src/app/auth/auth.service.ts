@@ -18,44 +18,25 @@
     }
     
     // Login method
-   // En el servicio AuthService
-login(credentials: { email: string; password: string }): Observable<any> {
-  const adminCredentials = { email: 'admin@admin.com', password: '123456' };
-
-  // Verificar si es administrador
-  if (credentials.email === adminCredentials.email && credentials.password === adminCredentials.password) {
-    const adminUser = {
-      name: 'Administrador',
-      email: credentials.email,
-      role: 'ADMIN',
-    };
-
-    const fakeToken = 'fake-admin-token'; // Simula un token para el admin
-
-    localStorage.setItem('user', JSON.stringify(adminUser));
-    localStorage.setItem('token', fakeToken); // Guarda el token falso para el admin
-
-    return new Observable(observer => observer.next({ access_token: fakeToken, user: adminUser }));
-  }
-
-  // Código para login normal (sin cambios)
-  const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-  const params = new URLSearchParams({
-    email: credentials.email,
-    password: credentials.password,
-  }).toString();
-  return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers }).pipe(
-    tap((response: any) => {
-      const token = response.access_token;
-      const user = response.user;
-      if (token && user) {
-        this.saveToken(token);
-        localStorage.setItem('user', JSON.stringify(user));
-      }
-    })
-  );
-}
-
+    login(credentials: { email: string; password: string }): Observable<any> {
+      const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+      const params = new URLSearchParams({
+        email: credentials.email,
+        password: credentials.password,
+      }).toString();
+    
+      return this.http.post(`${this.apiUrl}/users/users/login?${params}`, {}, { headers }).pipe(
+        tap((response: any) => {
+          const token = response.access_token;
+          const user = response.user;
+    
+          if (token && user) {
+            this.saveToken(token);
+            localStorage.setItem('user', JSON.stringify(user));
+          }
+        })
+      );
+    }
     
     
     // Logout method
@@ -162,10 +143,17 @@ login(credentials: { email: string; password: string }): Observable<any> {
     }
     
     getRole(): string {
-      const user = JSON.parse(localStorage.getItem('user') || '{}');
-      return user.rol || 'USER';
+      const userString = localStorage.getItem('user');
+      if (userString) {
+        try {
+          const user = JSON.parse(userString);
+          return user.role || 'USER';
+        } catch (error) {
+          console.error('Error al analizar el rol del usuario:', error);
+        }
+      }
+      return 'USER'; // Valor por defecto
     }
-    
     
     
   }

@@ -17,12 +17,16 @@
     <nav class="nav-bar" [class.visible]="menuVisible">
       <ng-container *ngIf="isAuthenticated">
         <button (click)="navigateTo('vende')">Vende</button>
-    
-        <!-- Mostrar solo si el usuario es un administrador -->
+      
+
         <ng-container *ngIf="isAdmin">
           <button (click)="navigateTo('usuarios')">Usuarios</button>
         </ng-container>
+        
+
       </ng-container>
+      
+
       <input
       type="text"
       placeholder="Buscar"
@@ -30,13 +34,7 @@
       [(ngModel)]="searchTerm"
       (input)="onSearch()"
     />
-    <input
-  type="text"
-  placeholder="Buscar"
-  class="search-bar"
-  [(ngModel)]="searchTerm"
-  (input)="onSearch()"
-/>
+    
 <div class="search-results" *ngIf="searchResults.length > 0">
   <div class="result-item" *ngFor="let item of searchResults">
     <img [src]="item.url_imagen" alt="{{ item.nombre_articulo }}" class="result-image" />

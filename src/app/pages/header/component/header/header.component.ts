@@ -4,12 +4,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { SearchService } from '../../services/search.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule , FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -34,15 +34,14 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Verifica si el usuario está autenticado
     this.isAuthenticated = this.authService.isAuthenticated();
-    
-    // Si el usuario está autenticado, verifica su rol
+  
     if (this.isAuthenticated) {
-      this.isAdmin = this.authService.getRole() === 'ADMIN';  // Verifica si el usuario es un administrador
       const username = this.authService.getUserName();
-      
-      // Muestra mensaje de bienvenida
+  
+      // Verificar si el usuario es administrador
+      this.isAdmin = username === 'Administrador';
+  
       Swal.fire({
         title: `¡Hola, ${username || 'Usuario'}!`,
         text: 'Has iniciado sesión correctamente.',
@@ -52,6 +51,8 @@ export class HeaderComponent implements OnInit {
       });
     }
   }
+  
+  
 
   navigateToCategory(categoryName: string): void {
     const route = categoryName.toLowerCase().replace(' ', '-'); // Convierte espacios a guiones

@@ -40,7 +40,7 @@ export class CarouselService {
       : [
           {
             id: 1,
-            img: 'assets/calculadora.jpg',
+            img: 'assets/electronica.png',
             name: 'Calculadora cientifica',
           },
           {
