@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../header/component/header/header.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-intercambia',
@@ -18,13 +19,18 @@ export class IntercambiaComponent implements OnInit {
   ngOnInit(): void {
     const storedProduct = localStorage.getItem('selectedProduct');
     this.product = storedProduct ? JSON.parse(storedProduct) : null;
-
+  
     if (!this.product) {
-      console.warn('No se encontró información del producto.');
-    } else {
-      console.log('Producto cargado desde localStorage:', this.product);
+      Swal.fire({
+        icon: 'error',
+        title: 'Producto no encontrado',
+        text: 'Por favor, selecciona un producto para intercambiar.',
+      }).then(() => {
+        this.router.navigate(['/material-estudio']);
+      });
     }
   }
+  
 
   goBack(): void {
     this.router.navigate(['/material-estudio']); // Redirige a la página anterior

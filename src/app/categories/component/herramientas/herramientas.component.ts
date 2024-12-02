@@ -265,11 +265,15 @@ goToRent(product: Item): void {
 }
 
 goToExchange(product: Item): void {
-  Swal.fire('Intercambiar', `Has seleccionado intercambiar el artículo: ${product.nombre_articulo}`, 'info');
+  localStorage.setItem('selectedProduct', JSON.stringify(product));
+  this.router.navigate(['/intercambia']);
 }
 
+
+
 goToPurchase(product: Item): void {
-  Swal.fire('Comprar', `Has seleccionado comprar el artículo: ${product.nombre_articulo}`, 'info');
+  localStorage.setItem('selectedProduct', JSON.stringify(product));
+  this.router.navigate(['/compra']); // Asegúrate de que la ruta esté definida
 }
 
 }

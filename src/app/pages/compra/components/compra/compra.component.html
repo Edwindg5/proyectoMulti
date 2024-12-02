@@ -37,7 +37,7 @@
 </div>
 
 <!-- Nueva sección -->
-<div class="product-characteristics" *ngIf="product.characteristics">
+<div *ngIf="product && product.characteristics">
   <h3>Características del producto</h3>
   <table>
     <tr>
@@ -54,6 +54,7 @@
     </tr>
   </table>
 </div>
+
 
 <!-- Botón de compra -->
 <button class="btn-exchange" (click)="onPurchaseClick()">

@@ -44,6 +44,7 @@
       <button class="btn-action" (click)="goToExchange(product)">Intercambiar</button>
       <button class="btn-action" (click)="goToPurchase(product)">Comprar</button>
     </div>
+    
       <div class="actions" *ngIf="isAuthenticated && product.userName === authenticatedUserName">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>

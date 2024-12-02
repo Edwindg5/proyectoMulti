@@ -1,7 +1,7 @@
 <app-header></app-header>
 <div class="header-banner">
   <img src="assets/material.png" alt="Icono" class="banner-icon" />
-  <h1>HERRAMIENTA</h1>
+  <h1>HERRAMIENTAS</h1>
 </div>
 <div class="card-container">
   <div 
@@ -44,6 +44,7 @@
       <button class="btn-action" (click)="goToExchange(product)">Intercambiar</button>
       <button class="btn-action" (click)="goToPurchase(product)">Comprar</button>
     </div>
+    
       <div class="actions" *ngIf="isAuthenticated && product.userName === authenticatedUserName">
         <button (click)="updateProduct(product)" class="btn-update">Actualizar</button>
         <button (click)="deleteProduct(product)" class="btn-delete">Eliminar</button>
