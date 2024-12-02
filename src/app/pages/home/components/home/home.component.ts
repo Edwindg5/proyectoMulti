@@ -5,11 +5,12 @@ import { faQuestionCircle, faStar } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../../header/component/header/header.component';
 import { CarouselService } from '../../services/carousel.service';
+import { ComponentsComponent } from '../../../footer/components/components.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule, HeaderComponent],
+  imports: [CommonModule, FontAwesomeModule, HeaderComponent, ComponentsComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
 })

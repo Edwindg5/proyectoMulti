@@ -1,0 +1,41 @@
+/* Footer general */
+.footer {
+    background-color: #282c34;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  
+  /* Texto del lado izquierdo */
+  .footer-left p {
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  /* Links del lado derecho */
+  .footer-right {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .footer-link {
+    color: #61dafb;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .footer-link:hover {
+    text-decoration: underline;
+  }
+  
