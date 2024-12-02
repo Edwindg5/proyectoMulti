@@ -191,7 +191,8 @@
 
 .search-container {
   position: relative;
-  width: 300px;
+  width: 300px; /* Ajusta según el diseño */
+  margin: auto;
 }
 
 .search-bar {
@@ -199,46 +200,71 @@
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  z-index: 10;
 }
-
+/* Estilo del contenedor de resultados */
 .search-results {
   position: absolute;
-  top: 40px;
+  top: 100%; /* Se posiciona justo debajo de la barra de búsqueda */
   left: 0;
-  width: 100%;
-  background: #fff;
+  width: 100%; /* Mantiene el ancho de la barra de búsqueda */
+  background-color: #f9f9f9;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  max-height: 300px;
-  overflow-y: auto;
-  z-index: 1000;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999; /* Asegura que esté sobre otros elementos */
 }
 
-.search-result-item {
+
+
+
+
+.result-item {
   display: flex;
   align-items: center;
-  padding: 8px;
-  border-bottom: 1px solid #eee;
+  gap: 10px;
+  padding: 5px 0;
 }
 
-.search-result-item:hover {
-  background: #f5f5f5;
-  cursor: pointer;
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+.result-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
 }
 
 .result-image {
-  width: 40px;
+  width: 40px; /* Tamaño más grande para mejor visibilidad */
   height: 40px;
-  margin-right: 10px;
   border-radius: 4px;
   object-fit: cover;
 }
 
 .result-name {
-  flex: 1;
+  flex-grow: 1; /* Toma el espacio restante */
   font-size: 14px;
+  font-weight: bold;
 }
 
+.result-details {
+  padding: 5px 10px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.result-details:hover {
+  background-color: #357ab8;
+}
 button {
   padding: 6px 10px;
   font-size: 12px;

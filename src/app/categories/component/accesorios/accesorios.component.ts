@@ -261,8 +261,11 @@ onMouseLeave(product: Item): void {
 }
 
 goToRent(product: Item): void {
-  Swal.fire('Rentar', `Has seleccionado rentar el artículo: ${product.nombre_articulo}`, 'info');
+  console.log('Navigating to rent for product', product); // Add this line to check
+  localStorage.setItem('selectedProduct', JSON.stringify(product));
+  this.router.navigate(['/renta']);
 }
+
 
 goToExchange(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product));
@@ -274,5 +277,17 @@ goToExchange(product: Item): void {
 goToPurchase(product: Item): void {
   localStorage.setItem('selectedProduct', JSON.stringify(product));
   this.router.navigate(['/compra']); // Asegúrate de que la ruta esté definida
+}
+viewOwnerDetails(product: Item): void {
+  Swal.fire({
+    title: 'Detalles del Propietario',
+    html: `
+      <p><strong>Nombre:</strong> ${product.userName || 'No especificado'}</p>
+      <p><strong>Correo:</strong> ${product.userEmail || 'No especificado'}</p>
+      <p><strong>Teléfono:</strong> ${product.userPhone || 'No especificado'}</p>
+    `,
+    icon: 'info',
+    confirmButtonText: 'Cerrar',
+  });
 }
 }

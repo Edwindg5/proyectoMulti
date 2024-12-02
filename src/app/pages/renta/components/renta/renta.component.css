@@ -101,4 +101,12 @@
 .btn-exchange:hover {
   background-color: #0056b3; /* Color al pasar el mouse */
 }
+.renta-section {
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin: 20px 0;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
 

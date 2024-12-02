@@ -27,22 +27,32 @@
       </ng-container>
       
 
-      <input
-      type="text"
-      placeholder="Buscar"
-      class="search-bar"
-      [(ngModel)]="searchTerm"
-      (input)="onSearch()"
-    />
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="Buscar"
+          class="search-bar"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+        
+        <div class="search-results" *ngIf="searchResults.length > 0">
+          <div class="result-item" *ngFor="let item of searchResults">
+            <img
+              [src]="item.url_imagen"
+              alt="{{ item.nombre_articulo }}"
+              class="result-image"
+            />
+            <span class="result-name">{{ item.nombre_articulo }}</span>
+            <button class="result-details" (click)="navigateToCategory(item.categoria)">
+              Detalles
+            </button>
+          </div>
+        </div>
+      </div>
+      
     
-<div class="search-results" *ngIf="searchResults.length > 0">
-  <div class="result-item" *ngFor="let item of searchResults">
-    <img [src]="item.url_imagen" alt="{{ item.nombre_articulo }}" class="result-image" />
-    <span class="result-name">{{ item.nombre_articulo }}</span>
-    <button class="result-details" (click)="navigateToCategory(item.categoria)">Detalles</button>
-  </div>
-</div>
-
+    
     
       <img
         src="assets/usuario.png"

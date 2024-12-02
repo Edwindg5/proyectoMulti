@@ -1,20 +1,16 @@
 <app-header></app-header>
 <div class="intercambio-container" *ngIf="product">
-  <!-- Imagen del producto como sección independiente -->
   <div class="section product-image">
     <img [src]="product.url_imagen" [alt]="product.nombre_articulo" />
   </div>
 
-  <!-- Información del producto -->
   <div class="section product-info">
     <h2>{{ product.nombre_articulo }}</h2>
-  
     <p class="price"><strong>${{ product.precio }}</strong> IVA incluido</p>
     <p class="textodeboton">Entrega inmediata en universidad</p>
-
     <div class="dropdown">
       <label for="building">Elige edificio de entrega:</label>
-      <select id="building">
+      <select id="building" [(ngModel)]="renta.edificio">
         <option>UD1</option>
         <option>UD2</option>
         <option>UD3</option>
@@ -24,39 +20,27 @@
     <p class="cantidad">Cantidad: 1 ({{ product.stock || '1' }} disponible)</p>
   </div>
 
-  <!-- Información del vendedor -->
   <div class="section vendor-info">
     <h3>Información del Rentador</h3>
-    <div>
-      <img [src]="product.profile_picture_url || 'assets/default-vendor.png'" [alt]="product.userName" />
-    </div>
+    <img [src]="product.profile_picture_url || 'assets/default-vendor.png'" [alt]="product.userName" />
     <p><strong>Rentado por:</strong> {{ product.userName }}</p>
     <p><strong>Teléfono:</strong> {{ product.userPhone }}</p>
     <p><strong>Correo:</strong> {{ product.userEmail || 'No disponible' }}</p>
   </div>
 </div>
 
-<!-- Nueva sección -->
-<div *ngIf="product && product.characteristics">
-  <h3>Características del producto</h3>
-  <table>
-    <tr>
-      <th>Marca</th>
-      <td>{{ product.characteristics.marca }}</td>
-      <th>Microcontrolador</th>
-      <td>{{ product.characteristics.microcontrolador }}</td>
-    </tr>
-    <tr>
-      <th>Modelo</th>
-      <td>{{ product.characteristics.modelo }}</td>
-      <th>Voltaje de funcionamiento</th>
-      <td>{{ product.characteristics.voltaje }}</td>
-    </tr>
-  </table>
+<div class="renta-section" *ngIf="product">
+  <h2>Renta el producto</h2>
+  <label>
+    Fecha de inicio:
+    <input type="date" [(ngModel)]="renta.startDate" />
+  </label>
+  <label>
+    Fecha de devolución:
+    <input type="date" [(ngModel)]="renta.endDate" />
+  </label>
 </div>
 
-
-<!-- Botón de compra -->
-<button class="btn-exchange" (click)="onPurchaseClick()">
-  Comprar ahora <span role="img" aria-label="cart">🛒</span>
+<button class="btn-exchange" (click)="onRequestRental()">
+  Solicitar ahora <span role="img" aria-label="cart">🛒</span>
 </button>

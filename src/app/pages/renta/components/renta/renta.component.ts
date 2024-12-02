@@ -1,18 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from '../../../header/component/header/header.component';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
+import { HeaderComponent } from '../../../header/component/header/header.component';
 
 
 @Component({
   selector: 'app-renta',
   standalone: true,
-  imports: [HeaderComponent, CommonModule],
+  imports: [CommonModule, FormsModule,HeaderComponent],
   templateUrl: './renta.component.html',
-  styleUrl: './renta.component.css'
+  styleUrls: ['./renta.component.css'],
 })
 export class RentaComponent implements OnInit {
-  product: any = null; // Variable para almacenar los datos del producto
+  product: any = null;
+  renta = {
+    startDate: '',
+    endDate: '',
+    edificio: ''
+  };
 
   ngOnInit(): void {
     const storedProduct = localStorage.getItem('selectedProduct');
@@ -20,46 +26,42 @@ export class RentaComponent implements OnInit {
 
     if (!this.product) {
       console.warn('No se encontró información del producto.');
-    } else {
-      console.log('Producto cargado desde localStorage:', this.product);
     }
   }
+
+  onRequestRental(): void {
+    if (!this.renta.startDate || !this.renta.endDate || !this.renta.edificio) {
+      Swal.fire('Por favor, complete todos los campos.');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Solicitud enviada',
+      html: `
+        <p><strong>Correo del propietario:</strong> ${this.product?.userEmail || 'No disponible'}</p>
+        <p><strong>Fecha de Inicio:</strong> ${this.renta.startDate}</p>
+        <p><strong>Fecha de Devolución:</strong> ${this.renta.endDate}</p>
+        <p><strong>Edificio:</strong> ${this.renta.edificio}</p>
+      `,
+      icon: 'success',
+      confirmButtonText: 'Aceptar',
+    });
+  }
+
   onPurchaseClick(): void {
-    if (!this.product) {
-      console.warn('No se puede realizar la compra. Información del producto no encontrada.');
+    if (!this.renta.edificio) {
+      Swal.fire('Por favor, seleccione un edificio para la entrega.');
       return;
     }
   
-    const { userPhone, userName, nombre_articulo } = this.product;
-  
     Swal.fire({
-      title: `Contactar a ${userName}`,
+      title: 'Solicitud de compra',
       html: `
-        <p><strong>Artículo:</strong> ${nombre_articulo}</p>
-        <p><strong>Teléfono:</strong> ${userPhone}</p>
-        <p>Elige una opción para contactar al vendedor:</p>
-        <div style="display: flex; justify-content: center; gap: 10px;">
-          <button id="call-btn" class="swal2-confirm swal2-styled" style="background-color: #6ca8d8;">
-            Llamar <i class="fa fa-phone"></i>
-          </button>
-          <button id="whatsapp-btn" class="swal2-confirm swal2-styled" style="background-color: #25D366;">
-            WhatsApp <i class="fa fa-whatsapp"></i>
-          </button>
-        </div>
+        <p><strong>Producto:</strong> ${this.product?.nombre_articulo || 'No disponible'}</p>
+        <p><strong>Edificio de Entrega:</strong> ${this.renta.edificio}</p>
       `,
-      showConfirmButton: false,
-      didOpen: () => {
-        const callButton = document.getElementById('call-btn');
-        const whatsappButton = document.getElementById('whatsapp-btn');
-  
-        callButton?.addEventListener('click', () => {
-          window.location.href = `tel:${userPhone}`;
-        });
-  
-        whatsappButton?.addEventListener('click', () => {
-          window.open(`https://wa.me/${userPhone}?text=Hola,%20estoy%20interesado%20en%20tu%20artículo%20${encodeURIComponent(nombre_articulo)}`, '_blank');
-        });
-      },
+      icon: 'success',
+      confirmButtonText: 'Aceptar',
     });
   }
   

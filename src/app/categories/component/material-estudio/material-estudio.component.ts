@@ -262,16 +262,9 @@ onMouseLeave(product: Item): void {
 }
 
 goToRent(product: Item): void {
-  Swal.fire({
-    title: 'Rentar artículo',
-    html: `
-      <p><strong>Artículo:</strong> ${product.nombre_articulo}</p>
-      <p><strong>Propietario:</strong> ${product.userName || 'No especificado'}</p>
-      <p><strong>Correo:</strong> ${product.userEmail || 'Correo no especificado'}</p>
-    `,
-    icon: 'info',
-    confirmButtonText: 'Aceptar',
-  });
+  console.log('Navigating to rent for product', product); // Add this line to check
+  localStorage.setItem('selectedProduct', JSON.stringify(product));
+  this.router.navigate(['/renta']);
 }
 
 

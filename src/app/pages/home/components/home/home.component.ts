@@ -68,8 +68,24 @@ export class HomeComponent implements OnInit {
   }
 
   navigateTo(route: string) {
-    this.router.navigate([`/${route}`]);
+    Swal.fire({
+      title: '¿Explorar categorías?',
+      text: 'Te recomendamos visitar la opción "Ver Categorías" para más opciones.',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Ir a Categorías',
+      cancelButtonText: 'Continuar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma, navega a la página de categorías
+        this.router.navigate(['/categorias']);
+      } else {
+        // Si el usuario cancela, continúa con la navegación normal
+        this.router.navigate([`/${route}`]);
+      }
+    });
   }
+  
 
   handleLooping(numberIdx = this.itemsPerPage): void {
     this.currentIndex = numberIdx;
