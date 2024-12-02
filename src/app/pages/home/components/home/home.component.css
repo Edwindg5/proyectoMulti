@@ -21,7 +21,7 @@ app-header {
 
 .slider-section {
   position: relative;
-  max-width: 1240px; /* Aumentado para mayor ancho */
+  max-width: 1450px; /* Aumentado para mayor ancho */
   margin: 0 auto;
   overflow: hidden;
   background-color: #eef3fc;
