@@ -73,8 +73,8 @@ export class HomeComponent implements OnInit {
       text: 'Te recomendamos visitar la opción "Ver Categorías" para más opciones.',
       icon: 'info',
       showCancelButton: true,
-      confirmButtonText: 'Ir a Categorías',
-      cancelButtonText: 'Continuar',
+      
+      
     }).then((result) => {
       if (result.isConfirmed) {
         // Si el usuario confirma, navega a la página de categorías
