@@ -16,16 +16,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 export class HeaderComponent implements OnInit {
   searchTerm: string = ''; // Almacena el término de búsqueda
   searchResults: any[] = []; // Almacena los resultados de búsqueda
-
   isAuthenticated = false;
   isAdmin: boolean = false;  // Verificar si el usuario es admin
   menuVisible = false;
   notificationsVisible = false; // Controla la visibilidad del panel de notificaciones
-  notifications = [
-    { message: 'Nueva oferta en Electrónica' },
-    { message: 'Tu pedido ha sido enviado' },
-  ];
-  unreadNotifications = this.notifications.length;
+
 
   constructor(
     private authService: AuthService,
@@ -40,20 +35,10 @@ export class HeaderComponent implements OnInit {
     if (this.isAuthenticated) {
       const username = this.authService.getUserName();
       const storedNotifications = JSON.parse(localStorage.getItem('notifications') || '[]');
-      this.notifications = storedNotifications;
-      this.unreadNotifications = storedNotifications.filter((n: any) => !n.leido).length;
-      
+   
   
       // Verificar si el usuario es administrador
       this.isAdmin = username === 'Administrador';
-  
-      Swal.fire({
-        title: `¡Hola, ${username || 'Usuario'}!`,
-        text: 'Has iniciado sesión correctamente.',
-        icon: 'success',
-        timer: 2000,
-        showConfirmButton: false,
-      });
     }
   }
   
@@ -71,7 +56,7 @@ export class HeaderComponent implements OnInit {
   
     // Actualizar notificación como leída
     notification.leido = true;
-    localStorage.setItem('notifications', JSON.stringify(this.notifications));
+  
   
     Swal.fire('Éxito', 'Intercambio aceptado.', 'success');
   }
@@ -90,7 +75,7 @@ export class HeaderComponent implements OnInit {
   
     // Actualizar notificación como leída
     notification.leido = true;
-    localStorage.setItem('notifications', JSON.stringify(this.notifications));
+
   
     Swal.fire('Intercambio rechazado', 'Has rechazado la solicitud de intercambio.', 'info');
   }
@@ -125,10 +110,9 @@ export class HeaderComponent implements OnInit {
   }
 
   toggleNotifications(): void {
+    this.router.navigate(['/solicit'])
     this.notificationsVisible = !this.notificationsVisible;
-    if (this.notificationsVisible) {
-      this.unreadNotifications = 0; // Marcar notificaciones como leídas
-    }
+
   }
 
   navigateTo(page: string): void {

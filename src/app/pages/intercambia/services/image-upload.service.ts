@@ -18,4 +18,11 @@ export class ImageUploadService {
     formData.append('file', file);
     return this.http.post<any>(this.apiUrl, formData);
   }
+  getItemsByUser(userId: number): Observable<any> {
+    return this.http.get<any>(`http://127.0.0.1:8000/items/?id_user=${userId}`); 
+  }
+  sendInterchange(interchange: any): Observable<any> {
+    return this.http.post<any>(`http://127.0.0.1:8000/trades/`, interchange);
+  }
+  
 }

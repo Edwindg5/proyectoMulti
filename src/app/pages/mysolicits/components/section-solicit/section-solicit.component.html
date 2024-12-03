@@ -1,0 +1,27 @@
+<section>
+    <div class="info">
+      <h2>Aquí se mostrarán tus solicitudes de intercambio</h2>
+      <p>Aquí puedes ver tus solicitudes de intercambio, incluyendo detalles de los artículos y el estado de cada transacción.</p>
+    </div>
+    <div class="cards-container">
+      <div *ngFor="let solicitud of solicitudes" class="card">
+        <div class="card-section">
+          <h4>Artículo solicitado</h4>
+          <img [src]="solicitud.articuloSolicitado.imagen" alt="Imagen solicitada" class="card-image" />
+          <p><strong>{{ solicitud.articuloSolicitado.nombre }}</strong></p>
+        </div>
+        <div class="card-middle">
+          <h4>Estado</h4>
+          <p>{{ solicitud.estado }}</p>
+          <h4>Fecha</h4>
+          <p>{{ solicitud.fechaOferta | date: 'medium' }}</p>
+        </div>
+        <div class="card-section">
+          <h4>Artículo ofrecido</h4>
+          <img [src]="solicitud.articuloOfrecido.imagen" alt="Imagen ofrecida" class="card-image" />
+          <p><strong>{{ solicitud.articuloOfrecido.nombre }}</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
