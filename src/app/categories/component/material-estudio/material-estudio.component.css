@@ -12,7 +12,7 @@
   gap: 2rem; /* Espaciado entre tarjetas */
   padding: 2rem; /* Espaciado interno del contenedor */
   margin: 0 auto; /* Centra el contenedor horizontalmente */
-  box-sizing: border-box; /* Asegura que el padding no expanda el contenedor */
+  box-sizing: border-box;
 }
 
 
