@@ -1,19 +1,18 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IntercambiaComponent } from './intercambia.component';
+import { ItemManagementComponent } from './item-management.component';
 
-describe('IntercambiaComponent', () => {
-  let component: IntercambiaComponent;
-  let fixture: ComponentFixture<IntercambiaComponent>;
+describe('ItemManagementComponent', () => {
+  let component: ItemManagementComponent;
+  let fixture: ComponentFixture<ItemManagementComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IntercambiaComponent]
+      imports: [ItemManagementComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IntercambiaComponent);
+    fixture = TestBed.createComponent(ItemManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
