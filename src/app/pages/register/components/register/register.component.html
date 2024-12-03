@@ -11,14 +11,16 @@
     </div>
     <h2>Registro</h2>
     <!-- Campo para subir foto -->
-    <div class="form-group">
-      <label for="profilePicture">Foto de perfil</label>
-      <input
-        id="profilePicture"
-        type="file"
-        (change)="onFileSelected($event)"
-      />
-    </div>
+<!-- Campo para subir foto -->
+<div class="form-group file-upload-container">
+  <label for="profilePicture">Foto de perfil</label>
+  <input
+    id="profilePicture"
+    type="file"
+    (change)="onFileSelected($event)"
+  />
+</div>
+
 
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="register-form">
       <!-- Campo: Nombre -->

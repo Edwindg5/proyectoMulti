@@ -254,3 +254,9 @@
   margin: 2rem 0;
 }
 
+.no-articles-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #888;
+}

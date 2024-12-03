@@ -9,6 +9,15 @@
   </button>
 </div>
 
+<!-- Mensaje cuando no hay artículos -->
+<div class="no-articles-message" *ngIf="!filteredProducts.length && !isOwnerView">
+  <p>No hay artículos para visualizar aún.</p>
+</div>
+
+<div class="no-articles-message" *ngIf="isOwnerView && !ownerArticles.length && !otherArticles.length">
+  <p>No tienes artículos ni hay artículos de otros usuarios disponibles.</p>
+</div>
+
 <!-- Nueva estructura de contenedores -->
 <div class="articles-container" [ngClass]="{ 'owner-view': isOwnerView }">
   <div *ngIf="isOwnerView" class="owner-articles">

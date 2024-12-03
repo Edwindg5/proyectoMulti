@@ -47,19 +47,57 @@
     display: flex;
     flex-direction: column;
   }
+
+  /* Estilo exclusivo para el contenedor del campo de subir foto */
+.file-upload-container {
+  width: 54%; /* El contenedor ocupa todo el ancho disponible */
+  margin: 0 auto; /* Centra el contenedor si hay espacio extra */
+}
+
+/* Estilo específico para el campo de subir foto */
+.file-upload-container input[type="file"] {
+  width: 100%; /* El input ocupa todo el ancho del contenedor */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ff0808; /* Color de borde rojo */
+  border-radius: 5px; /* Esquinas redondeadas */
+  background-color: #f1f5ff; /* Fondo */
+  box-sizing: border-box;
+  display: block; /* Asegura que se comporte como un bloque */
+}
+
   
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f1f5ff;
-  }
+ /* Estilo específico para el campo de subir foto */
+.form-group input[type="file"] {
+  width: 100%; /* Ancho completo del contenedor */
+  padding: 10px; /* Espaciado interno */
+  font-size: 1rem; /* Tamaño de fuente consistente */
+  border: 1px solid #d1d1d1; /* Borde estándar */
+  border-radius: 5px; /* Esquinas redondeadas */
+  background-color: #f1f5ff; /* Color de fondo */
+  box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+  display: block; /* Se comporta como un bloque */
+}
+
+/* Estilo general para los demás campos */
+.form-group input:not([type="file"]) {
+  width: 100%; /* Asegura que mantengan el ancho adecuado */
+  padding: 10px; /* Espaciado interno */
+  font-size: 1rem; /* Tamaño de fuente consistente */
+  border: 1px solid #ccc; /* Borde estándar */
+  border-radius: 5px; /* Esquinas redondeadas */
+  background-color: #f1f5ff; /* Color de fondo */
+  box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+}
+
+/* Opcional: Ajuste para las etiquetas */
+.form-group label {
+  font-size: 1rem;
+  margin-bottom: 5px;
+  display: block;
+  color: #333;
+}
+
   
   .login-button {
     padding: 10px;
