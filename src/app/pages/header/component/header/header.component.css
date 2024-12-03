@@ -4,6 +4,7 @@
   background-color: #4a90e2;
   padding: 15px 47px;
   color: white;
+  position: relative;
 }
 
 /* Sección izquierda con el logo y el botón de menú */
@@ -299,4 +300,17 @@ button:hover {
 .categories-menu {
   margin-top: 10px; /* Ajuste para que no quede pegado al botón */
 }
+.header-title {
+  position: absolute;
+  right: 900px; /* Ajusta este valor según lo necesites */
+  top: 50%; /* Centra verticalmente */
+  transform: translateY(-50%); /* Corrige el desplazamiento */
+  text-align: right;
+}
 
+.header-title h1 {
+  font-size: 40px; /* Tamaño del texto */
+  color: white; /* Color del texto */
+  margin: 0; /* Elimina márgenes adicionales */
+  white-space: nowrap; /* Evita el salto de línea */
+}

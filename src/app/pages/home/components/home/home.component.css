@@ -285,3 +285,40 @@ footer.description {
 .delete-btn:hover {
   background-color: #c0392b;
 }
+.carousel-title {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2b3e50; /* Color oscuro */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+/* Estilo para el título de la sección */
+.section-title {
+  text-align: center;
+  margin: 40px 0 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2b3e50; /* Color oscuro */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+/* Estilo para el texto destacado */
+.highlighted-text {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 800px;
+  font-size: 18px;
+  line-height: 1.8;
+  color: #444;
+}
+
+.highlighted-text strong {
+  color: #2b3e50; /* Color destacado */
+}
+
+.highlighted-text em {
+  font-style: italic;
+  color: #007bff; /* Color adicional para énfasis */
+}
