@@ -13,6 +13,8 @@ import { HerramientasComponent } from './categories/component/herramientas/herra
 import { AccesoriosComponent } from './categories/component/accesorios/accesorios.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UsersComponent } from './pages/users/components/users/users.component';
+import { SolicitComponent } from './pages/solicit/solicit.component';
+import { MysolicitsComponent } from './pages/mysolicits/mysolicits.component';
 
 
 export const routes: Routes = [
@@ -20,13 +22,15 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'compra', component: CompraComponent, canActivate: [AuthGuard] },
-  { path: 'vende', component: VendeComponent, canActivate: [AuthGuard] },
-  { path: 'renta', component: RentaComponent, canActivate: [AuthGuard] },
+  { path: 'compra', component: CompraComponent},// Solo accesible para admin
+  { path: 'vende', component: VendeComponent},// Solo accesible para admin
+  { path: 'renta', component: RentaComponent},// Solo accesible para admin
   { path: 'intercambia', component: IntercambiaComponent },
   { path: 'electronica', component: ElectronicaComponent },
   { path: 'material-estudio', component: MaterialEstudioComponent },
   { path: 'herramientas', component: HerramientasComponent },
   { path: 'accesorios', component: AccesoriosComponent },
-  { path: 'usuarios', component: UsersComponent, canActivate: [AuthGuard] }, // Solo accesible para admin
+  { path: 'usuarios', component: UsersComponent}, // Solo accesible para admin
+  { path: 'solicit', component: SolicitComponent },
+  {path: 'mysolicit', component: MysolicitsComponent}
 ];

@@ -1,0 +1,52 @@
+<form [formGroup]="formGroup" (ngSubmit)="guardarEstado()">
+    <div class="card">
+      <div class="card-header">
+        <div class="item-container">
+          <img
+            [src]="solicitud.articuloSolicitado.imagen || 'assets/default-image.png'"
+            [alt]="solicitud.articuloSolicitado.nombre"
+            class="item-image"
+          />
+          <p>Articulo solicitado</p>
+        </div>
+        <div class="item-container">
+          <img
+            [src]="solicitud.articuloOfrecido.imagen || 'assets/default-image.png'"
+            [alt]="solicitud.articuloOfrecido.nombre"
+            class="item-image"
+          />
+          <p>Articulo ofrecido</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <h3>{{ solicitud.articuloSolicitado.nombre }}</h3>
+        <p class="description">{{ solicitud.articuloSolicitado.descripcion }}</p>
+        <div class="info">
+          <span><strong>Solicitante:</strong> {{ solicitud.usuarioSolicitante.nombre }}</span>
+          <span><strong>Estado actual:</strong> {{ solicitud.estado }}</span>
+          <span><strong>Fecha de oferta:</strong> {{ solicitud.fechaOferta | date }}</span>
+        </div>
+        <div class="change-status">
+          <label for="estado">Cambiar estado:</label>
+          <select
+            id="estado"
+            class="custom-select"
+            formControlName="estado"
+          >
+            <option *ngFor="let estado of estados" [value]="estado.value">
+              {{ estado.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button
+          type="submit"
+          pButton
+          label="Guardar estado"
+          class="p-button-outlined"
+        ></button>
+      </div>
+    </div>
+  </form>
+  

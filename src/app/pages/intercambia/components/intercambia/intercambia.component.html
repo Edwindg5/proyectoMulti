@@ -1,5 +1,43 @@
 <app-header></app-header>
 
+<!-- Modal para mostrar los elementos -->
+<!-- Modal para mostrar los elementos -->
+<div *ngIf="isModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Selecciona un artículo</h2>
+      <button class="close" (click)="closeModal()">X</button>
+    </div>
+    <div class="modal-body">
+      <!-- Tabla para mostrar los productos -->
+      <table class="product-table">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of itemsByUser">
+            <td><img [src]="item.url_imagen" alt="imagen del producto" class="item-image" /></td>
+            <td>{{ item.nombre_articulo }}</td>
+            <td class="flexx">{{ item.descripcion }}</td>
+            <td>{{ item.precio | currency }}</td>
+            <td><button (click)="selectItem(item)">Seleccionar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <button (click)="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- El resto del contenido en la página -->
 <div class="intercambio-container">
   <!-- Detalles del producto -->
   <div class="product-details">
@@ -48,13 +86,17 @@
   <!-- Sección de intercambio -->
   <div class="exchange-section">
     <h3>Artículo a intercambiar</h3>
-    <div class="upload-container">
-      <input type="file" (change)="handleFileInput($event)" accept="image/*" />
-      <textarea [(ngModel)]="description" placeholder="Descripción del artículo"></textarea>
+    <p-button (onClick)="openModal()" icon="pi pi-search" label="Selecciona un producto" />
+    <div class="selected-item">
+      <p>Producto seleccionado: </p>
+      <img [src]="selectedItem?.url_imagen" alt= />
+      <p>{{ selectedItem?.nombre_articulo | titlecase }}</p>
+      <p>{{ selectedItem?.precio | currency }}</p>
     </div>
-    <button class="btn-exchange" [disabled]="!isFormValid()" (click)="requestExchange()">
+
+
+    <button class="btn-exchange" (click)="solicitInterchange()">
       Solicitar intercambio ahora
     </button>
-    
   </div>
 </div>

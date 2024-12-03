@@ -1,0 +1,37 @@
+<!-- Modal para seleccionar un artículo -->
+<div class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Selecciona un artículo</h2>
+        <button class="close" (click)="close()">X</button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Precio</th>
+              <th>Seleccionar</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of arrayInterchange">
+              <td><img [src]="item.url_imagen" alt="imagen" class="item-image"></td>
+              <td>{{ item.nombre_articulo }}</td>
+              <td>{{ item.descripcion }}</td>
+              <td>{{ item.precio | currency }}</td>
+              <td>
+                <input type="checkbox" [(ngModel)]="item.selected" (change)="selectItem(item)">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-close" (click)="close()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+  

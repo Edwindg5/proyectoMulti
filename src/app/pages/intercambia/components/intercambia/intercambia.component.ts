@@ -7,12 +7,19 @@ import { ImageUploadService } from '../../services/image-upload.service';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../../../auth/auth.service';
+import { ModalComponent } from '../../../solicit/components/modal/modal.component';
+import { SolicitService } from '../../../solicit/services/solicit.service';
+import { filter, map, tap } from 'rxjs';
+import { ButtonModule } from 'primeng/button';
 
+interface Item {
+  estado: string;
+}
 
 @Component({
   selector: 'app-intercambia',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FormsModule],
+  imports: [CommonModule, HeaderComponent, FormsModule, ButtonModule],
   templateUrl: './intercambia.component.html',
   styleUrls: ['./intercambia.component.css'],
 })
@@ -23,19 +30,39 @@ export class IntercambiaComponent implements OnInit {
   description = '';
   imageUrl: string | null = null;
   http: any;
-
+  isModal = false;
+  idOfer: number = 0;
+  itemsByUser: any[] = []
+  selectedItem: any = 0;
   
 
   constructor(
     private router: Router,
     private imageUploadService: ImageUploadService,
-    private authService: AuthService 
+    private authService: AuthService,
+    
   ) {}
 
   ngOnInit(): void {
+    
     const storedProduct = localStorage.getItem('selectedProduct');
     this.product = storedProduct ? JSON.parse(storedProduct) : null;
-
+    const storedSeller = localStorage.getItem('user');
+    this.idOfer = storedSeller ? JSON.parse(storedSeller).id : null;
+    this.imageUploadService.getItemsByUser(this.idOfer).pipe(
+      //filtrar aquellos que sean dsiponibles
+      filter((items) => items && items.some((item: Item) => item.estado === 'DISPONIBLE')),
+      tap({
+      next: (items) => {
+        this.itemsByUser = items
+        console.log(this.itemsByUser);
+        
+      },
+      error: (error) => {
+        console.error('Error al obtener los items por usuario:', error);
+        Swal.fire('Error', 'No se pudieron obtener los items del usuario.', 'error');
+      }
+    })).subscribe()
     if (!this.product) {
       Swal.fire({
         icon: 'error',
@@ -45,23 +72,7 @@ export class IntercambiaComponent implements OnInit {
     }
   }
 
-  handleFileInput(event: any): void {
-    this.selectedFile = event.target.files[0];
 
-    if (this.selectedFile) {
-      this.imageUploadService.uploadImage(this.selectedFile).subscribe({
-        next: (response) => {
-          console.log('URL de la imagen subida:', response.url);
-          this.imageUrl = response.url;
-          Swal.fire('Éxito', 'Imagen subida correctamente.', 'success');
-        },
-        error: (error) => {
-          console.error('Error al subir la imagen:', error);
-          Swal.fire('Error', 'No se pudo subir la imagen.', 'error');
-        },
-      });
-    }
-  }
 
   isFormValid(): boolean {
     return !!this.selectedBuilding && !!this.description && !!this.imageUrl;
@@ -95,10 +106,49 @@ export class IntercambiaComponent implements OnInit {
       confirmButtonText: 'Aceptar',
     });
   }
-  
-  
+  openModal(){
+    this.isModal = true;
+  }
+  solicitInterchange(){
+    if(this.selectedItem == 0){
+      Swal.fire('Información', 'Por favor selecciona un artículo para intercambiar.', 'info');
+      return;
+    }
+
+
+    console.log(this.product);
+    const articleSend = {
+      usuario_solicitante_id: this.product.user.id_usuario,
+      articulo_solicitado_id: this.product.id_articulo,
+      articulo_ofrecido_id: this.selectedItem.id_articulo,
+      usuario_ofertador_id: this.selectedItem.user.id_usuario,
+      estado: 'PENDING'
+    }
+    this.imageUploadService.sendInterchange(articleSend).pipe(tap({
+      next: (response) => {
+        console.log('Solicitud enviada:', response);
+        Swal.fire('Solicitud Enviada', 'La solicitud de intercambio ha sido enviada con éxito.','success');
+      },
+      error: (error) => {
+        console.error('Error al enviar la solicitud:', error);
+        Swal.fire('Error', 'No se pudo enviar la solicitud de intercambio.', 'error');
+      }
+    })).subscribe()
+    
+  }
 
   goBack(): void {
     this.router.navigate(['/material-estudio']);
+  }
+
+  closeModal() {
+    this.isModal = false;  // Ocultar el modal
+  }
+
+  selectItem(item: any) {
+    console.log('Artículo seleccionado:', item);
+    this.selectedItem = item;
+    this.closeModal();
+
   }
 }
