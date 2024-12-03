@@ -39,4 +39,15 @@
   .footer-link:hover {
     text-decoration: underline;
   }
-  
+/* Estilos para los íconos de redes sociales */
+.footer-social {
+  color: #61dafb;
+  font-size: 20px;
+  text-decoration: none;
+  margin-left: 15px;
+  transition: color 0.3s;
+}
+
+.footer-social:hover {
+  color: white;
+}

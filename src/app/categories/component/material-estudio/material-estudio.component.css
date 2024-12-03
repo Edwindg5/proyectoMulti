@@ -1,18 +1,11 @@
-.card-container {
-  width: 100%;
-  max-width: 100%; /* Limita el ancho máximo para evitar desbordamientos */
-  background: linear-gradient(0deg, rgb(255, 255, 255) 0%, rgba(82, 116, 183, 0.649) 100%);
-  backdrop-filter: blur(7px);
-  overflow-x: hidden; /* Oculta el scroll horizontal */
-  transition: 0.5s all;
-  color: black;
-  font-family: Arial, Helvetica, sans-serif;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Siempre muestra 3 columnas */
-  gap: 2rem; /* Espaciado entre tarjetas */
-  padding: 2rem; /* Espaciado interno del contenedor */
-  margin: 0 auto; /* Centra el contenedor horizontalmente */
-  box-sizing: border-box;
+.articles-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-items: center;
+  flex-direction: row;
+  width: 100vh;
+  gap: 2rem;
 }
 
 
@@ -24,7 +17,6 @@
 .product-card img {
   width: 100%;
   max-width: 300px; /* Limita el tamaño máximo de la imagen */
-  height: auto; /* Mantiene la proporción de la imagen */
   border-radius: 15px;
   object-fit: cover; /* Recorta la imagen si no encaja perfectamente */
   display: block;
@@ -182,7 +174,7 @@
 }
 
 .btn-action {
-  background-color: #4caf50;
+  background-color: #3362d0;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -192,7 +184,7 @@
 }
 
 .btn-action:hover {
-  background-color: #45a049;
+  background-color: #02287c;
 }
 
 .product-card:hover .hover-actions {
@@ -259,4 +251,10 @@
   margin-top: 20px;
   font-size: 18px;
   color: #888;
+}
+.price {
+  font-weight: bold;
+  color: #1abb27;
+  font-size: 40px;
+
 }

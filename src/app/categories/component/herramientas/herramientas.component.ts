@@ -6,12 +6,10 @@ import { Item } from '../../models/item.model';
 import { HeaderComponent } from '../../../pages/header/component/header/header.component';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../auth/auth.service';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { SearchService } from '../../../pages/header/services/search.service';
 import { ArticleService } from '../../../pages/vende/services/article.service';
-
-
-
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-herramientas',
   standalone: true,
@@ -27,11 +25,12 @@ export class HerramientasComponent implements OnInit {
   authenticatedUserName: string = '';
   isAuthenticated: boolean;
   articles: any[] = [];  // Arreglo para almacenar los artículos
-  isLoading = false; 
+  isLoading = false;
   ownerArticles: Item[] = [];
   otherArticles: Item[] = [];
   isOwnerView: boolean = false;  
-   
+  idUser=0;
+  
 
   constructor(
     private categoryService: CategoryService,
@@ -52,35 +51,7 @@ export class HerramientasComponent implements OnInit {
     if (this.searchSubscription) {
       this.searchSubscription.unsubscribe();
     }
-  }  
-
-
-  
-
-  
-  
-  loadAllArticles(): void {
-    this.isLoading = true;
-    this.categoryService.getAllItems().subscribe({
-      next: (articles) => {
-        this.products = articles.map((item) => ({
-          ...item,
-          url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
-          profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
-          userName: item.user?.nombre || 'Usuario no especificado',
-          userPhone: item.user?.telefono || 'Teléfono no especificado',
-        }));
-        this.filteredProducts = [...this.products]; // Actualizar los productos filtrados
-      },
-      error: (err) => {
-        console.error('Error al cargar los artículos:', err);
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
-  }
-
+  } 
 
   toggleOwnerView(): void {
     this.isOwnerView = !this.isOwnerView;
@@ -99,11 +70,46 @@ export class HerramientasComponent implements OnInit {
   }
 
   
-
-  ngOnInit(): void {
-    const categoryId = 3; // ID de la categoría "material-estudio"
-    this.loadItemsByCategory(categoryId);
   
+  loadAllArticles(): void {
+    this.isLoading = true;
+    this.categoryService.getAllItems()
+      .pipe(
+        // Filtrar los artículos que no son del usuario actual
+        map((articles: Item[]) => {
+          return articles.filter((article) => article.usuario_id !== this.idUser);
+        })
+      )
+      .subscribe({
+        next: (articles) => {
+          // Transformar los datos si es necesario
+          this.products = articles.map((item) => ({
+            ...item,
+            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
+            profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
+            userName: item.user?.nombre || 'Usuario no especificado',
+            userPhone: item.user?.telefono || 'Teléfono no especificado',
+          }));
+          this.filteredProducts = [...this.products]; // Actualizar productos filtrados
+        },
+        error: (err) => {
+          console.error('Error al cargar los artículos:', err);
+        },
+        complete: () => {
+          this.isLoading = false;
+        },
+      });
+  }
+  
+  
+  ngOnInit(): void {
+    const userstorage = localStorage.getItem('user');
+    this.idUser = userstorage ? JSON.parse(userstorage).id : 0;
+    
+    // Carga los artículos, aplicando el filtro
+    this.loadAllArticles();
+  
+    // Escucha de la barra de búsqueda
     this.searchSubscription = this.searchService.searchTerm$.subscribe((term) => {
       this.searchTerm = term;
       this.filteredProducts = this.products.filter((product) =>
@@ -114,11 +120,14 @@ export class HerramientasComponent implements OnInit {
   }
   
   
+  
 
     // Cargar todos los artículos
     loadArticles(): void {
       this.isLoading = true;
-      this.articleService.getAllArticles().subscribe({
+      this.articleService.getAllArticles().pipe(
+        filter(response => response.id_usuario !== this.idUser )
+      ).subscribe({
         next: (articles) => {
           this.articles = articles;
         },
@@ -130,30 +139,37 @@ export class HerramientasComponent implements OnInit {
         },
       });
     }
-
     loadItemsByCategory(categoryId: number): void {
       this.isLoading = true;
-    
-      this.categoryService.getItemsByCategory(categoryId).subscribe({
-        next: (data: any[]) => {
-          console.log('Respuesta del backend:', data); // Depuración
-          this.products = data.map((item) => ({
-            ...item,
-            url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
-            profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
-            userName: item.user?.nombre || 'Usuario no especificado',
-            userPhone: item.user?.telefono || 'Teléfono no especificado',
-          }));
-          this.filteredProducts = [...this.products];
-        },
-        error: (error) => {
-          console.error('Error al obtener los artículos:', error);
-        },
-        complete: () => {
-          this.isLoading = false;
-        },
-      });
+      this.categoryService.getItemsByCategory(categoryId)
+        .pipe(
+          // Filtrar los artículos que no sean del usuario actual
+          map((data: Item[]) => {
+            return data.filter((item) => item.usuario_id !== this.idUser);
+          })
+        )
+        .subscribe({
+          next: (data: Item[]) => {
+            this.products = data.map((item) => ({
+              ...item,
+              url_imagen: item.url_imagen || 'ruta/a/imagen/default.png',
+              profile_picture_url: item.user?.profile_picture_url || 'ruta/a/imagen/default.png',
+              userName: item.user?.nombre || 'Usuario no especificado',
+              userPhone: item.user?.telefono || 'Teléfono no especificado',
+              userEmail: item.user?.correo_electronico || 'Correo no especificado'
+            }));
+            this.filteredProducts = [...this.products]; // Actualizar productos filtrados
+          },
+          error: (error) => {
+            console.error('Error al obtener los artículos:', error);
+          },
+          complete: () => {
+            this.isLoading = false;
+          },
+        });
     }
+    
+    
     
     
 

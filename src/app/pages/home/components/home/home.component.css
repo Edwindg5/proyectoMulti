@@ -142,7 +142,7 @@ app-header {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  background-color: #f5f8ff; /* Fondo claro */
+  background-color: #ffffff; /* Fondo claro */
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -184,7 +184,7 @@ app-header {
   max-width: 1200px;
   margin: 40px auto;
   padding: 20px;
-  background: #f4f4f4;
+  background:  orange;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -311,11 +311,11 @@ footer.description {
   max-width: 800px;
   font-size: 18px;
   line-height: 1.8;
-  color: #444;
+  color: #e1e1e1;
 }
 
 .highlighted-text strong {
-  color: #2b3e50; /* Color destacado */
+  color: #ffffff; /* Color destacado */
 }
 
 .highlighted-text em {

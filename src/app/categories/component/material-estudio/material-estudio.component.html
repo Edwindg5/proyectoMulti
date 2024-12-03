@@ -2,7 +2,7 @@
 
 <div class="header-banner">
   <img src="assets/material.png" alt="Icono" class="banner-icon" />
-  <h1>MATERIAL DE ESTUDIO</h1>
+  <h1>MATERIAL ESTUDIO</h1>
 </div>
 
 <!-- Nueva sección de controles -->
@@ -37,7 +37,7 @@
   </div>
 
   <!-- Sección original -->
-  <div *ngIf="!isOwnerView">
+  <div *ngIf="!isOwnerView" class="articles-container">
     <div *ngFor="let product of filteredProducts" class="product-card"
       (mouseenter)="onMouseEnter(product)"
       (mouseleave)="onMouseLeave(product)"
@@ -53,7 +53,7 @@
         <p class="description">{{ product.descripcion }}</p>
         <div class="tokenInfo">
           <div class="price">
-            <p>{{ product.precio | currency }}</p>
+            <p>{{ product.precio | currency:'MXN' }}</p>
           </div>
         </div>
         <hr />
@@ -66,7 +66,7 @@
               (click)="viewOwnerDetails(product)"
             />
           </div>
-          <p><ins>Propietario:</ins> {{ product.userName }}</p>
+          <p style="text-transform: capitalize; color: #3417da; font-size: 18px; font-weight: bold;"><ins>Propietario:</ins> {{ product.userName | titlecase}}</p>
         </div>
         <div class="hover-actions" *ngIf="hoveredProduct === product">
           <button class="btn-action" (click)="goToRent(product)">Rentar</button>

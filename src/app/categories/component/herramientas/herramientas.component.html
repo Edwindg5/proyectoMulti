@@ -1,13 +1,18 @@
 <app-header></app-header>
+
 <div class="header-banner">
-  <img src="assets/material.png" alt="Icono" class="banner-icon" />
+  <img src="assets/image.png" alt="Icono" class="banner-icon" />
   <h1>HERRAMIENTAS</h1>
 </div>
+
+<!-- Nueva sección de controles -->
 <div class="controls">
   <button (click)="toggleOwnerView()" class="toggle-button">
     {{ isOwnerView ? 'Ver todos los artículos' : 'Ordenar mis artículos' }}
   </button>
 </div>
+
+
 
 <!-- Mensaje cuando no hay artículos -->
 <div class="no-articles-message" *ngIf="!filteredProducts.length && !isOwnerView">
@@ -17,7 +22,6 @@
 <div class="no-articles-message" *ngIf="isOwnerView && !ownerArticles.length && !otherArticles.length">
   <p>No tienes artículos ni hay artículos de otros usuarios disponibles.</p>
 </div>
-
 <!-- Nueva estructura de contenedores -->
 <div class="articles-container" [ngClass]="{ 'owner-view': isOwnerView }">
   <div *ngIf="isOwnerView" class="owner-articles">
@@ -33,7 +37,7 @@
   </div>
 
   <!-- Sección original -->
-  <div *ngIf="!isOwnerView">
+  <div *ngIf="!isOwnerView" class="articles-container">
     <div *ngFor="let product of filteredProducts" class="product-card"
       (mouseenter)="onMouseEnter(product)"
       (mouseleave)="onMouseLeave(product)"
@@ -49,7 +53,7 @@
         <p class="description">{{ product.descripcion }}</p>
         <div class="tokenInfo">
           <div class="price">
-            <p>{{ product.precio | currency }}</p>
+            <p>{{ product.precio | currency:'MXN' }}</p>
           </div>
         </div>
         <hr />
@@ -62,7 +66,7 @@
               (click)="viewOwnerDetails(product)"
             />
           </div>
-          <p><ins>Propietario:</ins> {{ product.userName }}</p>
+          <p style="text-transform: capitalize; color: #3417da; font-size: 18px; font-weight: bold;"><ins>Propietario:</ins> {{ product.userName | titlecase}}</p>
         </div>
         <div class="hover-actions" *ngIf="hoveredProduct === product">
           <button class="btn-action" (click)="goToRent(product)">Rentar</button>

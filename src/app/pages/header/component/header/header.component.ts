@@ -147,4 +147,20 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
+
+
+  onClickDetalles(item: any): void {
+    Swal.fire({
+      title: item.nombre_articulo,
+      html: `
+        <p><strong>Categoría:</strong> ${item.categoria}</p>
+        <p><strong>Descripción:</strong> ${item.descripcion}</p>
+        <p><strong>Precio:</strong> $${item.precio}</p>
+      `,
+      imageUrl: item.url_imagen,
+      imageWidth: 200,
+      imageHeight: 200,
+      imageAlt: 'Imagen del producto',
+    });
+  }
 }

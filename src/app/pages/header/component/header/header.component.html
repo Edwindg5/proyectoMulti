@@ -49,9 +49,10 @@
               class="result-image"
             />
             <span class="result-name">{{ item.nombre_articulo }}</span>
-            <button class="result-details" (click)="navigateToCategory(item.categoria)">
+            <button class="result-details" (click)="onClickDetalles(item)">
               Detalles
             </button>
+            
           </div>
         </div>
       </div>
