@@ -27,7 +27,11 @@ export class HerramientasComponent implements OnInit {
   authenticatedUserName: string = '';
   isAuthenticated: boolean;
   articles: any[] = [];  // Arreglo para almacenar los artículos
-  isLoading = false;  
+  isLoading = false; 
+  ownerArticles: Item[] = [];
+  otherArticles: Item[] = [];
+  isOwnerView: boolean = false;  
+   
 
   constructor(
     private categoryService: CategoryService,
@@ -49,6 +53,9 @@ export class HerramientasComponent implements OnInit {
       this.searchSubscription.unsubscribe();
     }
   }  
+
+
+  
 
   
   
@@ -73,6 +80,24 @@ export class HerramientasComponent implements OnInit {
       },
     });
   }
+
+
+  toggleOwnerView(): void {
+    this.isOwnerView = !this.isOwnerView;
+    if (this.isOwnerView) {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const userName = user.name || '';
+      this.ownerArticles = this.products.filter(
+        (product) => product.userName === userName
+      );
+      this.otherArticles = this.products.filter(
+        (product) => product.userName !== userName
+      );
+    } else {
+      this.filteredProducts = [...this.products];
+    }
+  }
+
   
 
   ngOnInit(): void {
