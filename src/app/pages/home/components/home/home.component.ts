@@ -47,8 +47,12 @@ export class HomeComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Filtra el artículo de la lista local
+        // Filtrar el artículo de la lista local
         this.items = this.items.filter((item) => item.id !== itemId);
+  
+        // Actualizar el almacenamiento local
+        this.carouselService.setArticles(this.items);
+  
         Swal.fire('Eliminado', 'El artículo ha sido eliminado del carrusel.', 'success');
       }
     });
