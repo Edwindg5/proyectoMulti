@@ -18,3 +18,8 @@ export interface Item {
   user?: User;
   profile_picture_url: string; // URL de la imagen de perfil
 }
+export interface ItemUpdate {
+  nombre_articulo: string;
+  descripcion: string;
+  precio: number;
+}

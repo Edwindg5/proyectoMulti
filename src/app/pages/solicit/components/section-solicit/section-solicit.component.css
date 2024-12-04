@@ -23,7 +23,34 @@
     flex-direction: column;
     gap: 4px;
   }
+  p {
+    font-size: 0.875rem;
+    color: #666;
+    margin: 4px 0;
+  }
+  .info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 0 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 4px;
+  }
   
+  .info h2 {
+    font-size: 1.5rem;
+    color: #4a90e2;
+    margin-bottom: 8px;
+  }
+  
+  .info p {
+    font-size: 1rem;
+    color: #666;
+  } 
   
   .card {
     width: 300px;

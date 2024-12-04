@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { SearchService } from '../../services/search.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -20,13 +20,18 @@ export class HeaderComponent implements OnInit {
   isAdmin: boolean = false;  // Verificar si el usuario es admin
   menuVisible = false;
   notificationsVisible = false; // Controla la visibilidad del panel de notificaciones
-
+  searchItems: FormGroup;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private searchService: SearchService
-  ) {}
+  ) {
+    this.searchItems = new FormGroup({
+      term: new FormControl([''])
+    });
+
+  }
 
   ngOnInit(): void {
     
@@ -88,20 +93,10 @@ export class HeaderComponent implements OnInit {
   }
   
 
-  onSearch(): void {
-    if (this.searchTerm.trim()) {
-      this.searchService.searchItems(this.searchTerm).subscribe(
-        (results) => {
-          this.searchResults = results;
-        },
-        (error) => {
-          console.error('Error en la búsqueda:', error);
-          this.searchResults = []; // Limpia los resultados si hay error
-        }
-      );
-    } else {
-      this.searchResults = []; // Limpia los resultados si no hay texto
-    }
+  searchItemsByName(): void {
+    const term = this.searchItems.value.term;  
+    localStorage.setItem('termToSearch', term);  
+    this.router.navigate(['/busqueda']);
   }
   
 

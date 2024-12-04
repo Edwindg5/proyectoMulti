@@ -1,0 +1,13 @@
+<div class="card">
+    <div class="card-img">
+        <img [src]="item.url_imagen" alt="Imagen no disponible">
+    </div>
+    <div class="card-title">{{item.nombre_articulo | titlecase}} - Ofrece {{item.user?.nombre || 'Usuario'}}</div>
+    <div class="card-subtitle" [class.expanded]="isExpanded" (click)="toggleDescription()">
+        {{item.descripcion | titlecase}}
+    </div>
+    <hr class="card-divider">
+    <div class="card-footer">
+        <div class="card-price">{{item.precio | currency:'MXN'}}</div>
+    </div>
+</div>

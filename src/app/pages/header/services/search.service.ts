@@ -16,6 +16,9 @@ export class SearchService {
   searchItems(query: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}?query=${encodeURIComponent(query)}`);
   }
+  searchItemsByName(name:string):Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}_by_name?name=${name}`);
+  }
 
   // Método para actualizar el término de búsqueda
   setSearchTerm(term: string): void {

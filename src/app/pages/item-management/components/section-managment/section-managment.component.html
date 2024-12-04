@@ -1,1 +1,117 @@
-<p>section-managment works!</p>
+<app-loader *ngIf="isLoading" [message]="mensaje"></app-loader>
+<section *ngIf="!isLoading" class="flex items-center w-full justify-center flex-col mt-10">
+    <div class="flex items-center justify-center w-[70%] flex-col">
+      <h1 class="text-blue-400 font-bold text-[30px]">Aquí podrás administrar y eliminar tus productos.</h1>
+      <p class="text-gray-700 mt-4 ">Gestiona y organiza tus productos fácilmente.</p>
+    </div>
+    <div class="flex items-center justify-center w-[70%]">
+      <div class="p-6 min-h-screen ">
+        <div class="overflow-x-auto  rounded-md">
+          <table class="w-full text-sm text-left border rounded-md ">
+            <tbody class=" text-gray-700 uppercase font-medium bg-white">
+              <tr>
+                <th class="px-6 py-4 border-b border-gray-200">Imagen</th>
+                <th class="px-6 py-4 border-b border-gray-200">Nombre</th>
+                <th class="px-6 py-4 border-b border-gray-200">Descripción</th>
+                <th class="px-6 py-4 border-b border-gray-200">Categoría</th>
+                <th class="px-6 py-4 border-b border-gray-200">Precio</th>
+                <th class="px-6 py-4 border-b border-gray-200">Estado</th>
+                <th class="px-6 py-4 border-b border-gray-200">Acciones</th>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr *ngFor="let article of articles" class="border-b border-gray-300">
+                <td class="px-6 py-4">
+                  <img
+                    [src]="article.url_imagen"
+                    alt="{{ article.nombre_articulo }}"
+                    class="h-16 w-16 rounded-md object-cover"
+                  />
+                </td>
+                <td class="px-6 py-4">{{ article.nombre_articulo | titlecase }}</td>
+                <td class="px-6 py-4">{{ article.descripcion | titlecase }}</td>
+                <td class="px-6 py-4">{{ article.categoria.nombre_categoria | titlecase }}</td>
+                <td class="px-6 py-4">{{ article.precio | currency:'MXN'}}</td>
+                <td
+                  class="px-6 py-4"
+                  [ngClass]="{
+                    'text-green-600 font-semibold': article.estado === 'DISPONIBLE',
+                    'text-yellow-600 font-semibold': article.estado === 'PENDING',
+                    'text-red-600 font-semibold': article.estado === 'NO DISPONIBLE'
+                  }"
+                >
+                  {{ article.estado }}
+                </td>
+                <td class="px-6 py-4 flex space-x-4 mt-3">
+                  <button
+                    (click)="openEditModal(article)"
+                    class="text-blue-800 text-[14px] font-semibold px-4 py-2 rounded"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    (click)="deleteArticle(article)"
+                    class=" text-red-600 text-[14px] font-semibold px-4 py-2 rounded "
+                  >
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+<!-- Modal para editar -->
+<div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg shadow-2xl p-8 w-[500px]">
+      <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-3">Editar Producto</h2>
+      <form (ngSubmit)="saveArticle()">
+        <div class="mb-5">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedArticle.nombre_articulo"
+            name="nombre_articulo"
+            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div class="mb-5">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+          <input
+            type="text"
+            [(ngModel)]="selectedArticle.descripcion"
+            name="descripcion"
+            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div class="mb-5">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Precio</label>
+          <input
+            type="number"
+            [(ngModel)]="selectedArticle.precio"
+            name="precio"
+            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
+          />
+        </div>
+        <div class="flex justify-end space-x-4">
+          <button
+            type="button"
+            (click)="closeEditModal()"
+            class="bg-gray-600 text-white px-5 py-2 rounded-md hover:bg-gray-700 transition duration-300"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+          >
+            Guardar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  </section>
+  
