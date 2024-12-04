@@ -15,6 +15,8 @@ import { AuthGuard } from './auth/auth.guard';
 import { UsersComponent } from './pages/users/components/users/users.component';
 import { SolicitComponent } from './pages/solicit/solicit.component';
 import { MysolicitsComponent } from './pages/mysolicits/mysolicits.component';
+import { ItemManagementComponent } from './pages/item-management/item-management.component';
+import { BusquedaComponent } from './pages/busqueda/busqueda.component';
 
 
 export const routes: Routes = [
@@ -32,5 +34,7 @@ export const routes: Routes = [
   { path: 'accesorios', component: AccesoriosComponent },
   { path: 'usuarios', component: UsersComponent}, // Solo accesible para admin
   { path: 'solicit', component: SolicitComponent },
-  {path: 'mysolicit', component: MysolicitsComponent}
+  {path: 'mysolicit', component: MysolicitsComponent},
+  {path: 'managament-items', component: ItemManagementComponent},
+  {path: 'busqueda', component: BusquedaComponent}
 ];

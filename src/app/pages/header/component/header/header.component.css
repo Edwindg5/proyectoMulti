@@ -314,3 +314,9 @@ button:hover {
   margin: 0; /* Elimina márgenes adicionales */
   white-space: nowrap; /* Evita el salto de línea */
 }
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #0056b3;
+}

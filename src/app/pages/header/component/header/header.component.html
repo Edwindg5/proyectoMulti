@@ -31,14 +31,15 @@
 
       </ng-container>
       
-
-      <div class="search-container">
-        <input
+<!--> Presionar enter en el input<!-->
+      <div class="search-container" [formGroup]="searchItems">
+        <input 
           type="text"
           placeholder="Buscar"
           class="search-bar"
-          [(ngModel)]="searchTerm"
-          (input)="onSearch()"
+          formControlName="term"
+          (keyup.enter)="searchItemsByName()"
+          
         />
         
         <div class="search-results" *ngIf="searchResults.length > 0">

@@ -1,0 +1,10 @@
+<section class="flex items-center justify-center w-full flex-col">
+    <div class="w-[70%]  flex items-center justify-center mt-4">
+        <h1 class="text-3xl font-bold">En esta seccion apareceran el resultado relacionado con: {{name}}</h1>
+    </div>
+    <div *ngIf="items.length > 0" class="items-center flex justify-center flex-row flex-wrap w-[80%] gap-5 mt-7">
+        <app-card-product-search *ngFor="let itemFound of items" [item]="itemFound"></app-card-product-search>
+    </div>
+    <div *ngIf="items.length ==0" class="items-center flex justify-center flex-row flex-wrap w-[80%]">
+        <h1 class="text-[20px] font-semibold text-black">No hay productos que mostrar con este termino: {{name}}</h1></div>
+</section>
