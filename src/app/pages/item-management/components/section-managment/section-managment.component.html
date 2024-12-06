@@ -29,7 +29,7 @@
                   />
                 </td>
                 <td class="px-6 py-4">{{ article.nombre_articulo | titlecase }}</td>
-                <td class="px-6 py-4">{{ article.descripcion | titlecase }}</td>
+                <td class="px-6 py-4">{{ article.descripcion  }}</td>
                 <td class="px-6 py-4">{{ article.categoria.nombre_categoria | titlecase }}</td>
                 <td class="px-6 py-4">{{ article.precio | currency:'MXN'}}</td>
                 <td
@@ -62,56 +62,92 @@
         </div>
       </div>
     </div>
-<!-- Modal para editar -->
-<div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-2xl p-8 w-[500px]">
-      <h2 class="text-xl font-semibold mb-6 text-gray-800 border-b pb-3">Editar Producto</h2>
-      <form (ngSubmit)="saveArticle()">
-        <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-          <input
-            type="text"
-            [(ngModel)]="selectedArticle.nombre_articulo"
-            name="nombre_articulo"
-            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-          <input
-            type="text"
-            [(ngModel)]="selectedArticle.descripcion"
-            name="descripcion"
-            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Precio</label>
-          <input
-            type="number"
-            [(ngModel)]="selectedArticle.precio"
-            name="precio"
-            class="block w-full border border-gray-300 rounded-md p-3 focus:border-blue-500 focus:ring focus:ring-blue-200"
-          />
-        </div>
-        <div class="flex justify-end space-x-4">
-          <button
-            type="button"
-            (click)="closeEditModal()"
-            class="bg-gray-600 text-white px-5 py-2 rounded-md hover:bg-gray-700 transition duration-300"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            class="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition duration-300"
-          >
-            Guardar
-          </button>
-        </div>
-      </form>
+    <div *ngIf="isModalOpen" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="relative bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
+        <!-- Botón para cerrar -->
+        <button
+          (click)="closeEditModal()"
+          class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition duration-200"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+    
+        <!-- Título -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center border-b pb-4">Editar Producto</h2>
+    
+        <!-- Formulario -->
+        <form (ngSubmit)="saveArticle()" class="space-y-5">
+          <!-- Nombre -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
+            <input
+              type="text"
+              [(ngModel)]="selectedArticle.nombre_articulo"
+              name="nombre_articulo"
+              class="w-full border border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:ring focus:ring-blue-100 transition"
+              placeholder="Nombre del producto"
+            />
+          </div>
+    
+          <!-- Descripción -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+            <textarea
+              [(ngModel)]="selectedArticle.descripcion"
+              name="descripcion"
+              class="w-full border border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:ring focus:ring-blue-100 transition resize-none"
+              rows="3"
+              placeholder="Escribe una descripción del producto"
+            ></textarea>
+          </div>
+          	 <!-- Categoria -->
+             <div [formGroup]="categorySelected" >
+              <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+              <select id="id_category" 
+                formControlName="id_category"
+                class="w-full border border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:ring focus:ring-blue-100 transition"
+              >
+              <option value="" disabled selected>{{selectedArticle.categoria.nombre_categoria}}</option>
+                <option *ngFor="let category of categories" [value]="category.id_categoria">
+                  {{ category.nombre_categoria }}
+                </option>
+              </select>
+            </div>
+            
+          <!-- Precio -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">Precio</label>
+            <input
+              type="number"
+              [(ngModel)]="selectedArticle.precio"
+              name="precio"
+              class="w-full border border-gray-300 rounded-lg p-3 focus:border-blue-500 focus:ring focus:ring-blue-100 transition"
+              placeholder="Precio en MXN"
+            />
+          </div>
+    
+          <!-- Botones -->
+          <div class="flex justify-end space-x-4 pt-4 border-t border-gray-200">
+            <button
+              type="button"
+              (click)="closeEditModal()"
+              class="px-5 py-2 rounded-lg bg-gray-500 text-white hover:bg-gray-600 transition duration-300"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition duration-300"
+            >
+              Guardar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+    
   
   </section>
   

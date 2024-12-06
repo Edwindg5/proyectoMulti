@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { SearchsService } from '../../services/searchs.service';
 import { CommonModule } from '@angular/common';
 import { CardProductSearchComponent } from '../card-product-search/card-product-search.component';
@@ -11,17 +12,23 @@ import { CardProductSearchComponent } from '../card-product-search/card-product-
     CardProductSearchComponent,
   ],
   templateUrl: './section-busqueda.component.html',
-  styleUrl: './section-busqueda.component.css'
+  styleUrl: './section-busqueda.component.css',
 })
-export class SectionBusquedaComponent {
-  constructor(private searchService:SearchsService){}
-  name :string = '';
+export class SectionBusquedaComponent implements OnInit {
+  constructor(private route: ActivatedRoute, private searchService: SearchsService) {}
+
+  name: string = '';
   items: any[] = [];
-  ngOnInit(){
-    const storedName = localStorage.getItem('termToSearch');
-    this.name = storedName ? storedName : '';
-    this.searchService.getItemsByName(this.name).subscribe(items =>{
-      this.items = items;
-    })
-  } 
+
+  ngOnInit() {
+    // Escucha cambios en los parámetros de la ruta
+    this.route.queryParams.subscribe(params => {
+      this.name = params['term'] || '';
+      if (this.name) {
+        this.searchService.getItemsByName(this.name).subscribe(items => {
+          this.items = items;
+        });
+      }
+    });
+  }
 }

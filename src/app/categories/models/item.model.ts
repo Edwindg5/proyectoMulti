@@ -22,4 +22,5 @@ export interface ItemUpdate {
   nombre_articulo: string;
   descripcion: string;
   precio: number;
+  id_categoria: number;
 }

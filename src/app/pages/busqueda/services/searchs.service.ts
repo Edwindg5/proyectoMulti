@@ -17,12 +17,6 @@ export class SearchsService {
 
       },
       error: (err) =>{
-       Swal.fire({
-         title: 'Error',
-         text: 'Ha habido un error en la busqueda, intente de nuevo.',
-         icon: 'error',
-         confirmButtonText: 'Aceptar'
-       })
       } 
     }))
     ;

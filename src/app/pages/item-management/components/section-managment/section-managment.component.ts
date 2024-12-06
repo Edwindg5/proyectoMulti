@@ -5,6 +5,8 @@ import { ReactiveFormsModule,FormControl,FormGroup,Validators } from '@angular/f
 import { ItemManagementService } from '../../services/item-management.service';
 import { ItemUpdate } from '../../../../categories/models/item.model';
 import { LoaderComponent } from '../../../../components/loader/loader.component';
+import Swal from 'sweetalert2';
+import { Category } from '../../models/category';
 @Component({
   selector: 'app-section-managment',
   standalone: true,
@@ -21,8 +23,15 @@ export class SectionManagmentComponent {
   idOfer:number = 0;
   articles: any[] = [];
   isLoading = false;
-  mensaje = "Cargando articulos"
-  constructor(private itemService:ItemManagementService){}
+  mensaje = "Cargando articulos";
+  categories: Category[] = [];
+  categorySelected: FormGroup;
+  constructor(private itemService:ItemManagementService){
+    this.categorySelected = new FormGroup({
+      id_category: new FormControl(''),
+      name_category: new FormControl('')
+    });
+  }
   ngOnInit(){
     this.isLoading = true;  
     const storedSeller = localStorage.getItem('user');
@@ -32,6 +41,7 @@ export class SectionManagmentComponent {
       this.articles = articles;
       this.isLoading = false;
     });
+    
   }
   
   isModalOpen = false;
@@ -39,8 +49,13 @@ export class SectionManagmentComponent {
 
   openEditModal(article: any) {
     this.isModalOpen = true;
-    this.selectedArticle = { ...article }; // Clona el artículo
+    this.selectedArticle = { ...article };
+    this.itemService.getCategories().subscribe((data) => {
+      this.categories = data;
+    });
   }
+  
+  
 
   closeEditModal() {
     this.isModalOpen = false;
@@ -48,26 +63,42 @@ export class SectionManagmentComponent {
   }
 
   saveArticle() {
-    console.log('Artículo editado:', this.selectedArticle);
-    const id_articulo = this.selectedArticle.id_articulo
-    const itemToUpdate:ItemUpdate = {
+    const id_articulo = this.selectedArticle.id_articulo;
+    const itemToUpdate: ItemUpdate = {
       precio: this.selectedArticle.precio,
       nombre_articulo: this.selectedArticle.nombre_articulo,
-      descripcion: this.selectedArticle.descripcion
-    }
-    this.itemService.updateItem(id_articulo, itemToUpdate).subscribe(data => {
+      descripcion: this.selectedArticle.descripcion,
+      id_categoria: Number(this.categorySelected.value.id_category) || this.selectedArticle.id_categoria
+    };
+  
+    this.itemService.updateItem(id_articulo, itemToUpdate).subscribe((data) => {
       console.log('Artículo actualizado:', data);
-      this.ngOnInit();
-    })
+      this.ngOnInit(); 
+    });
+  
     this.closeEditModal();
   }
+  
 
   deleteArticle(article: any) {
     const id_item = article.id_articulo;
-    this.itemService.deleteItem(id_item).subscribe(data => {
-      this.ngOnInit();
-      
-    })
+   Swal.fire({
+    title: 'Estás seguro?',
+    text: "Una vez eliminado, no podrás recuperar este artículo!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, eliminar!'	
+   })
+   .then((result) => {
+    if (result.isConfirmed) {
+      this.itemService.deleteItem(id_item).subscribe(data => {
+        console.log('Artículo eliminado:', data);
+        this.ngOnInit();
+      })
+    }
+  })
     console.log('Artículo eliminado:', article);
   }
 }

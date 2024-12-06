@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable,tap } from 'rxjs';
 import { Item, ItemUpdate } from '../../../categories/models/item.model';
 import Swal from 'sweetalert2';
+import { Category } from '../models/category';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,20 @@ export class ItemManagementService {
       }
     }))
     ;
+  }
+  getCategories():Observable<Category[]> {
+    return this.http.get<Category[]>('http://127.0.0.1:8000/categories').pipe(tap({
+      next: (data) => {
+        console.log(data);
+      },
+      error: (error) => {
+        Swal.fire({
+          title: 'Error',
+          text: 'Hubo un error en el sistema al querer actualizar el producto.',
+          icon: 'error'
+        })
+      }
+    }))
   }
   
 }

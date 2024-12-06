@@ -94,10 +94,9 @@ export class HeaderComponent implements OnInit {
   
 
   searchItemsByName(): void {
-    const term = this.searchItems.value.term;  
-    localStorage.setItem('termToSearch', term);  
-    this.router.navigate(['/busqueda']);
-  }
+    const term = this.searchItems.value.term;
+    this.router.navigate(['/busqueda'], { queryParams: { term } });
+  }  
   
 
   toggleMenu(): void {

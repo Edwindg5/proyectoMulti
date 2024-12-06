@@ -16,4 +16,17 @@
   img {
     border-radius: 8px;
   }
+  .truncate-description {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Muestra solo 2 líneas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+  
+  .show-full {
+    -webkit-line-clamp: unset;
+    overflow: visible;
+  }
   
