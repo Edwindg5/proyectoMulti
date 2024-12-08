@@ -322,3 +322,23 @@ footer.description {
   font-style: italic;
   color: #007bff; /* Color adicional para énfasis */
 }
+.alert-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #e74c3c;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.alert-icon:hover {
+  background-color: #c0392b;
+}
+
+.alert-icon i {
+  font-size: 18px;
+}
+

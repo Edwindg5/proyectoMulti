@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
   itemsPerPage: number = 3;
   userRole: string = ''; 
   isAdmin: boolean = false;
+  bannedItems: { id: number; name: string; img: string }[] = [];
 
   constructor(private router: Router, private carouselService: CarouselService, private authService: AuthService) {}
 
@@ -38,26 +39,29 @@ export class HomeComponent implements OnInit {
   this.isAdmin = userName === 'Administrador'; 
   }
   deleteItem(itemId: number): void {
+    const bannedItem = this.items.find((item) => item.id === itemId);
+    if (!bannedItem) return;
+  
     Swal.fire({
       title: '¿Estás seguro?',
-      text: 'Este artículo será eliminado del carrusel.',
+      text: 'Este artículo será marcado como "baneado".',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Sí, banear',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        // Filtrar el artículo de la lista local
+        // Mover el artículo a la lista de baneados
+        this.bannedItems.push(bannedItem);
         this.items = this.items.filter((item) => item.id !== itemId);
   
         // Actualizar el almacenamiento local
         this.carouselService.setArticles(this.items);
   
-        Swal.fire('Eliminado', 'El artículo ha sido eliminado del carrusel.', 'success');
+        Swal.fire('Baneado', 'El artículo ha sido marcado como "baneado".', 'success');
       }
     });
   }
-  
 
   toggleMenu() {
     this.menuVisible = !this.menuVisible;
@@ -118,5 +122,36 @@ export class HomeComponent implements OnInit {
 
   getTransformContentLayout(): string {
     return `flex: 0 0 calc((100% / ${this.itemsPerPage}) - 20px)`;
+  }
+  showBannedItems(): void {
+    const tableContent = this.bannedItems
+      .map(
+        (item) =>
+          `<tr>
+            <td><img src="${item.img}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;" /></td>
+            <td>${item.name}</td>
+          </tr>`
+      )
+      .join('');
+  
+    Swal.fire({
+      title: 'Artículos Baneados',
+      html: `
+        <table style="width: 100%; text-align: left; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="border-bottom: 1px solid #ddd; padding: 5px;">Imagen</th>
+              <th style="border-bottom: 1px solid #ddd; padding: 5px;">Nombre</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableContent || '<tr><td colspan="2" style="text-align: center;">No hay artículos baneados</td></tr>'}
+          </tbody>
+        </table>
+      `,
+      showCloseButton: true,
+      focusConfirm: false,
+      confirmButtonText: 'Cerrar',
+    });
   }
 }

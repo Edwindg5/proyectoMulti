@@ -302,7 +302,7 @@ button:hover {
 }
 .header-title {
   position: absolute;
-  right: 1300px; /* Ajusta este valor según lo necesites */
+  right: 1100px; /* Ajusta este valor según lo necesites */
   top: 50%; /* Centra verticalmente */
   transform: translateY(-50%); /* Corrige el desplazamiento */
   text-align: right;

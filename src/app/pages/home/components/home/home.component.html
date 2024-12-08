@@ -93,6 +93,10 @@
     <p>Seguridad garantizada</p>
   </div>
 </div>
+<div class="alert-icon" *ngIf="isAdmin" (click)="showBannedItems()">
+  <i class="fa fa-exclamation-triangle"></i>
+</div>
+
 
 <!-- Icono de ayuda -->
 <div class="help-icon" (click)="toggleHelpPanel()">
